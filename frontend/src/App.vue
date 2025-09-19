@@ -1,15 +1,24 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="p-8 rounded-lg border-2">
-            <h1 class="text-4xl font-bold mb-4 text-center">VueJS Running</h1>
-        </div>
-    </div>
+  <div id="app">
+    <AppNavbar v-if="authStore.isAuthenticated && !isAuthRoute" />
+    <router-view />
+  </div>
 </template>
 
-<script>
-export default {
-    name: 'App'
-}
+<script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useAuthStore } from './stores/auth'
+import AppNavbar from './components/App-Navbar.vue'
+
+const route = useRoute()
+const authStore = useAuthStore()
+
+const isAuthRoute = computed(() => {
+  return route.name === 'Login' || route.name === 'Register'
+})
 </script>
 
-<style scoped></style>
+<style>
+/* Global styles */
+</style>
