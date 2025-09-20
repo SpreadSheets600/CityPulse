@@ -26,6 +26,14 @@
           ]">
             Issues
           </router-link>
+          <router-link v-if="authStore.isAdmin" to="/admin-dashboard" :class="[
+            'px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200',
+            $route.name === 'AdminDashboard'
+              ? 'bg-indigo-100 text-indigo-700'
+              : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+          ]">
+            Admin Dashboard
+          </router-link>
           <router-link to="/profile" :class="[
             'px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200',
             $route.name === 'Profile'
