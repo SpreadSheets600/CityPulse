@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 axios.defaults.baseURL = 'http://localhost:5000'
-axios.defaults.headers.common['Content-Type'] = 'application/json'
 
 axios.interceptors.request.use(
   (config) => {
@@ -20,7 +19,6 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid
       localStorage.removeItem('token')
       window.location.href = '/login'
     }
