@@ -22,8 +22,8 @@
         <!-- Issues list -->
         <div v-else-if="issues.length > 0" class="bg-white shadow overflow-hidden sm:rounded-md">
           <ul class="divide-y divide-gray-200">
-            <li v-for="issue in issues" :key="issue.id" class="hover:bg-gray-50">
-              <div class="px-4 py-4 sm:px-6">
+            <li v-for="issue in issues" :key="issue.id">
+              <router-link :to="`/issues/${issue.id}`" class="block hover:bg-gray-50 px-4 py-4 sm:px-6">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center">
                     <p class="text-sm font-medium text-indigo-600 truncate">{{ issue.title }}</p>
@@ -51,7 +51,7 @@
                     </span>
                   </div>
                 </div>
-              </div>
+              </router-link>
             </li>
           </ul>
         </div>
