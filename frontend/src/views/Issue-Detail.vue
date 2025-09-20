@@ -82,6 +82,36 @@
               </div>
             </dl>
           </div>
+
+          <!-- Updates section -->
+          <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+            <h4 class="text-md font-medium text-gray-900 mb-3">Updates</h4>
+            <div v-if="updates.length === 0" class="text-sm text-gray-500">No updates yet.</div>
+            <div v-else class="space-y-4">
+              <div v-for="u in updates" :key="u.id" class="border rounded-md p-3">
+                <div class="flex items-center justify-between">
+                  <h5 class="font-semibold">{{ u.title }}</h5>
+                  <span class="text-xs text-gray-500">{{ formatDate(u.created_at) }}</span>
+                </div>
+                <p class="text-sm text-gray-700 mt-1">{{ u.body }}</p>
+                <div class="mt-2">
+                  <div class="flex justify-between text-xs text-gray-500">
+                    <span>Progress</span>
+                    <span>{{ u.progress }}%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded h-2 mt-1">
+                    <div class="bg-indigo-600 h-2 rounded" :style="{ width: (u.progress || 0) + '%' }"></div>
+                  </div>
+                </div>
+                <div v-if="u.image_urls && u.image_urls.length > 0" class="mt-3">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                    <img v-for="(url, index) in u.image_urls" :key="index" :src="url" :alt="`Update image ${index + 1}`"
+                      class="w-full h-24 object-cover rounded cursor-pointer" @click="openImageModal(url)" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Error State -->
@@ -120,6 +150,7 @@ const issue = ref(null)
 const loading = ref(false)
 const selectedImage = ref(null)
 const mapCenter = ref([0, 0])
+const updates = ref([])
 
 const getStatusClass = (status) => {
   const classes = {
@@ -162,6 +193,15 @@ const fetchIssue = async () => {
   }
 }
 
+const fetchUpdates = async () => {
+  try {
+    const resp = await axios.get(`/api/issues/${route.params.id}/updates`)
+    updates.value = resp.data.updates || []
+  } catch (e) {
+    console.error('Failed to fetch updates', e)
+  }
+}
+
 const openImageModal = (url) => {
   selectedImage.value = url
 }
@@ -173,5 +213,6 @@ const closeImageModal = () => {
 onMounted(() => {
   console.log('IssueDetail component mounted, route params:', route.params)
   fetchIssue()
+  fetchUpdates()
 })
 </script>
