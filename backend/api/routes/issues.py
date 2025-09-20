@@ -7,11 +7,8 @@ from flask_jwt_extended import (
 )
 
 from uuid import uuid4
-from api.models import db, User, Issue
+from api.models import db, User, Issue, IssueUpdate, UserRole
 from ..utils.s3 import upload_file_to_s3, compress_image
-
-
-from uuid import uuid4
 
 
 class ReportIssue(Resource):
@@ -130,11 +127,82 @@ class MyIssues(Resource):
 class GetIssue(Resource):
     @jwt_required()
     def get(self, issue_id):
-        user_id = get_jwt_identity()
-
-        issue = Issue.query.filter_by(id=issue_id, citizen_id=user_id).first()
+        issue = Issue.query.filter_by(id=issue_id).first()
 
         if not issue:
             return {"error": "Issue not found"}, 404
 
         return {"issue": issue.to_dict()}, 200
+
+    @jwt_required()
+    def put(self, issue_id):
+        user_id = get_jwt_identity()
+        issue = Issue.query.filter_by(id=issue_id).first()
+
+        if not issue:
+            return {"error": "Issue not found"}, 404
+
+        # Check permissions: admin or owner
+        user = User.query.get(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+
+        if str(issue.citizen_id) != str(user_id) and user.role != UserRole.admin:
+            return {"error": "Forbidden"}, 403
+
+        files = request.files.getlist("images")
+
+        if not files or any(f.mimetype.split("/")[0] != "image" for f in files):
+            return {"error": "At least one image is required"}, 400
+
+        if any(f.content_length > 15 * 1024 * 1024 for f in files):
+            return {"error": "Each image must be less than 15 MB"}, 400
+
+        image_urls = []
+        for file in files:
+            try:
+                img = compress_image(file)
+                url = upload_file_to_s3(
+                    img,
+                    f"issues/images/{user_id}_{uuid4()}_{file.filename}",
+                    config=app.config["S3_CONFIG"],
+                    content_type="image/webp",
+                )
+                image_urls.append(url)
+            except Exception as e:
+                return {"error": f"Failed to upload image: {str(e)}"}, 500
+
+        # Append new images to existing
+        issue.image_urls.extend(image_urls)
+        db.session.commit()
+
+        return {
+            "message": "Images uploaded successfully",
+            "issue": issue.to_dict(),
+        }, 200
+
+
+class GetIssueUpdates(Resource):
+    @jwt_required()
+    def get(self, issue_id):
+        user_id = get_jwt_identity()
+
+        # User can view updates if they own the issue or are admin
+        issue = Issue.query.get(issue_id)
+        if not issue:
+            return {"error": "Issue not found"}, 404
+
+        if str(issue.citizen_id) != str(user_id):
+            # Check admin
+            from api.models import UserRole
+
+            user = User.query.get(user_id)
+            if not user or user.role != UserRole.admin:
+                return {"error": "Forbidden"}, 403
+
+        updates = (
+            IssueUpdate.query.filter_by(issue_id=issue_id)
+            .order_by(IssueUpdate.created_at.desc())
+            .all()
+        )
+        return {"updates": [u.to_dict() for u in updates]}, 200
