@@ -1,123 +1,132 @@
 <template>
-  <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Report New Issue</h2>
+  <!-- Modal toggle -->
+  <button @click="isOpen = true"
+    class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+    Report New Issue
+  </button>
 
-    <form @submit.prevent="submitIssue" class="space-y-6">
-      <!-- Title -->
-      <div>
-        <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-          Issue Title *
-        </label>
-        <input id="title" v-model="formData.title" type="text" required placeholder="Brief description of the issue"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+  <!-- Main modal -->
+  <div :class="['fixed inset-0 z-50 overflow-y-auto', { 'flex items-center justify-center': isOpen }]" tabindex="-1"
+    :aria-hidden="!isOpen" v-if="isOpen">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black bg-opacity-50" @click="closeModal"></div>
+
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-lg shadow-lg max-w-2xl w-full mx-4 my-6">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">
+          Report New Issue
+        </h3>
+        <button type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center"
+          @click="closeModal">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
       </div>
 
-      <!-- Issue Type -->
-      <div>
-        <label for="issueType" class="block text-sm font-medium text-gray-700 mb-2">
-          Issue Type
-        </label>
-        <select id="issueType" v-model="formData.issueType"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-          <option value="Unspecified">Select issue type</option>
-          <option value="Pothole">Pothole</option>
-          <option value="Street Light">Street Light</option>
-          <option value="Water Supply">Water Supply</option>
-          <option value="Sewage">Sewage</option>
-          <option value="Garbage">Garbage</option>
-          <option value="Traffic">Traffic</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
+      <!-- Modal body / form -->
+      <form class="p-4 md:p-5" @submit.prevent="submitIssue">
+        <div class="grid gap-4 mb-4 grid-cols-2">
+          <!-- Title (full width) -->
+          <div class="col-span-2">
+            <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Issue Title *</label>
+            <input id="title" v-model="formData.title" type="text" required placeholder="Brief description of the issue"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+          </div>
 
-      <!-- Description -->
-      <div>
-        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-          Description *
-        </label>
-        <textarea id="description" v-model="formData.description" required rows="4"
-          placeholder="Detailed description of the issue..."
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"></textarea>
-      </div>
+          <!-- Issue Type (half) -->
+          <div class="col-span-2">
+            <label for="issueType" class="block mb-2 text-sm font-medium text-gray-900">Issue Type</label>
+            <select id="issueType" v-model="formData.issueType"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+              <option value="Unspecified">Select issue type</option>
+              <option value="Pothole">Pothole</option>
+              <option value="Street Light">Street Light</option>
+              <option value="Water Supply">Water Supply</option>
+              <option value="Sewage">Sewage</option>
+              <option value="Garbage">Garbage</option>
+              <option value="Traffic">Traffic</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
-      <!-- Location Selector -->
-      <LocationSelector v-model="formData.location" />
+          <!-- Location selector (half) -->
+          <div class="col-span-2">
+            <label class="block mb-2 text-sm font-medium text-gray-900">Location</label>
+            <LocationSelector v-model="formData.location" />
+          </div>
 
-      <!-- Images -->
-      <div>
-        <label for="images" class="block text-sm font-medium text-gray-700 mb-2">
-          Images * (at least one required)
-        </label>
-        <input id="images" ref="imageInput" type="file" multiple accept="image/*" @change="handleImageUpload"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
-        <p class="text-sm text-gray-600 mt-1">
-          Select one or more images (max 15MB each)
-        </p>
+          <!-- Description (full) -->
+          <div class="col-span-2">
+            <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description *</label>
+            <textarea id="description" v-model="formData.description" required rows="4"
+              placeholder="Detailed description of the issue..."
+              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"></textarea>
+          </div>
 
-        <!-- Image Preview -->
-        <div v-if="imagePreviews.length > 0" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-          <div v-for="(preview, index) in imagePreviews" :key="index" class="relative">
-            <img :src="preview" alt="Preview" class="w-full h-24 object-cover rounded-lg border" />
-            <button @click="removeImage(index)"
-              class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
-              ×
-            </button>
+          <!-- Images (full) -->
+          <div class="col-span-2">
+            <label for="images" class="block mb-2 text-sm font-medium text-gray-900">Images * (at least one
+              required)</label>
+            <input id="images" ref="imageInput" type="file" multiple accept="image/*" @change="handleImageUpload"
+              class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5" />
+            <p class="text-sm text-gray-600 mt-1">Select one or more images (max 15MB each)</p>
+
+            <div v-if="imagePreviews.length > 0" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div v-for="(preview, index) in imagePreviews" :key="index" class="relative">
+                <img :src="preview" alt="Preview" class="w-full h-24 object-cover rounded-lg border" />
+                <button type="button" @click="removeImage(index)"
+                  class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">×</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Voice Note (half) -->
+          <div class="col-span-2 sm:col-span-1">
+            <label for="voiceNote" class="block mb-2 text-sm font-medium text-gray-900">Voice Note (optional)</label>
+            <input id="voiceNote" type="file" accept="audio/*" @change="handleVoiceNoteUpload"
+              class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5" />
+          </div>
+
+          <!-- Video Note (half) -->
+          <div class="col-span-2 sm:col-span-1">
+            <label for="videoNote" class="block mb-2 text-sm font-medium text-gray-900">Video Note (optional)</label>
+            <input id="videoNote" type="file" accept="video/*" @change="handleVideoNoteUpload"
+              class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5" />
           </div>
         </div>
-      </div>
 
-      <!-- Voice Note -->
-      <div>
-        <label for="voiceNote" class="block text-sm font-medium text-gray-700 mb-2">
-          Voice Note (optional)
-        </label>
-        <input id="voiceNote" type="file" accept="audio/*" @change="handleVoiceNoteUpload"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
-        <p class="text-sm text-gray-600 mt-1">
-          Record or upload an audio description
-        </p>
-      </div>
+        <div class="flex justify-end space-x-4">
+          <button type="button" @click="closeModal"
+            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+            Cancel
+          </button>
+          <button type="submit" :disabled="loading || !isFormValid"
+            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center">
+            <span v-if="loading" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
+              Submitting...
+            </span>
+            <span v-else>Report Issue</span>
+          </button>
+        </div>
 
-      <!-- Video Note -->
-      <div>
-        <label for="videoNote" class="block text-sm font-medium text-gray-700 mb-2">
-          Video Note (optional)
-        </label>
-        <input id="videoNote" type="file" accept="video/*" @change="handleVideoNoteUpload"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
-        <p class="text-sm text-gray-600 mt-1">
-          Upload a video showing the issue
-        </p>
-      </div>
-
-      <!-- Submit Button -->
-      <div class="flex justify-end space-x-4">
-        <button type="button" @click="$emit('cancel')"
-          class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-          Cancel
-        </button>
-        <button type="submit" :disabled="loading || !isFormValid"
-          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
-          <span v-if="loading" class="flex items-center">
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-              viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-              </circle>
-              <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-              </path>
-            </svg>
-            Submitting...
-          </span>
-          <span v-else>Report Issue</span>
-        </button>
-      </div>
-
-      <!-- Error Message -->
-      <div v-if="error" class="text-red-600 text-sm text-center">
-        {{ error }}
-      </div>
-    </form>
+        <div v-if="error" class="text-red-600 text-sm text-center mt-3">
+          {{ error }}
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -132,6 +141,9 @@ const router = useRouter()
 
 // Emits
 const emit = defineEmits(['cancel', 'success'])
+
+// Modal state
+const isOpen = ref(false)
 
 // Reactive data
 const formData = ref({
@@ -159,7 +171,7 @@ const isFormValid = computed(() => {
 
 // Methods
 const handleImageUpload = (event) => {
-  const files = Array.from(event.target.files)
+  const files = Array.from(event.target.files || [])
 
   // Validate file sizes
   const maxSize = 15 * 1024 * 1024 // 15MB
@@ -184,17 +196,13 @@ const handleImageUpload = (event) => {
 }
 
 const handleVoiceNoteUpload = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    formData.value.voiceNote = file
-  }
+  const file = event.target.files && event.target.files[0]
+  if (file) formData.value.voiceNote = file
 }
 
 const handleVideoNoteUpload = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    formData.value.videoNote = file
-  }
+  const file = event.target.files && event.target.files[0]
+  if (file) formData.value.videoNote = file
 }
 
 const removeImage = (index) => {
@@ -207,6 +215,26 @@ const removeImage = (index) => {
     formData.value.images.forEach(file => dt.items.add(file))
     imageInput.value.files = dt.files
   }
+}
+
+const closeModal = () => {
+  isOpen.value = false
+  // Reset form
+  formData.value = {
+    title: '',
+    issueType: 'Unspecified',
+    description: '',
+    location: null,
+    images: [],
+    voiceNote: null,
+    videoNote: null
+  }
+  imagePreviews.value = []
+  error.value = ''
+  if (imageInput.value) {
+    imageInput.value.value = ''
+  }
+  emit('cancel')
 }
 
 const submitIssue = async () => {
@@ -241,22 +269,15 @@ const submitIssue = async () => {
       formDataToSend.append('video_note', formData.value.videoNote)
     }
 
-    console.log(formDataToSend)
-
     const response = await axios.post('/api/issues/report', formDataToSend)
 
     if (response.status === 201 || response.status === 200) {
-
-      console.log('Response Data :', response.data)
-
       emit('success', response.data.issue)
+      isOpen.value = false
       router.push('/issues')
     } else {
-      error.value = response.data.error || 'Failed to report issue'
+      error.value = response.data?.error || 'Failed to report issue'
     }
-
-    console.log('Issue reported successfully : ', response.data)
-
   } catch (err) {
     error.value = 'Network Error. Please Try Again.'
     console.error('Issue submission error:', err)
@@ -267,5 +288,5 @@ const submitIssue = async () => {
 </script>
 
 <style scoped>
-/* Additional styles if needed */
+/* keep modal centered when visible */
 </style>
