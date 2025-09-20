@@ -41,17 +41,43 @@ const router = createRouter({
       component: () => import('../views/User-Profile.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/admin-profile',
+      name: 'AdminProfile',
+      component: () => import('../views/User-Profile.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin-dashboard',
+      name: 'AdminDashboard',
+      component: () => import('../views/Admin-Dashboard.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/issues/:id/manage',
+      name: 'AdminIssueManage',
+      component: () => import('../views/Admin-Issue-Manage.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
   ],
 })
 
 // Navigation Gaurd
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
+
+  if (authStore.token && !authStore.user) {
+    await authStore.initializeAuth()
+  }
+
   const isAuthenticated = authStore.isAuthenticated
+  const isAdmin = authStore.user?.role === 'admin'
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')
   } else if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
+    next('/')
+  } else if (to.meta.requiresAdmin && !isAdmin) {
     next('/')
   } else {
     next()

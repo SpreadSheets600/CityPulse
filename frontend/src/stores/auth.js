@@ -8,6 +8,8 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') || null)
   const isAuthenticated = computed(() => !!token.value)
 
+  const isAdmin = computed(() => user.value?.role === 'admin')
+
   const setToken = (newToken) => {
     token.value = newToken
     if (newToken) {
@@ -55,8 +57,17 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const initializeAuth = () => {
-    // Token is handled by axios interceptor, no need to set headers manually
+  const initializeAuth = async () => {
+    if (token.value) {
+      try {
+        const response = await axios.get('/api/auth/me')
+        setUser(response.data.user)
+      } catch (error) {
+        console.error('Failed to fetch user data:', error)
+        setToken(null)
+        setUser(null)
+      }
+    }
   }
 
   return {
@@ -67,5 +78,6 @@ export const useAuthStore = defineStore('auth', () => {
     register,
     initializeAuth,
     isAuthenticated,
+    isAdmin,
   }
 })
