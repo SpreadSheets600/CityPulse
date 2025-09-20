@@ -80,10 +80,11 @@ class Login(Resource):
 class Logout(Resource):
     @jwt_required()
     def post(self):
-        response = {"msg": "Logout Successful"}
+        from flask import make_response
 
+        response = make_response({"msg": "Logout Successful"})
         unset_jwt_cookies(response)
-        return response, 200
+        return response
 
 
 class Refresh(Resource):
@@ -92,3 +93,13 @@ class Refresh(Resource):
         current_user = get_jwt_identity()
         new_access_token = create_access_token(identity=current_user)
         return {"access_token": new_access_token}, 200
+
+
+class GetCurrentUser(Resource):
+    @jwt_required()
+    def get(self):
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+        return {"user": user.to_dict()}, 200
