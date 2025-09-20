@@ -3,7 +3,7 @@ from . import db
 from passlib.hash import bcrypt
 
 
-class UseRole(enum.Enum):
+class UserRole(enum.Enum):
     citizen = "citizen"
     admin = "admin"
 
@@ -16,7 +16,7 @@ class User(db.Model):
 
     address = db.Column(db.String(200), nullable=False)
 
-    role = db.Column(db.Enum(UseRole), default=UseRole.citizen, nullable=False)
+    role = db.Column(db.Enum(UserRole), default=UserRole.citizen, nullable=False)
 
     phone = db.Column(db.String(15), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -26,10 +26,10 @@ class User(db.Model):
     profile_picture = db.Column(db.String(200), nullable=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
-    isuues = db.relationship("Issue", backref="user", lazy=True)
+    issues = db.relationship("Issue", backref="user", lazy=True)
 
     def __repr__(self):
-        return f"<User {self.username}>"
+        return f"<User {self.firstname} {self.lastname}>"
 
     def to_dict(self):
         return {
