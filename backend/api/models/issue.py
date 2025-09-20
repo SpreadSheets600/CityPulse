@@ -17,8 +17,8 @@ class Issue(db.Model):
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(500), nullable=False)
 
-    # Store multiple image URLs as JSON
     image_urls = db.Column(db.JSON, nullable=False)
+
     voice_note_url = db.Column(db.String())
     video_note_url = db.Column(db.String())
 
