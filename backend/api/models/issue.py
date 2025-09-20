@@ -32,6 +32,8 @@ class Issue(db.Model):
     longitude = db.Column(db.Float, nullable=False)
     address = db.Column(db.String(200))
 
+    department_id = db.Column(db.Integer, db.ForeignKey("department.id"), nullable=True)
+
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(
         db.DateTime,
@@ -42,6 +44,10 @@ class Issue(db.Model):
     citizen_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     verification = db.relationship("VerificationStatus", backref="issue", uselist=False)
+
+    updates = db.relationship(
+        "IssueUpdate", backref="issue", lazy=True, cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<Issue {self.title} - {self.status.value}>"
@@ -59,6 +65,7 @@ class Issue(db.Model):
             "latitude": self.latitude,
             "longitude": self.longitude,
             "address": self.address,
+            "department_id": self.department_id,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
             "citizen_id": self.citizen_id,
