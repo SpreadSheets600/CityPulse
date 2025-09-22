@@ -95,6 +95,10 @@ const props = defineProps({
   modelValue: {
     type: Object,
     default: () => null
+  },
+  autoLocate: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -133,15 +137,15 @@ const searchAddress = async (query) => {
 const selectAddress = (suggestion) => {
   address.value = suggestion.display_name
   selectedLocation.value = {
-    lat: suggestion.lat,
-    lng: suggestion.lon
+    lat: Number(suggestion.lat),
+    lng: Number(suggestion.lon)
   }
   addressSuggestions.value = []
 
   // Update map if visible
   if (map.value && marker.value) {
-    marker.value.setLatLng([suggestion.lat, suggestion.lon])
-    map.value.setView([suggestion.lat, suggestion.lon], 15)
+    marker.value.setLatLng([Number(suggestion.lat), Number(suggestion.lon)])
+    map.value.setView([Number(suggestion.lat), Number(suggestion.lon)], 15)
   }
 
   emitLocation()
@@ -330,6 +334,11 @@ onUnmounted(() => {
     map.value.remove()
   }
 })
+
+// Auto-locate if requested
+if (props.autoLocate) {
+  useCurrentLocation()
+}
 </script>
 
 <style scoped>
@@ -340,5 +349,12 @@ onUnmounted(() => {
 
 :deep(.leaflet-popup-content-wrapper) {
   font-family: inherit;
+}
+
+/* Lower Leaflet z-index so app modals clearly overlay */
+:deep(.leaflet-pane),
+:deep(.leaflet-top),
+:deep(.leaflet-bottom) {
+  z-index: 100 !important;
 }
 </style>
