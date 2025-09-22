@@ -40,6 +40,7 @@ class User(db.Model):
             "role": self.role.value,
             "phone": self.phone,
             "email": self.email,
+            "profile_picture": self.profile_picture,
             "created_at": self.created_at.isoformat(),
         }
 
