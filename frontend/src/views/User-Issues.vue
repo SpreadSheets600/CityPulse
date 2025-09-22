@@ -5,13 +5,13 @@
       <div class="px-4 py-6 sm:px-0">
         <div class="flex justify-between items-center mb-8">
           <h2 class="text-2xl font-bold text-gray-900">My Issues</h2>
-          <button @click="showCreateForm = true"
+          <router-link to="/issues/create"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
             <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
             Report New Issue
-          </button>
+          </router-link>
         </div>
 
         <!-- Loading State -->
@@ -65,30 +65,25 @@
           <h3 class="mt-2 text-sm font-medium text-gray-900">No issues reported</h3>
           <p class="mt-1 text-sm text-gray-500">Get started by reporting your first issue.</p>
           <div class="mt-6">
-            <button @click="showCreateForm = true"
+            <router-link to="/issues/create"
               class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
               <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
               Report New Issue
-            </button>
+            </router-link>
           </div>
         </div>
       </div>
     </main>
-
-    <!-- Create Issue Form Modal -->
-    <IssueForm v-model="showCreateForm" @success="onIssueCreated" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import IssueForm from '../components/Issue-Form.vue'
 import axios from '../api/client'
 
 const issues = ref([])
-const showCreateForm = ref(false)
 const loading = ref(false)
 
 const getStatusClass = (status) => {
@@ -121,11 +116,6 @@ const fetchIssues = async () => {
   } finally {
     loading.value = false
   }
-}
-
-const onIssueCreated = (newIssue) => {
-  showCreateForm.value = false
-  issues.value.unshift(newIssue) // Add to the beginning of the list
 }
 
 onMounted(() => {

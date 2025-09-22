@@ -92,14 +92,14 @@
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
             <div class="flex flex-wrap gap-4">
-              <button @click="showIssueModal = true"
+              <router-link to="/issues/create"
                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
                 Report New Issue
-              </button>
+              </router-link>
               <router-link to="/issues"
                 class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                 View My Issues
@@ -153,28 +153,19 @@
       </div>
     </main>
   </div>
-
-  <IssueForm v-model="showIssueModal" @success="handleIssueSuccess" />
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '../stores/auth'
-import IssueForm from '../components/Issue-Form.vue'
 import axios from '../api/client'
 
 const authStore = useAuthStore()
 
 const user = computed(() => authStore.user)
 
-const showIssueModal = ref(false)
 const selectedStatus = ref('all')
 const allIssues = ref([])
-
-const handleIssueSuccess = () => {
-  showIssueModal.value = false
-  fetchData() // Refresh data after new issue
-}
 
 const stats = computed(() => {
   const issues = allIssues.value
