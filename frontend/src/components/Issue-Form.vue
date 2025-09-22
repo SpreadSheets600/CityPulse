@@ -1,15 +1,16 @@
 <template>
   <!-- Main modal -->
-  <div :class="['fixed inset-0 z-50 overflow-y-auto', { 'flex items-center justify-center': isOpen }]" tabindex="-1"
+  <div :class="['fixed inset-0 z-50', { 'flex sm:items-center sm:justify-center': isOpen }]" tabindex="-1"
     :aria-hidden="!isOpen" v-if="isOpen">
     <!-- Backdrop -->
     <div class="fixed inset-0 bg-gray-900/50 bg-opacity-50" @click="closeModal"></div>
 
     <!-- Modal content -->
-    <div class="relative bg-white rounded-lg shadow-lg max-w-2xl w-full mx-4 my-6 max-h-[90vh] overflow-y-auto">
+    <div
+      class="relative bg-white rounded-t-2xl sm:rounded-lg shadow-lg w-full sm:max-w-2xl sm:mx-4 sm:my-6 h-[100dvh] sm:h-auto sm:max-h-[90vh] flex flex-col">
       <!-- Modal header -->
       <div
-        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 sticky top-0 bg-white">
+        class="flex items-center justify-between p-4 md:p-5 border-b border-gray-200 sticky top-0 bg-white rounded-t-2xl sm:rounded-t">
         <h3 class="text-lg font-semibold text-gray-900">
           Report New Issue
         </h3>
@@ -25,8 +26,8 @@
       </div>
 
       <!-- Modal body / form -->
-      <form class="p-4 md:p-5" @submit.prevent="submitIssue">
-        <div class="grid gap-4 mb-4 grid-cols-2">
+      <form class="p-4 md:p-5 overflow-y-auto flex-1" @submit.prevent="submitIssue">
+        <div class="grid gap-4 mb-4 grid-cols-1 sm:grid-cols-2">
           <!-- Title (full width) -->
           <div class="col-span-2">
             <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Issue Title *</label>
@@ -68,38 +69,123 @@
           <div class="col-span-2">
             <label for="images" class="block mb-2 text-sm font-medium text-gray-900">Images * (at least one
               required)</label>
-            <input id="images" ref="imageInput" type="file" multiple accept="image/*" @change="handleImageUpload"
-              class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5" />
-            <p class="text-sm text-gray-600 mt-1">Select one or more images (max 15MB each)</p>
 
-            <div v-if="imagePreviews.length > 0" class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-3">
+              <input id="images" ref="imageInput" type="file" multiple accept="image/*" @change="handleImageUpload"
+                class="text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5 w-full" />
+              <button type="button" @click="showPhotoModal = true"
+                class="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                title="Take Photo">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                  </path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span class="hidden sm:inline ml-2">Take Photo</span>
+              </button>
+            </div>
+            <p class="text-sm text-gray-600 mt-1">Select images or use camera button</p>
+
+            <div v-if="imagePreviews.length > 0" class="mt-4 grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4">
               <div v-for="(preview, index) in imagePreviews" :key="index" class="relative">
-                <img :src="preview" alt="Preview" class="w-full h-24 object-cover rounded-lg border" />
+                <img :src="preview" alt="Preview" class="w-full h-20 sm:h-24 object-cover rounded-lg border" />
                 <button type="button" @click="removeImage(index)"
                   class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">×</button>
               </div>
             </div>
           </div>
 
-          <!-- Voice Note (full width on mobile, half on larger screens) -->
+          <!-- Voice Note -->
           <div class="col-span-2 sm:col-span-1">
             <label for="voiceNote" class="block mb-2 text-sm font-medium text-gray-900">Voice Note (optional)</label>
-            <input id="voiceNote" type="file" accept="audio/*" @change="handleVoiceNoteUpload"
-              class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5" />
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-3">
+              <input id="voiceNote" type="file" accept="audio/*" @change="handleVoiceNoteUpload"
+                class="text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5 w-full" />
+              <button type="button" @click="showAudioModal = true"
+                class="w-full sm:w-auto px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                title="Record Audio">
+                <svg v-if="isRecordingAudio" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <rect x="6" y="4" width="4" height="16"></rect>
+                  <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+                <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                  </path>
+                </svg>
+                <span class="hidden sm:inline ml-2">Record Audio</span>
+              </button>
+            </div>
+
+            <div v-if="formData.voiceNote" class="mt-2 p-3 bg-gray-50 rounded-lg">
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                  </path>
+                </svg>
+                <span class="text-sm text-gray-700">{{ formData.voiceNote.name }}</span>
+                <button type="button" @click="formData.voiceNote = null"
+                  class="ml-auto text-red-500 hover:text-red-700">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
 
-          <!-- Video Note (full width on mobile, half on larger screens) -->
+          <!-- Video Note -->
           <div class="col-span-2 sm:col-span-1">
             <label for="videoNote" class="block mb-2 text-sm font-medium text-gray-900">Video Note (optional)</label>
-            <input id="videoNote" type="file" accept="video/*" @change="handleVideoNoteUpload"
-              class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5" />
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-3">
+              <input id="videoNote" type="file" accept="video/*" @change="handleVideoNoteUpload"
+                class="text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5 w-full" />
+              <button type="button" @click="showVideoModal = true"
+                class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                title="Record Video">
+                <svg v-if="isRecordingVideo" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <rect x="6" y="4" width="4" height="16"></rect>
+                  <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+                <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
+                  </path>
+                </svg>
+                <span class="hidden sm:inline ml-2">Record Video</span>
+              </button>
+            </div>
+
+            <div v-if="formData.videoNote" class="mt-2 p-3 bg-gray-50 rounded-lg">
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
+                  </path>
+                </svg>
+                <span class="text-sm text-gray-700">{{ formData.videoNote.name }}</span>
+                <button type="button" @click="formData.videoNote = null"
+                  class="ml-auto text-red-500 hover:text-red-700">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
         <div
-          class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4 sticky bottom-0 bg-white pt-4 border-t">
+          class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4 sticky bottom-0 bg-white p-4 border-t rounded-b-2xl sm:rounded-b">
           <button type="button" @click="closeModal"
-            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 order-2 sm:order-1 mt-2">
+            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 order-2 sm:order-1">
             Cancel
           </button>
           <button type="submit" :disabled="loading || !isFormValid"
@@ -124,12 +210,20 @@
       </form>
     </div>
   </div>
+
+  <!-- Media Capture Modals -->
+  <PhotoCaptureModal v-model="showPhotoModal" @capture="addCapturedImage" />
+  <VideoCaptureModal v-model="showVideoModal" @capture="formData.videoNote = $event" />
+  <AudioCaptureModal v-model="showAudioModal" @capture="formData.voiceNote = $event" />
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 
 import LocationSelector from './Location-Selector.vue'
+import PhotoCaptureModal from './Photo-Capture-Modal.vue'
+import VideoCaptureModal from './Video-Capture-Modal.vue'
+import AudioCaptureModal from './Audio-Capture-Modal.vue'
 import axios from '../api/client'
 
 const props = defineProps({
@@ -159,6 +253,15 @@ const imagePreviews = ref([])
 const loading = ref(false)
 const error = ref('')
 const imageInput = ref(null)
+
+// Media capture state
+// Modal states
+const showPhotoModal = ref(false)
+const showVideoModal = ref(false)
+const showAudioModal = ref(false)
+// Icon state used in template (kept simple; modals manage actual recording)
+const isRecordingAudio = ref(false)
+const isRecordingVideo = ref(false)
 
 // Computed
 const isFormValid = computed(() => {
@@ -214,6 +317,18 @@ const removeImage = (index) => {
     formData.value.images.forEach(file => dt.items.add(file))
     imageInput.value.files = dt.files
   }
+}
+
+// Media capture functions
+const addCapturedImage = (file) => {
+  formData.value.images.push(file)
+
+  // Create preview
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    imagePreviews.value.push(e.target.result)
+  }
+  reader.readAsDataURL(file)
 }
 
 const closeModal = () => {
@@ -286,5 +401,10 @@ const submitIssue = async () => {
 </script>
 
 <style scoped>
-/* keep modal centered when visible */
+/* Improve safe-area on iOS */
+@supports (padding: max(0px)) {
+  .p-safe-b {
+    padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+  }
+}
 </style>
