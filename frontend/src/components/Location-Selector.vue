@@ -6,9 +6,9 @@
       </label>
 
       <!-- Location Input Options -->
-      <div class="flex space-x-4 mb-4">
+      <div class="flex flex-col sm:flex-row gap-3 mb-4">
         <button @click="useCurrentLocation" :disabled="gettingLocation"
-          class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+          class="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex-1 sm:flex-initial">
           <svg v-if="gettingLocation" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
@@ -24,17 +24,17 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z">
             </path>
           </svg>
-          {{ gettingLocation ? 'Getting Location...' : 'Use Current Location' }}
+          <span class="text-sm">{{ gettingLocation ? 'Getting Location...' : 'Use Current Location' }}</span>
         </button>
 
         <button @click="showMap = !showMap"
-          class="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+          class="flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex-1 sm:flex-initial">
           <svg class="-ml-1 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
             </path>
           </svg>
-          {{ showMap ? 'Hide Map' : 'Select on Map' }}
+          <span class="text-sm">{{ showMap ? 'Hide Map' : 'Select on Map' }}</span>
         </button>
       </div>
 
@@ -57,7 +57,7 @@
 
       <!-- Map Container -->
       <div v-if="showMap" class="mb-4">
-        <div class="h-64 border border-gray-300 rounded-lg overflow-hidden">
+        <div class="h-64 sm:h-80 border border-gray-300 rounded-lg overflow-hidden">
           <div ref="mapContainer" class="h-full w-full"></div>
         </div>
         <p class="text-sm text-gray-600 mt-2">

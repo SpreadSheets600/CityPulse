@@ -64,7 +64,8 @@
                 <dd class="mt-1 sm:mt-0">
                   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <img v-for="(url, index) in issue.image_urls" :key="index" :src="url" :alt="`Image ${index + 1}`"
-                      class="w-full h-48 object-cover rounded-lg cursor-pointer" @click="openImageModal(url)" />
+                      class="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                      @click="openImageModal(url)" />
                   </div>
                 </dd>
               </div>
@@ -88,25 +89,26 @@
             <h4 class="text-md font-medium text-gray-900 mb-3">Updates</h4>
             <div v-if="updates.length === 0" class="text-sm text-gray-500">No updates yet.</div>
             <div v-else class="space-y-4">
-              <div v-for="u in updates" :key="u.id" class="border rounded-md p-3">
-                <div class="flex items-center justify-between">
-                  <h5 class="font-semibold">{{ u.title }}</h5>
+              <div v-for="u in updates" :key="u.id" class="border rounded-md p-4">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                  <h5 class="font-semibold mb-1 sm:mb-0">{{ u.title }}</h5>
                   <span class="text-xs text-gray-500">{{ formatDate(u.created_at) }}</span>
                 </div>
                 <p class="text-sm text-gray-700 mt-1">{{ u.body }}</p>
                 <div class="mt-2">
-                  <div class="flex justify-between text-xs text-gray-500">
+                  <div class="flex justify-between text-xs text-gray-500 mb-1">
                     <span>Progress</span>
                     <span>{{ u.progress }}%</span>
                   </div>
-                  <div class="w-full bg-gray-200 rounded h-2 mt-1">
+                  <div class="w-full bg-gray-200 rounded h-2">
                     <div class="bg-indigo-600 h-2 rounded" :style="{ width: (u.progress || 0) + '%' }"></div>
                   </div>
                 </div>
                 <div v-if="u.image_urls && u.image_urls.length > 0" class="mt-3">
                   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                     <img v-for="(url, index) in u.image_urls" :key="index" :src="url" :alt="`Update image ${index + 1}`"
-                      class="w-full h-24 object-cover rounded cursor-pointer" @click="openImageModal(url)" />
+                      class="w-full h-24 object-cover rounded cursor-pointer hover:opacity-90 transition-opacity"
+                      @click="openImageModal(url)" />
                   </div>
                 </div>
               </div>
