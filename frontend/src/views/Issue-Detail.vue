@@ -52,10 +52,18 @@
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   <p class="mb-2">{{ issue.latitude }}, {{ issue.longitude }}</p>
                   <div class="h-64 w-full rounded-lg overflow-hidden border">
-                    <iframe
-                      :src="`https://www.openstreetmap.org/export/embed.html?bbox=${mapCenter[1] - 0.01},${mapCenter[0] - 0.01},${mapCenter[1] + 0.01},${mapCenter[0] + 0.01}&layer=mapnik&marker=${mapCenter[0]},${mapCenter[1]}`"
-                      width="100%" height="100%" style="border: none;">
-                    </iframe>
+                    <l-map v-model:zoom="zoom" :center="mapCenter" :use-global-leaflet="false" style="height: 100%;">
+                      <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'></l-tile-layer>
+                      <l-marker :lat-lng="mapCenter">
+                        <l-popup>
+                          <div class="text-sm">
+                            <p class="font-semibold">{{ issue.title }}</p>
+                            <p>{{ issue.address }}</p>
+                          </div>
+                        </l-popup>
+                      </l-marker>
+                    </l-map>
                   </div>
                 </dd>
               </div>
@@ -145,6 +153,8 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from '../api/client'
+import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
+import 'leaflet/dist/leaflet.css'
 
 
 const route = useRoute()
@@ -153,6 +163,7 @@ const loading = ref(false)
 const selectedImage = ref(null)
 const mapCenter = ref([0, 0])
 const updates = ref([])
+const zoom = ref(15)
 
 const getStatusClass = (status) => {
   const classes = {
