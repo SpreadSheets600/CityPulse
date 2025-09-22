@@ -13,6 +13,8 @@ from api.routes.issues import (
     AllIssues,
     GetIssue,
     GetIssueUpdates,
+    GeocodeAddress,
+    ReverseGeocode,
 )
 from api.routes.admin import (
     GetAllUsers,
@@ -59,6 +61,8 @@ def create_app():
     api.add_resource(AllIssues, "/api/issues")
     api.add_resource(GetIssue, "/api/issues/<int:issue_id>")
     api.add_resource(GetIssueUpdates, "/api/issues/<int:issue_id>/updates")
+    api.add_resource(GeocodeAddress, "/api/geocode")
+    api.add_resource(ReverseGeocode, "/api/reverse-geocode")
 
     api.add_resource(MyIssues, "/api/issues/my-issues")
 
