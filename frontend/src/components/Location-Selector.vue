@@ -88,6 +88,7 @@
 <script setup>
 import { ref, onUnmounted, watch, nextTick } from 'vue'
 import L from 'leaflet'
+import axios from '../api/client'
 
 // Props
 const props = defineProps({
@@ -113,7 +114,7 @@ const marker = ref(null)
 // Refs
 const mapContainer = ref(null)
 
-// Geocoding function using Nominatim (OpenStreetMap)
+// Geocoding function using backend API
 const searchAddress = async (query) => {
   if (!query || query.length < 3) {
     addressSuggestions.value = []
@@ -121,17 +122,8 @@ const searchAddress = async (query) => {
   }
 
   try {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&countrycodes=IN`
-    )
-    const results = await response.json()
-
-    addressSuggestions.value = results.map(result => ({
-      place_id: result.place_id,
-      display_name: result.display_name,
-      lat: parseFloat(result.lat),
-      lon: parseFloat(result.lon)
-    }))
+    const response = await axios.get(`/api/geocode?q=${encodeURIComponent(query)}`)
+    addressSuggestions.value = response.data.suggestions || []
   } catch (error) {
     console.error('Geocoding error:', error)
     addressSuggestions.value = []
@@ -180,12 +172,9 @@ const useCurrentLocation = async () => {
 
     // Try to get address from coordinates
     try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
-      )
-      const result = await response.json()
-      if (result && result.display_name) {
-        address.value = result.display_name
+      const response = await axios.get(`/api/reverse-geocode?lat=${lat}&lon=${lng}`)
+      if (response.data.address) {
+        address.value = response.data.address
       }
     } catch {
       console.log('Could not reverse geocode location')
@@ -279,12 +268,9 @@ const initializeMap = () => {
 
 const reverseGeocode = async (lat, lng) => {
   try {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
-    )
-    const result = await response.json()
-    if (result && result.display_name) {
-      address.value = result.display_name
+    const response = await axios.get(`/api/reverse-geocode?lat=${lat}&lon=${lng}`)
+    if (response.data.address) {
+      address.value = response.data.address
     }
   } catch {
     console.log('Could not reverse geocode location')
