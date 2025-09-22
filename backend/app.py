@@ -7,7 +7,13 @@ from flask_migrate import Migrate, upgrade, stamp, init, migrate as alembic_migr
 
 from api.models import db, User, UserRole
 from api.routes.auth import Register, Login, Logout, Refresh, GetCurrentUser
-from api.routes.issues import ReportIssue, MyIssues, GetIssue, GetIssueUpdates
+from api.routes.issues import (
+    ReportIssue,
+    MyIssues,
+    AllIssues,
+    GetIssue,
+    GetIssueUpdates,
+)
 from api.routes.admin import (
     GetAllUsers,
     DeleteUser,
@@ -50,6 +56,7 @@ def create_app():
     api.add_resource(GetCurrentUser, "/api/auth/me")
 
     api.add_resource(ReportIssue, "/api/issues/report")
+    api.add_resource(AllIssues, "/api/issues")
     api.add_resource(GetIssue, "/api/issues/<int:issue_id>")
     api.add_resource(GetIssueUpdates, "/api/issues/<int:issue_id>/updates")
 
