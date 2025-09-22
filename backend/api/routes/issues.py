@@ -7,6 +7,9 @@ from flask_jwt_extended import (
 )
 
 from uuid import uuid4
+import urllib.request
+import urllib.parse
+import json
 from api.models import db, User, Issue, IssueUpdate, UserRole
 from ..utils.s3 import upload_file_to_s3, compress_image
 
@@ -215,3 +218,74 @@ class GetIssueUpdates(Resource):
             .all()
         )
         return {"updates": [u.to_dict() for u in updates]}, 200
+
+
+class GeocodeAddress(Resource):
+    @jwt_required()
+    def get(self):
+        query = request.args.get("q", "").strip()
+
+        if not query or len(query) < 3:
+            return {"suggestions": []}, 200
+
+        try:
+            # Use Nominatim API for geocoding
+            url = f"https://nominatim.openstreetmap.org/search?format=json&q={urllib.parse.quote(query)}&limit=5&countrycodes=IN"
+
+            # Set a user agent as required by Nominatim
+            req = urllib.request.Request(url, headers={"User-Agent": "CityPulse/1.0"})
+
+            with urllib.request.urlopen(req) as response:
+                data = json.loads(response.read().decode())
+
+            suggestions = []
+            for result in data:
+                suggestions.append(
+                    {
+                        "place_id": result.get("place_id"),
+                        "display_name": result.get("display_name"),
+                        "lat": float(result.get("lat", 0)),
+                        "lon": float(result.get("lon", 0)),
+                    }
+                )
+
+            return {"suggestions": suggestions}, 200
+
+        except Exception as e:
+            print(f"Geocoding error: {e}")
+            return {"error": "Geocoding service unavailable"}, 500
+
+
+class ReverseGeocode(Resource):
+    @jwt_required()
+    def get(self):
+        lat = request.args.get("lat")
+        lon = request.args.get("lon")
+
+        if not lat or not lon:
+            return {"error": "Latitude and longitude are required"}, 400
+
+        try:
+            lat = float(lat)
+            lon = float(lon)
+
+            if not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
+                return {"error": "Invalid coordinates"}, 400
+
+            # Use Nominatim API for reverse geocoding
+            url = f"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}&zoom=18&addressdetails=1"
+
+            # Set a user agent as required by Nominatim
+            req = urllib.request.Request(url, headers={"User-Agent": "CityPulse/1.0"})
+
+            with urllib.request.urlopen(req) as response:
+                data = json.loads(response.read().decode())
+
+            if data and data.get("display_name"):
+                return {"address": data.get("display_name"), "details": data}, 200
+            else:
+                return {"error": "Address not found"}, 404
+
+        except Exception as e:
+            print(f"Reverse geocoding error: {e}")
+            return {"error": "Reverse geocoding service unavailable"}, 500
