@@ -76,7 +76,12 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')
   } else if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated) {
-    next('/')
+    // Redirect authenticated users away from login/register pages
+    if (isAdmin) {
+      next('/admin-dashboard')
+    } else {
+      next('/')
+    }
   } else if (to.meta.requiresAdmin && !isAdmin) {
     next('/')
   } else {
