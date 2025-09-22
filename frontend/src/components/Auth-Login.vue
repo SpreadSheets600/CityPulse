@@ -82,7 +82,12 @@ const handleLogin = async () => {
   loading.value = false
 
   if (result.success) {
-    router.push('/')
+    // Redirect admin users to admin dashboard, regular users to home
+    if (authStore.isAdmin) {
+      router.push('/admin-dashboard')
+    } else {
+      router.push('/')
+    }
   } else {
     error.value = result.error
   }
