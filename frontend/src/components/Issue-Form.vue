@@ -1,20 +1,15 @@
 <template>
-  <!-- Modal toggle -->
-  <button @click="isOpen = true"
-    class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-    Report New Issue
-  </button>
-
   <!-- Main modal -->
   <div :class="['fixed inset-0 z-50 overflow-y-auto', { 'flex items-center justify-center': isOpen }]" tabindex="-1"
     :aria-hidden="!isOpen" v-if="isOpen">
     <!-- Backdrop -->
-    <div class="fixed inset-0 bg-black bg-opacity-50" @click="closeModal"></div>
+    <div class="fixed inset-0 bg-gray-900/50 bg-opacity-50" @click="closeModal"></div>
 
     <!-- Modal content -->
-    <div class="relative bg-white rounded-lg shadow-lg max-w-2xl w-full mx-4 my-6">
+    <div class="relative bg-white rounded-lg shadow-lg max-w-2xl w-full mx-4 my-6 max-h-[90vh] overflow-y-auto">
       <!-- Modal header -->
-      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+      <div
+        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 sticky top-0 bg-white">
         <h3 class="text-lg font-semibold text-gray-900">
           Report New Issue
         </h3>
@@ -39,7 +34,7 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
           </div>
 
-          <!-- Issue Type (half) -->
+          <!-- Issue Type (full width on mobile, half on larger screens) -->
           <div class="col-span-2">
             <label for="issueType" class="block mb-2 text-sm font-medium text-gray-900">Issue Type</label>
             <select id="issueType" v-model="formData.issueType"
@@ -55,7 +50,7 @@
             </select>
           </div>
 
-          <!-- Location selector (half) -->
+          <!-- Location selector (full width) -->
           <div class="col-span-2">
             <label class="block mb-2 text-sm font-medium text-gray-900">Location</label>
             <LocationSelector v-model="formData.location" />
@@ -77,7 +72,7 @@
               class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5" />
             <p class="text-sm text-gray-600 mt-1">Select one or more images (max 15MB each)</p>
 
-            <div v-if="imagePreviews.length > 0" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div v-if="imagePreviews.length > 0" class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div v-for="(preview, index) in imagePreviews" :key="index" class="relative">
                 <img :src="preview" alt="Preview" class="w-full h-24 object-cover rounded-lg border" />
                 <button type="button" @click="removeImage(index)"
@@ -86,14 +81,14 @@
             </div>
           </div>
 
-          <!-- Voice Note (half) -->
+          <!-- Voice Note (full width on mobile, half on larger screens) -->
           <div class="col-span-2 sm:col-span-1">
             <label for="voiceNote" class="block mb-2 text-sm font-medium text-gray-900">Voice Note (optional)</label>
             <input id="voiceNote" type="file" accept="audio/*" @change="handleVoiceNoteUpload"
               class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5" />
           </div>
 
-          <!-- Video Note (half) -->
+          <!-- Video Note (full width on mobile, half on larger screens) -->
           <div class="col-span-2 sm:col-span-1">
             <label for="videoNote" class="block mb-2 text-sm font-medium text-gray-900">Video Note (optional)</label>
             <input id="videoNote" type="file" accept="video/*" @change="handleVideoNoteUpload"
@@ -101,13 +96,14 @@
           </div>
         </div>
 
-        <div class="flex justify-end space-x-4">
+        <div
+          class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4 sticky bottom-0 bg-white pt-4 border-t">
           <button type="button" @click="closeModal"
-            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 order-2 sm:order-1">
             Cancel
           </button>
           <button type="submit" :disabled="loading || !isFormValid"
-            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center">
+            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed order-1 sm:order-2 inline-flex items-center justify-center">
             <span v-if="loading" class="flex items-center">
               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">
@@ -132,18 +128,21 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 
 import LocationSelector from './Location-Selector.vue'
 import axios from '../api/client'
 
-const router = useRouter()
+const props = defineProps({
+  modelValue: Boolean
+})
 
-// Emits
-const emit = defineEmits(['cancel', 'success'])
+const emit = defineEmits(['update:modelValue', 'cancel', 'success'])
 
 // Modal state
-const isOpen = ref(false)
+const isOpen = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value)
+})
 
 // Reactive data
 const formData = ref({
@@ -274,7 +273,6 @@ const submitIssue = async () => {
     if (response.status === 201 || response.status === 200) {
       emit('success', response.data.issue)
       isOpen.value = false
-      router.push('/issues')
     } else {
       error.value = response.data?.error || 'Failed to report issue'
     }
