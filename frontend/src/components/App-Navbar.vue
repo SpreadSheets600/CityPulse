@@ -6,7 +6,8 @@
       </router-link>
 
       <!-- Profile dropdown and mobile menu button -->
-      <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+      <!-- Desktop menu and profile dropdown -->
+      <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
         <!-- Profile dropdown button -->
         <button type="button" @click="toggleDropdown"
           class="flex border border-gray-200 text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300"
@@ -20,7 +21,7 @@
         </button>
 
         <!-- Dropdown menu -->
-        <div :class="['z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm absolute top-12 right-4 min-w-48',
+        <div :class="['z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm absolute top-full right-0 min-w-48',
           dropdownOpen ? 'block' : 'hidden']" id="user-dropdown">
           <div class="px-4 py-3">
             <span class="block text-sm text-gray-900">{{ user?.firstname }} {{ user?.lastname }}</span>
