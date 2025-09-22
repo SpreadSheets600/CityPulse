@@ -124,6 +124,15 @@ class MyIssues(Resource):
         return {"issues": [issue.to_dict() for issue in issues]}, 200
 
 
+class AllIssues(Resource):
+    @jwt_required()
+    def get(self):
+        # Allow all authenticated users to view all issues
+        issues = Issue.query.order_by(Issue.created_at.desc()).all()
+
+        return {"issues": [issue.to_dict() for issue in issues]}, 200
+
+
 class GetIssue(Resource):
     @jwt_required()
     def get(self, issue_id):
