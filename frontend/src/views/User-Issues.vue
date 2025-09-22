@@ -78,12 +78,7 @@
     </main>
 
     <!-- Create Issue Form Modal -->
-    <div v-if="showCreateForm" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50"
-      @click="showCreateForm = false">
-      <div class="relative top-4 mx-auto p-5 w-full max-w-2xl" @click.stop>
-        <IssueForm @cancel="showCreateForm = false" @success="onIssueCreated" />
-      </div>
-    </div>
+    <IssueForm v-model="showCreateForm" @success="onIssueCreated" />
   </div>
 </template>
 
