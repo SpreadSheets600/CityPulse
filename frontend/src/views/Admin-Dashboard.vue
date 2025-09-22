@@ -118,7 +118,7 @@
         <div class="bg-white shadow rounded-lg mb-6">
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Issues Map</h3>
-            <div class="map-container" style="height: 500px;">
+            <div class="map-container h-72 sm:h-96">
               <l-map v-model:zoom="zoom" :center="center" :use-global-leaflet="false" style="height: 100%;">
                 <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'></l-tile-layer>
@@ -136,10 +136,9 @@
                         <p class="text-sm"><strong>Type:</strong> {{ issue.issue_type }}</p>
                         <p class="text-sm"><strong>Address:</strong> {{ issue.address }}</p>
                         <p class="text-sm"><strong>Created:</strong> {{ new Date(issue.created_at).toLocaleDateString()
-                          }}</p>
+                        }}</p>
                       </div>
-                      <div class="grid grid-cols-2 gap-2">
-
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <router-link :to="{ name: 'AdminIssueManage', params: { id: issue.id } }"
                           class="w-full text-center bg-indigo-600 text-white px-3 py-2 rounded text-sm hover:bg-indigo-700 transition-colors">
                           Manage
@@ -157,13 +156,13 @@
         <div class="bg-white shadow rounded-lg">
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Recent Issues</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <div v-for="issue in issues.slice(0, 9)" :key="issue.id"
                 class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div class="flex justify-between items-start mb-3">
-                  <h4 class="text-sm font-medium text-gray-900 line-clamp-2">{{ issue.title }}</h4>
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3">
+                  <h4 class="text-sm font-medium text-gray-900 line-clamp-2 mb-2 sm:mb-0">{{ issue.title }}</h4>
                   <span :class="getStatusColor(issue.status)"
-                    class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ml-2">
+                    class="px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap self-start sm:self-auto">
                     {{ issue.status }}
                   </span>
                 </div>
@@ -173,7 +172,7 @@
                   <p><strong>Location:</strong> {{ issue.address }}</p>
                   <p><strong>Date:</strong> {{ new Date(issue.created_at).toLocaleDateString() }}</p>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="flex flex-col sm:flex-row gap-2">
                   <router-link :to="{ name: 'AdminIssueManage', params: { id: issue.id } }"
                     class="w-full text-center bg-indigo-600 text-white px-3 py-2 rounded text-sm hover:bg-indigo-700 transition-colors">
                     Manage

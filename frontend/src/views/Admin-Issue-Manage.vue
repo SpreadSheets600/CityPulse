@@ -11,68 +11,76 @@
 
       <div v-else-if="issue">
         <!-- Issue summary -->
-        <div class="bg-white rounded shadow p-4 mb-6">
-          <h2 class="text-xl font-semibold">{{ issue.title }}</h2>
-          <p class="text-gray-600 mb-2">{{ issue.description }}</p>
-          <div class="text-sm text-gray-500 space-x-4">
-            <span><strong>Status:</strong> {{ issue.status }}</span>
-            <span><strong>Type:</strong> {{ issue.issue_type }}</span>
-            <span><strong>Address:</strong> {{ issue.address }}</span>
+        <div class="bg-white rounded shadow p-4 sm:p-6 mb-6">
+          <h2 class="text-xl font-semibold mb-2">{{ issue.title }}</h2>
+          <p class="text-gray-600 mb-4">{{ issue.description }}</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-500">
+            <div><strong>Status:</strong> <span class="capitalize">{{ issue.status }}</span></div>
+            <div><strong>Type:</strong> {{ issue.issue_type }}</div>
+            <div><strong>Address:</strong> {{ issue.address }}</div>
+            <div><strong>Created:</strong> {{ new Date(issue.created_at).toLocaleDateString() }}</div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Update status -->
-          <div class="bg-white rounded shadow p-4">
-            <h3 class="font-semibold mb-3">Update Status</h3>
-            <select v-model="status" class="w-full border rounded p-2 mb-3">
+          <div class="bg-white rounded shadow p-4 sm:p-6">
+            <h3 class="font-semibold mb-4">Update Status</h3>
+            <select v-model="status" class="w-full border rounded p-3 mb-4 text-sm">
               <option value="pending">Pending</option>
               <option value="in_progress">In Progress</option>
               <option value="resolved">Resolved</option>
               <option value="rejected">Rejected</option>
               <option value="verified">Verified</option>
             </select>
-            <button @click="saveStatus" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
+            <button @click="saveStatus"
+              class="w-full bg-blue-600 text-white px-4 py-3 rounded hover:bg-blue-700 text-sm font-medium">Save
+              Status</button>
           </div>
 
           <!-- Assign department -->
-          <div class="bg-white rounded shadow p-4">
-            <h3 class="font-semibold mb-3">Assign Department</h3>
-            <select v-model="departmentId" class="w-full border rounded p-2 mb-3">
+          <div class="bg-white rounded shadow p-4 sm:p-6">
+            <h3 class="font-semibold mb-4">Assign Department</h3>
+            <select v-model="departmentId" class="w-full border rounded p-3 mb-4 text-sm">
               <option disabled value="">Select Department</option>
               <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
             </select>
             <button @click="assignDepartment"
-              class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Assign</button>
+              class="w-full bg-green-600 text-white px-4 py-3 rounded hover:bg-green-700 text-sm font-medium">Assign
+              Department</button>
           </div>
         </div>
 
         <!-- Post update -->
-        <div class="bg-white rounded shadow p-4 mt-6">
-          <h3 class="font-semibold mb-3">Post Update</h3>
-          <input v-model="updateTitle" type="text" placeholder="Title" class="w-full border rounded p-2 mb-3" />
-          <textarea v-model="updateBody" rows="4" placeholder="Details"
-            class="w-full border rounded p-2 mb-3"></textarea>
-          <label class="block text-sm mb-1">Progress: {{ progress }}%</label>
-          <input v-model.number="progress" type="range" min="0" max="100" class="w-full mb-3" />
+        <div class="bg-white rounded shadow p-4 sm:p-6 mt-6">
+          <h3 class="font-semibold mb-4">Post Update</h3>
+          <input v-model="updateTitle" type="text" placeholder="Update title"
+            class="w-full border rounded p-3 mb-4 text-sm" />
+          <textarea v-model="updateBody" rows="4" placeholder="Update details"
+            class="w-full border rounded p-3 mb-4 text-sm"></textarea>
+          <div class="mb-4">
+            <label class="block text-sm font-medium mb-2">Progress: {{ progress }}%</label>
+            <input v-model.number="progress" type="range" min="0" max="100" class="w-full" />
+          </div>
           <input type="file" multiple accept="image/*" @change="onUpdateFileChange"
-            class="w-full border rounded p-2 mb-3" />
-          <button @click="postUpdate" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Publish
+            class="w-full border rounded p-3 mb-4 text-sm" />
+          <button @click="postUpdate"
+            class="w-full bg-indigo-600 text-white px-4 py-3 rounded hover:bg-indigo-700 text-sm font-medium">Publish
             Update</button>
         </div>
 
         <!-- Existing updates -->
-        <div class="bg-white rounded shadow p-4 mt-6">
-          <h3 class="font-semibold mb-3">Updates</h3>
-          <div v-if="updates.length === 0" class="text-sm text-gray-500">No updates yet.</div>
-          <div v-else class="space-y-3">
-            <div v-for="u in updates" :key="u.id" class="border rounded p-3">
-              <div class="flex items-center justify-between mb-1">
-                <h4 class="font-medium">{{ u.title }}</h4>
+        <div class="bg-white rounded shadow p-4 sm:p-6 mt-6">
+          <h3 class="font-semibold mb-4">Updates</h3>
+          <div v-if="updates.length === 0" class="text-sm text-gray-500 py-4">No updates yet.</div>
+          <div v-else class="space-y-4">
+            <div v-for="u in updates" :key="u.id" class="border rounded p-4">
+              <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                <h4 class="font-medium mb-1 sm:mb-0">{{ u.title }}</h4>
                 <span class="text-xs text-gray-500">{{ new Date(u.created_at).toLocaleString() }}</span>
               </div>
-              <p class="text-sm text-gray-700">{{ u.body }}</p>
-              <div class="text-xs text-gray-500 mt-1">Progress: {{ u.progress }}%</div>
+              <p class="text-sm text-gray-700 mb-2">{{ u.body }}</p>
+              <div class="text-xs text-gray-500 mb-2">Progress: {{ u.progress }}%</div>
               <div v-if="u.image_urls && u.image_urls.length > 0" class="mt-3">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                   <img v-for="(url, index) in u.image_urls" :key="index" :src="url" :alt="`Update image ${index + 1}`"
