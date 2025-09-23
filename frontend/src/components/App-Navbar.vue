@@ -1,40 +1,47 @@
 <template>
-  <nav class="navbar bg-base-100 shadow">
-    <div class="max-w-screen-xl w-full mx-auto px-4">
-      <div class="flex items-center justify-between w-full">
-        <router-link to="/" class="btn btn-ghost text-2xl font-semibold">CityPulse</router-link>
-
-        <div class="flex-none">
-          <div class="dropdown dropdown-end" :class="{ 'dropdown-open': dropdownOpen }">
-            <div tabindex="0" role="button" id="user-menu-button" aria-expanded="dropdownOpen"
-              class="btn btn-ghost btn-circle avatar" @click="toggleDropdown">
-              <div class="w-8 rounded-full">
-                <img v-if="profilePictureUrl" :src="profilePictureUrl" alt="Profile" class="object-cover" />
-                <div v-else
-                  class="w-8 h-8 rounded-full flex items-center justify-center bg-primary text-primary-content">
-                  <span class="text-xs font-semibold">{{ userInitials }}</span>
-                </div>
-              </div>
+  <nav class="navbar bg-base-200 shadow-sm">
+    <div class="flex-1">
+      <router-link @click="closeDropdown"
+        :to="authStore.isAuthenticated ? (authStore.isAdmin ? '/admin-dashboard' : '/dashboard') : '/'"
+        class="btn btn-ghost text-2xl font-semibold">CityPulse</router-link>
+    </div>
+    <div class="flex gap-2">
+      <div v-if="authStore.isAuthenticated" class="dropdown dropdown-end" :class="{ 'dropdown-open': dropdownOpen }">
+        <div tabindex="0" role="button" id="user-menu-button" aria-expanded="dropdownOpen"
+          class="btn btn-ghost btn-circle avatar" @click="toggleDropdown">
+          <div class="w-8 rounded-full border border-gray-300">
+            <img v-if="profilePictureUrl" :src="profilePictureUrl" alt="Profile" class="object-cover" />
+            <div v-else class="w-8 h-8 rounded-full flex items-center justify-center bg-primary text-primary-content">
+              <span class="text-xs font-semibold">{{ userInitials }}</span>
             </div>
-            <ul tabindex="0" id="user-dropdown"
-              class="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow">
-              <li>
-                <router-link @click="closeDropdown" :to="authStore.isAdmin ? '/admin-dashboard' : '/'">
-                  {{ authStore.isAdmin ? 'Admin Dashboard' : 'Dashboard' }}
-                </router-link>
-              </li>
-              <li>
-                <router-link @click="closeDropdown" to="/issues">Issues</router-link>
-              </li>
-              <li>
-                <router-link @click="closeDropdown" to="/profile">Profile</router-link>
-              </li>
-              <li>
-                <button @click="handleLogout" class="text-error">Log Out</button>
-              </li>
-            </ul>
           </div>
         </div>
+        <ul tabindex="0" id="user-dropdown"
+          class="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow">
+          <li>
+            <router-link @click="closeDropdown" :to="authStore.isAdmin ? '/admin-dashboard' : '/dashboard'">
+              {{ authStore.isAdmin ? 'Admin Dashboard' : 'Dashboard' }}
+            </router-link>
+          </li>
+          <li>
+            <router-link @click="closeDropdown" to="/issues">Issues</router-link>
+          </li>
+          <li>
+            <router-link @click="closeDropdown" to="/profile">Profile</router-link>
+          </li>
+          <li class="border-t border-base-100 mt-2 pt-2">
+            <button @click="handleLogout" class="text-error">Log Out</button>
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        <router-link to="/login" class="btn btn-ghost">
+          <svg aria-hidden="true" class="h-4 w-4 text-current" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z"
+              fill="currentColor" opacity=".9" />
+          </svg>
+          <span>Sign in</span>
+        </router-link>
       </div>
     </div>
   </nav>
