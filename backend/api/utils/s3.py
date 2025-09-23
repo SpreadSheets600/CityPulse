@@ -40,7 +40,7 @@ def compress_image(file, max_size_mb=1.5, quality=85):
 
 
 def upload_file_to_s3(
-    fileobj, filename, config, content_type="image/webp", signed_url_expires=3600
+    fileobj, filename, config, content_type="image/webp", signed_url_expires=604800
 ):
     s3 = get_s3_client(config)
     bucket = config["bucket_name"]
