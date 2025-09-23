@@ -122,8 +122,8 @@
               <l-map v-model:zoom="zoom" :center="center" :use-global-leaflet="false" style="height: 100%;">
                 <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'></l-tile-layer>
-                <l-marker v-for="issue in issues.filter(i => i.status === 'pending')" :key="issue.id"
-                  :lat-lng="[issue.latitude, issue.longitude]">
+                <l-marker v-for="issue in issues.filter(i => i.status !== 'rejected')" :key="issue.id"
+                  :lat-lng="[issue.latitude, issue.longitude]" :class="issue.status">
                   <l-popup>
                     <div class="w-48 sm:w-56">
                       <div class="space-y-1 text-sm">
@@ -367,31 +367,31 @@ onMounted(() => {
 }
 
 /* Custom marker colors based on status */
-.leaflet-marker-icon {
+::v-deep(.leaflet-marker-icon) {
   filter: hue-rotate(0deg);
 }
 
-.leaflet-marker-icon.pending {
+::v-deep(.leaflet-marker-icon.pending) {
   filter: hue-rotate(45deg);
   /* Yellow tint */
 }
 
-.leaflet-marker-icon.in_progress {
+::v-deep(.leaflet-marker-icon.in_progress) {
   filter: hue-rotate(200deg);
   /* Blue tint */
 }
 
-.leaflet-marker-icon.resolved {
+::v-deep(.leaflet-marker-icon.resolved) {
   filter: hue-rotate(120deg);
   /* Green tint */
 }
 
-.leaflet-marker-icon.rejected {
+::v-deep(.leaflet-marker-icon.rejected) {
   filter: hue-rotate(0deg);
   /* Red tint */
 }
 
-.leaflet-marker-icon.verified {
+::v-deep(.leaflet-marker-icon.verified) {
   filter: hue-rotate(270deg);
   /* Purple tint */
 }
