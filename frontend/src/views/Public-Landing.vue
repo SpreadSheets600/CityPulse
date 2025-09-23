@@ -1,92 +1,92 @@
 <template>
   <div class="min-h-screen bg-gradient-to-b from-white to-slate-50 text-slate-800 antialiased">
-    <!-- Navbar -->
-    <AppNavbar />
-
     <!-- Hero Section -->
-    <section class="relative overflow-hidden">
-      <!-- Soft background shapes -->
-      <div class="pointer-events-none absolute inset-0 -z-10">
-        <div class="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-cyan-200/40 blur-3xl"></div>
-        <div class="absolute -bottom-10 -right-16 h-72 w-72 rounded-full bg-indigo-200/40 blur-3xl"></div>
-      </div>
+    <section id="hero" class="hero relative isolate overflow-hidden min-h-screen flex items-center"
+      aria-label="City Pulse hero">
 
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-10 pb-20">
-        <div class="grid lg:grid-cols-2 items-center gap-12">
-          <!-- Left: Copy -->
-          <div class="animate-fade-up">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-slate-900">
+      <div aria-hidden="true" class="absolute inset-0 -z-20 bg-cover"
+        :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(https://miro.medium.com/v2/1*jA8GG75oUkXovmpSm2XQtA.jpeg)' }" />
+
+      <!-- Mesh blobs for depth -->
+      <div aria-hidden="true"
+        class="pointer-events-none absolute -top-24 -left-24 h-[28rem] w-[28rem] rounded-full blur-3xl opacity-20"
+        style="background: radial-gradient(circle at 35% 35%, #06B6D4 0%, transparent 55%)" />
+      <div aria-hidden="true"
+        class="pointer-events-none absolute -bottom-24 -right-24 h-[28rem] w-[28rem] rounded-full blur-3xl opacity-20"
+        style="background: radial-gradient(circle at 70% 70%, #FB7185 0%, transparent 55%)" />
+
+      <!-- Content container -->
+      <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 w-full">
+        <div class="grid gap-8 lg:gap-12 lg:items-center">
+          <!-- Centered copy block -->
+          <div class="motion-safe:animate-fade-up text-white text-center">
+            <!-- Small live badge -->
+            <div
+              class="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-3 py-1 ring-1 ring-white/15 text-xs text-slate-200">
+              <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              Live in your neighborhood
+            </div>
+
+            <h1 class="mt-4 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
               Pulse your city to action.
             </h1>
-            <p class="mt-5 text-lg text-slate-600 max-w-2xl">
+
+            <p class="mt-5 text-lg text-slate-200/90 max-w-2xl mx-auto">
               City Pulse is the fastest way to report issues—potholes, outages, safety hazards—and
               mobilize verified responders with real‑time maps and community updates.
             </p>
-            <div class="mt-8 flex flex-col sm:flex-row gap-4">
-              <!-- Primary CTA -->
+
+            <!-- CTAs -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+              <!-- Primary CTA: gradient glow + ripple + glint -->
               <router-link to="/login"
-                class="relative group inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 transition transform active:scale-[.98] shadow-lg"
-                style="background: linear-gradient(135deg, var(--cp-teal), var(--cp-indigo));">
+                class="group relative inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 transition active:scale-[.98] shadow-[0_0_22px_rgba(6,182,212,.35),0_10px_24px_rgba(0,0,0,.25)]"
+                :style="{ background: 'linear-gradient(135deg,#06B6D4,#312E81)' }" @click="ripple">
                 <span
                   class="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-10 transition"></span>
-                <svg aria-hidden="true" class="mr-2 h-5 w-5 text-white" viewBox="0 0 24 24" fill="none">
+                <span
+                  class="glint pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"></span>
+                <svg aria-hidden="true" class="mr-2 h-5 w-5 text-white motion-safe:animate-bob" viewBox="0 0 24 24"
+                  fill="none">
                   <path d="M6 12h4l2-5 2 10 2-5h4" stroke="white" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round" />
                 </svg>
                 Report an Issue
               </router-link>
+
+              <!-- Secondary CTA -->
               <a href="#reports"
-                class="inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold ring-1 ring-slate-300 text-slate-700 hover:bg-slate-100 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                class="inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold ring-1 ring-white/25 text-white/90 hover:bg-white/10 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                 See Nearby Reports
               </a>
             </div>
+
             <!-- Trust bar -->
-            <div class="mt-8 flex flex-wrap items-center gap-6 text-sm text-slate-600">
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-300">
               <div class="inline-flex items-center gap-2">
-                <svg class="h-5 w-5 text-cyan-600" viewBox="0 0 24 24" fill="none">
+                <svg class="h-5 w-5 text-cyan-400" viewBox="0 0 24 24" fill="none">
                   <path d="M20 7l-9 9-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round" />
                 </svg>
-                <span><strong class="text-slate-900">{{ stats.totalIssues }}</strong> reports solved</span>
+                <span><strong class="text-white">{{ totalIssuesText }}</strong> reports solved</span>
               </div>
               <div class="inline-flex items-center gap-2">
-                <svg class="h-5 w-5 text-rose-500" viewBox="0 0 24 24" fill="none">
+                <svg class="h-5 w-5 text-rose-400" viewBox="0 0 24 24" fill="none">
                   <path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z"
                     fill="currentColor" />
                 </svg>
-                <span><strong class="text-slate-900">{{ stats.activeVolunteers }}</strong> active
-                  volunteers</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Image Collage -->
-          <div class="relative h-[420px] lg:h-[520px] animate-fade-up">
-            <div
-              class="absolute -inset-6 -z-10 bg-gradient-to-tr from-cyan-200/40 to-indigo-200/40 rounded-[3rem] blur-2xl">
-            </div>
-            <div class="grid grid-cols-2 gap-4 h-full">
-              <div class="flex flex-col gap-4">
-                <img src="https://images.unsplash.com/photo-1486308510493-aa64833637b8?auto=format&fit=crop&w=900&q=60"
-                  alt="City street" class="h-56 w-full object-cover rounded-2xl shadow-soft">
-                <img src="https://images.unsplash.com/photo-1508057198894-247b23fe5ade?auto=format&fit=crop&w=900&q=60"
-                  alt="Community" class="h-56 w-full object-cover rounded-2xl shadow-soft">
-              </div>
-              <div class="flex flex-col gap-4 mt-8">
-                <img src="https://images.unsplash.com/photo-1532634896-26909d0d4b6a?auto=format&fit=crop&w=900&q=60"
-                  alt="Maintenance" class="h-56 w-full object-cover rounded-2xl shadow-soft">
-                <img src="https://images.unsplash.com/photo-1521790361543-f645cf042ec4?auto=format&fit=crop&w=900&q=60"
-                  alt="Volunteers" class="h-56 w-full object-cover rounded-2xl shadow-soft">
+                <span><strong class="text-white">{{ volunteersText }}</strong> active volunteers</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Divider -->
-      <div aria-hidden="true">
-        <svg class="w-full h-16 text-white" preserveAspectRatio="none" viewBox="0 0 1440 100">
-          <path fill="currentColor" d="M0,80 C240,20 480,20 720,80 C960,140 1200,140 1440,80 L1440,100 L0,100 Z"></path>
+      <div class="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 320" class="w-full">
+          <path fill="white"
+            d="M0,256L80,240C160,224,320,192,480,197.3C640,203,800,245,960,245.3C1120,245,1280,203,1360,181.3L1440,160V320H0Z">
+          </path>
         </svg>
       </div>
     </section>
@@ -101,8 +101,10 @@
             tabindex="0">
             <div
               class="flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br from-cyan-500 to-indigo-600 text-white shadow-neo">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-6 w-6">
-                <path d="M3 6h18M3 12h12M3 18h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5" />
               </svg>
             </div>
             <h3 class="mt-4 text-lg font-semibold">Quick Report</h3>
@@ -115,10 +117,10 @@
             tabindex="0">
             <div
               class="flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-white shadow-neo">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-6 w-6">
-                <path
-                  d="M12 2v4m0 12v4m10-10h-4M6 12H2m15.07 7.07-2.83-2.83M5.76 6.34 2.93 3.51m16.16 0-2.83 2.83M5.76 17.66l-2.83 2.83"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z" />
               </svg>
             </div>
             <h3 class="mt-4 text-lg font-semibold">Real-time Map</h3>
@@ -130,10 +132,11 @@
             class="group rounded-2xl p-6 border border-slate-200 bg-white shadow-soft transition transform hover:-translate-y-1 focus-within:-translate-y-1"
             tabindex="0">
             <div
-              class="flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br from-rose-400 to-cyan-500 text-white shadow-neo">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-6 w-6">
-                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
+              class="flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br from-cyan-500 to-indigo-600 text-white shadow-neo">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
               </svg>
             </div>
             <h3 class="mt-4 text-lg font-semibold">Verified Responders</h3>
@@ -145,9 +148,9 @@
 
       <!-- Live reports feed -->
       <section id="reports" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-        <div class="lg:grid lg:grid-cols-3 lg:gap-8 items-start">
+        <div class="items-start">
           <!-- Horizontal scrollable cards -->
-          <div class="lg:col-span-2">
+          <div>
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-2xl font-bold text-slate-900">Live Nearby Reports</h2>
               <router-link to="/login" class="text-sm text-cyan-700 hover:text-cyan-600">View
@@ -157,7 +160,7 @@
               <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-3" role="list"
                 aria-label="Scrollable list of recent reports">
                 <!-- Report Card Template -->
-                <article v-for="issue in issues.slice(0, 6)" :key="issue.id" role="listitem" tabindex="0"
+                <article v-for="issue in issues" :key="issue.id" role="listitem" tabindex="0"
                   class="snap-start min-w-[280px] w-[280px] rounded-2xl border border-slate-200 bg-white shadow-soft transition transform hover:-translate-y-1 focus:-translate-y-1">
                   <div class="p-4">
                     <!-- Thumbnail -->
@@ -183,16 +186,16 @@
             </div>
           </div>
 
-          <!-- Static small map placeholder (desktop right) -->
-          <aside class="hidden lg:block lg:col-span-1" aria-label="Map preview">
-            <div class="sticky top-8 rounded-3xl border border-slate-200 bg-white shadow-soft p-4">
+          <!-- Map below the issues -->
+          <aside class="mt-8" aria-label="Map preview">
+            <div class="rounded-3xl border border-slate-200 bg-white shadow-soft p-4">
               <h3 class="mb-3 font-semibold text-slate-900">Map Preview</h3>
               <div class="relative h-72 rounded-2xl overflow-hidden">
                 <l-map v-model:zoom="zoom" :center="center" :use-global-leaflet="false" style="height: 100%;">
                   <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'></l-tile-layer>
-                  <l-marker v-for="issue in issues.slice(0, 10)" :key="issue.id"
-                    :lat-lng="[issue.latitude, issue.longitude]">
+                  <l-marker v-for="issue in issues" :key="issue.id" :lat-lng="[issue.latitude, issue.longitude]"
+                    :class="issue.status">
                     <l-popup>
                       <div class="w-48 sm:w-56">
                         <div class="space-y-1 text-sm">
@@ -211,93 +214,46 @@
           </aside>
         </div>
       </section>
-
-      <!-- FAQ -->
-      <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        <div class="rounded-3xl border border-slate-200 p-6 bg-white shadow-soft">
-          <h2 class="text-xl font-semibold text-slate-900">Quick answers</h2>
-          <ul class="mt-4 grid sm:grid-cols-2 gap-4 text-slate-600 text-sm">
-            <li class="rounded-lg bg-slate-50 p-4 ring-1 ring-slate-200">How quickly are reports verified?
-              Typically within minutes by nearby volunteers or municipal partners.</li>
-            <li class="rounded-lg bg-slate-50 p-4 ring-1 ring-slate-200">Do I need an account? No—guest
-              reporting works. Accounts enable history and notifications.</li>
-            <li class="rounded-lg bg-slate-50 p-4 ring-1 ring-slate-200">Is my location shared? Only
-              approximate location is shown to protect privacy.</li>
-            <li class="rounded-lg bg-slate-50 p-4 ring-1 ring-slate-200">Is it free? City Pulse is free for
-              citizens. Municipal dashboards are offered to cities.</li>
-          </ul>
-        </div>
-      </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="mt-12 border-t border-slate-200 bg-white/80 backdrop-blur">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
-          <div class="flex items-center gap-2">
-            <span
-              class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-indigo-600">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4 text-white">
-                <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  d="M3 12h3l1.5-3 2.5 6L12 6l2 8 1.5-3H21" />
-              </svg>
-            </span>
-            <span class="text-lg font-semibold text-slate-900">City<span class="text-cyan-600"> Pulse</span></span>
-          </div>
-          <ul class="flex flex-wrap items-center gap-4 text-sm text-slate-600">
-            <li><a href="#how" class="hover:text-slate-900">How it works</a></li>
-            <li><a href="#reports" class="hover:text-slate-900">Reports</a></li>
-            <li><a href="#map" class="hover:text-slate-900">Map</a></li>
-            <li><a href="#faq" class="hover:text-slate-900">FAQ</a></li>
-            <li><a href="#" class="hover:text-slate-900">Privacy</a></li>
-            <li><a href="#" class="hover:text-slate-900">Terms</a></li>
-          </ul>
-          <div class="flex items-center gap-3">
-            <a href="#" aria-label="Follow on X" class="p-2 rounded-lg hover:bg-slate-100">
-              <svg class="h-5 w-5 text-slate-600" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M18.244 2H21l-6.5 7.43L22 22h-5.9l-4.62-6.01L6 22H3.244l7.09-8.1L2 2h6.06l4.15 5.6L18.244 2Z" />
-              </svg>
-            </a>
-            <a href="#" aria-label="Follow on GitHub" class="p-2 rounded-lg hover:bg-slate-100">
-              <svg class="h-5 w-5 text-slate-600" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 .5A11.5 11.5 0 0 0 .5 12.3c0 5.24 3.4 9.68 8.12 11.26.6.12.82-.26.82-.58 0-.28-.01-1.05-.02-2.05-3.3.73-4-1.61-4-1.61-.55-1.42-1.34-1.8-1.34-1.8-1.1-.78.08-.76.08-.76 1.22.09 1.87 1.27 1.87 1.27 1.08 1.88 2.84 1.34 3.53 1.03.11-.8.42-1.34.77-1.65-2.64-.31-5.41-1.37-5.41-6.09 0-1.35.47-2.45 1.24-3.31-.12-.31-.54-1.56.12-3.25 0 0 1-.33 3.3 1.26.96-.27 1.98-.4 3-.41 1.02 0 2.04.14 3 .4 2.3-1.59 3.3-1.26 3.3-1.26.66 1.7.24 2.94.12 3.26.77.86 1.24 1.96 1.24 3.3 0 4.73-2.78 5.77-5.43 6.08.43.37.81 1.1.81 2.22 0 1.6-.01 2.88-.01 3.28 0 .32.22.71.83.58A11.51 11.51 0 0 0 23.5 12.3 11.5 11.5 0 0 0 12 .5Z" />
-              </svg>
-            </a>
-            <a href="#" aria-label="Follow on LinkedIn" class="p-2 rounded-lg hover:bg-slate-100">
-              <svg class="h-5 w-5 text-slate-600" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.34V9.75h3.42v1.46h.05c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.34 2.41 4.34 5.54v5.55ZM5.34 8.29a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9.75h3.56v10.7Z" />
-              </svg>
-            </a>
-          </div>
-        </div>
-        <p class="mt-4 text-center text-xs text-slate-500">© {{ new Date().getFullYear() }} City Pulse. All
-          rights reserved.</p>
-      </div>
-    </footer>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from '../api/client'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
-import AppNavbar from '../components/App-Navbar.vue'
 
 const issues = ref([])
 const stats = ref({ totalIssues: 0, activeVolunteers: 0 })
 const zoom = ref(13)
-const center = ref([28.6139, 77.2090]) // Default to Delhi
+const center = ref([28.6139, 77.2090])
+
+const totalIssuesText = computed(() => stats.value.totalIssues.toLocaleString())
+const volunteersText = computed(() => stats.value.activeVolunteers.toLocaleString())
+
+const ripple = (event) => {
+  const button = event.target.closest('button') || event.target
+  const circle = document.createElement('span')
+  const diameter = Math.max(button.clientWidth, button.clientHeight)
+  const radius = diameter / 2
+  circle.style.width = circle.style.height = `${diameter}px`
+  circle.style.left = `${event.clientX - button.offsetLeft - radius}px`
+  circle.style.top = `${event.clientY - button.offsetTop - radius}px`
+  circle.classList.add('cp-ripple')
+  const existingRipple = button.getElementsByClassName('cp-ripple')[0]
+  if (existingRipple) {
+    existingRipple.remove()
+  }
+  button.appendChild(circle)
+}
 
 const fetchPublicIssues = async () => {
   try {
     const response = await axios.get('/api/issues/public')
     issues.value = response.data.issues
     stats.value.totalIssues = issues.value.length
-    stats.value.activeVolunteers = Math.floor(Math.random() * 500) + 200 // Mock data
+    stats.value.activeVolunteers = Math.floor(Math.random() * 500) + 200
     if (issues.value.length > 0) {
       center.value = [issues.value[0].latitude, issues.value[0].longitude]
     }
@@ -354,5 +310,201 @@ onMounted(() => {
   -webkit-box-orient: vertical;
   line-clamp: 2;
   overflow: hidden;
+}
+
+/* Hero visual enhancements */
+::v-deep(.hero) {
+  position: relative;
+}
+
+::v-deep(.hero .relative) {
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Soft vignette around edges */
+::v-deep(.hero::before) {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 80% at 50% 40%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.35) 100%);
+}
+
+/* Decorative curved mask at bottom */
+::v-deep(.hero::after) {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 120px;
+  background: radial-gradient(200% 100% at 50% -20%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 1) 61%);
+}
+
+@media (max-width: 640px) {
+
+  /* Slightly stronger overlay on small screens for readability */
+  ::v-deep(.hero > .absolute.inset-0) {
+    background-image: linear-gradient(to right, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.6));
+  }
+}
+
+/* Custom marker colors based on status */
+::v-deep(.leaflet-marker-icon) {
+  filter: hue-rotate(0deg);
+}
+
+::v-deep(.leaflet-marker-icon.pending) {
+  filter: hue-rotate(45deg);
+  /* Yellow tint */
+}
+
+::v-deep(.leaflet-marker-icon.in_progress) {
+  filter: hue-rotate(200deg);
+  /* Blue tint */
+}
+
+::v-deep(.leaflet-marker-icon.resolved) {
+  filter: hue-rotate(120deg);
+  /* Green tint */
+}
+
+::v-deep(.leaflet-marker-icon.rejected) {
+  filter: hue-rotate(0deg);
+  /* Red tint */
+}
+
+::v-deep(.leaflet-marker-icon.verified) {
+  filter: hue-rotate(270deg);
+  /* Purple tint */
+}
+
+/* Keyframes */
+@keyframes gradient-pan {
+  0% {
+    background-position: 0% 50%
+  }
+
+  50% {
+    background-position: 100% 50%
+  }
+
+  100% {
+    background-position: 0% 50%
+  }
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(12px)
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0)
+  }
+}
+
+@keyframes bob {
+
+  0%,
+  100% {
+    transform: translateY(0)
+  }
+
+  50% {
+    transform: translateY(-1.5px)
+  }
+}
+
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(2px);
+    opacity: .9
+  }
+
+  70% {
+    transform: translateY(10px);
+    opacity: .4
+  }
+
+  100% {
+    transform: translateY(2px);
+    opacity: 0
+  }
+}
+
+.animate-gradient-pan {
+  animation: gradient-pan 16s ease infinite;
+}
+
+.motion-safe\:animate-fade-up {
+  animation: fade-up .7s ease both;
+}
+
+.motion-safe\:animate-bob {
+  animation: bob 1.4s ease-in-out infinite;
+}
+
+/* CTA ripple */
+.cp-ripple {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  background: radial-gradient(circle at center,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.35) 25%,
+      rgba(255, 255, 255, 0.2) 45%,
+      transparent 60%);
+  animation: cp-ripple 520ms ease-out forwards;
+}
+
+@keyframes cp-ripple {
+  from {
+    opacity: .45;
+    transform: translate(-50%, -50%) scale(0)
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3)
+  }
+}
+
+/* Button glint on hover */
+.glint {
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .25) 40%, transparent 80%);
+  transform: translateX(-120%);
+  transition: transform .6s ease;
+}
+
+.group:hover .glint {
+  transform: translateX(120%)
+}
+
+/* Scroll cue mouse + dot */
+.mouse-outline {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, .06), transparent)
+}
+
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  .animate-gradient-pan,
+  .motion-safe\:animate-fade-up,
+  .motion-safe\:animate-bob,
+  .cp-ripple,
+  .dot {
+    animation: none !important;
+  }
 }
 </style>
