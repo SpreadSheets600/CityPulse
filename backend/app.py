@@ -11,6 +11,7 @@ from api.routes.issues import (
     ReportIssue,
     MyIssues,
     AllIssues,
+    PublicIssues,
     GetIssue,
     GetIssueUpdates,
     GeocodeAddress,
@@ -59,6 +60,7 @@ def create_app():
 
     api.add_resource(ReportIssue, "/api/issues/report")
     api.add_resource(AllIssues, "/api/issues")
+    api.add_resource(PublicIssues, "/api/issues/public")
     api.add_resource(GetIssue, "/api/issues/<int:issue_id>")
     api.add_resource(GetIssueUpdates, "/api/issues/<int:issue_id>/updates")
     api.add_resource(GeocodeAddress, "/api/geocode")
