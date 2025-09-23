@@ -3,15 +3,15 @@
   <div :class="['fixed inset-0 z-50', { 'flex sm:items-center sm:justify-center': isOpen }]" tabindex="-1"
     :aria-hidden="!isOpen" v-if="isOpen">
     <!-- Backdrop -->
-    <div class="fixed inset-0 bg-gray-900/50 bg-opacity-50" @click="closeModal"></div>
+    <div class="fixed inset-0 bg-base-300/50" @click="closeModal"></div>
 
     <!-- Modal content -->
     <div
-      class="relative bg-white rounded-t-2xl sm:rounded-lg shadow-lg w-full sm:max-w-2xl sm:mx-4 sm:my-6 h-[100dvh] sm:h-auto sm:max-h-[90vh] flex flex-col">
+      class="relative bg-base-100 rounded-t-2xl sm:rounded-lg shadow-lg w-full sm:max-w-2xl sm:mx-4 sm:my-6 h-[100dvh] sm:h-auto sm:max-h-[90vh] flex flex-col">
       <!-- Modal header -->
       <div
         class="flex items-center justify-between p-4 md:p-5 border-b border-gray-200 sticky top-0 bg-white rounded-t-2xl sm:rounded-t">
-        <h3 class="text-lg font-semibold text-gray-900">
+        <h3 class="text-lg font-semibold">
           Report New Issue
         </h3>
         <button type="button"
@@ -30,16 +30,15 @@
         <div class="grid gap-4 mb-4 grid-cols-1 sm:grid-cols-2">
           <!-- Title (full width) -->
           <div class="col-span-2">
-            <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Issue Title *</label>
+            <label for="title" class="label"><span class="label-text">Issue Title *</span></label>
             <input id="title" v-model="formData.title" type="text" required placeholder="Brief description of the issue"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+              class="input input-bordered w-full" />
           </div>
 
           <!-- Issue Type (full width on mobile, half on larger screens) -->
           <div class="col-span-2">
-            <label for="issueType" class="block mb-2 text-sm font-medium text-gray-900">Issue Type</label>
-            <select id="issueType" v-model="formData.issueType"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+            <label for="issueType" class="label"><span class="label-text">Issue Type</span></label>
+            <select id="issueType" v-model="formData.issueType" class="select select-bordered w-full">
               <option value="Unspecified">Select issue type</option>
               <option value="Pothole">Pothole</option>
               <option value="Street Light">Street Light</option>
@@ -53,28 +52,25 @@
 
           <!-- Location selector (full width) -->
           <div class="col-span-2">
-            <label class="block mb-2 text-sm font-medium text-gray-900">Location</label>
+            <label class="label"><span class="label-text">Location</span></label>
             <LocationSelector v-model="formData.location" />
           </div>
 
           <!-- Description (full) -->
           <div class="col-span-2">
-            <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description *</label>
+            <label for="description" class="label"><span class="label-text">Description *</span></label>
             <textarea id="description" v-model="formData.description" required rows="4"
-              placeholder="Detailed description of the issue..."
-              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"></textarea>
+              placeholder="Detailed description of the issue..." class="textarea textarea-bordered w-full"></textarea>
           </div>
 
           <!-- Images (full) -->
           <div class="col-span-2">
-            <label for="images" class="block mb-2 text-sm font-medium text-gray-900">Images * (at least one
-              required)</label>
+            <label for="images" class="label"><span class="label-text">Images * (at least one required)</span></label>
 
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-3">
               <input id="images" ref="imageInput" type="file" multiple accept="image/*" @change="handleImageUpload"
-                class="text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5 w-full" />
-              <button type="button" @click="showPhotoModal = true"
-                class="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                class="file-input file-input-bordered w-full" />
+              <button type="button" @click="showPhotoModal = true" class="btn btn-success w-full sm:w-auto"
                 title="Take Photo">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -86,26 +82,25 @@
                 <span class="hidden sm:inline ml-2">Take Photo</span>
               </button>
             </div>
-            <p class="text-sm text-gray-600 mt-1">Select images or use camera button</p>
+            <p class="text-sm opacity-60 mt-1">Select images or use camera button</p>
 
             <div v-if="imagePreviews.length > 0" class="mt-4 grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-4">
               <div v-for="(preview, index) in imagePreviews" :key="index" class="relative">
                 <img :src="preview" alt="Preview" class="w-full h-20 sm:h-24 object-cover rounded-lg border" />
                 <button type="button" @click="removeImage(index)"
-                  class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">×</button>
+                  class="btn btn-xs btn-circle btn-error absolute -top-2 -right-2">×</button>
               </div>
             </div>
           </div>
 
           <!-- Voice Note -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="voiceNote" class="block mb-2 text-sm font-medium text-gray-900">Voice Note (optional)</label>
+            <label for="voiceNote" class="label"><span class="label-text">Voice Note (optional)</span></label>
 
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-3">
               <input id="voiceNote" type="file" accept="audio/*" @change="handleVoiceNoteUpload"
-                class="text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5 w-full" />
-              <button type="button" @click="showAudioModal = true"
-                class="w-full sm:w-auto px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                class="file-input file-input-bordered w-full" />
+              <button type="button" @click="showAudioModal = true" class="btn btn-secondary w-full sm:w-auto"
                 title="Record Audio">
                 <svg v-if="isRecordingAudio" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <rect x="6" y="4" width="4" height="16"></rect>
@@ -120,7 +115,7 @@
               </button>
             </div>
 
-            <div v-if="formData.voiceNote" class="mt-2 p-3 bg-gray-50 rounded-lg">
+            <div v-if="formData.voiceNote" class="mt-2 p-3 bg-base-200 rounded-lg">
               <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -128,8 +123,7 @@
                   </path>
                 </svg>
                 <span class="text-sm text-gray-700">{{ formData.voiceNote.name }}</span>
-                <button type="button" @click="formData.voiceNote = null"
-                  class="ml-auto text-red-500 hover:text-red-700">
+                <button type="button" @click="formData.voiceNote = null" class="btn btn-xs btn-error ml-auto">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
                     </path>
@@ -141,13 +135,12 @@
 
           <!-- Video Note -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="videoNote" class="block mb-2 text-sm font-medium text-gray-900">Video Note (optional)</label>
+            <label for="videoNote" class="label"><span class="label-text">Video Note (optional)</span></label>
 
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-3">
               <input id="videoNote" type="file" accept="video/*" @change="handleVideoNoteUpload"
-                class="text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5 w-full" />
-              <button type="button" @click="showVideoModal = true"
-                class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                class="file-input file-input-bordered w-full" />
+              <button type="button" @click="showVideoModal = true" class="btn btn-info w-full sm:w-auto"
                 title="Record Video">
                 <svg v-if="isRecordingVideo" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <rect x="6" y="4" width="4" height="16"></rect>
@@ -162,7 +155,7 @@
               </button>
             </div>
 
-            <div v-if="formData.videoNote" class="mt-2 p-3 bg-gray-50 rounded-lg">
+            <div v-if="formData.videoNote" class="mt-2 p-3 bg-base-200 rounded-lg">
               <div class="flex items-center gap-2">
                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -170,8 +163,7 @@
                   </path>
                 </svg>
                 <span class="text-sm text-gray-700">{{ formData.videoNote.name }}</span>
-                <button type="button" @click="formData.videoNote = null"
-                  class="ml-auto text-red-500 hover:text-red-700">
+                <button type="button" @click="formData.videoNote = null" class="btn btn-xs btn-error ml-auto">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
                     </path>
@@ -184,12 +176,11 @@
 
         <div
           class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4 sticky bottom-0 bg-white p-4 border-t rounded-b-2xl sm:rounded-b">
-          <button type="button" @click="closeModal"
-            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 order-2 sm:order-1">
+          <button type="button" @click="closeModal" class="btn order-2 sm:order-1">
             Cancel
           </button>
           <button type="submit" :disabled="loading || !isFormValid"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed order-1 sm:order-2 inline-flex items-center justify-center">
+            class="btn btn-primary order-1 sm:order-2 inline-flex items-center justify-center">
             <span v-if="loading" class="flex items-center">
               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">
@@ -204,7 +195,7 @@
           </button>
         </div>
 
-        <div v-if="error" class="text-red-600 text-sm text-center mt-3">
+        <div v-if="error" class="text-error text-sm text-center mt-3">
           {{ error }}
         </div>
       </form>

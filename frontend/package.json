@@ -16,7 +16,6 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
     "axios": "^1.12.2",
-    "flowbite": "^3.1.2",
     "object-assign": "^4.1.1",
     "pinia": "^3.0.3",
     "tailwindcss": "^4.1.13",
@@ -25,6 +24,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "daisyui": "^5.1.14",
     "@eslint/js": "^9.31.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue-leaflet/vue-leaflet": "^0.10.1",

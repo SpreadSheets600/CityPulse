@@ -1,58 +1,39 @@
 <template>
-  <nav class="bg-white border-gray-200 shadow-sm">
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-      <router-link to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-        <span class="self-center text-2xl font-semibold whitespace-nowrap text-gray-900">CityPulse</span>
-      </router-link>
+  <nav class="navbar bg-base-100 shadow">
+    <div class="max-w-screen-xl w-full mx-auto px-4">
+      <div class="flex items-center justify-between w-full">
+        <router-link to="/" class="btn btn-ghost text-2xl font-semibold">CityPulse</router-link>
 
-      <!-- Profile dropdown and mobile menu button -->
-      <!-- Desktop menu and profile dropdown -->
-      <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
-        <!-- Profile dropdown button -->
-        <button type="button" @click="toggleDropdown"
-          class="flex border border-gray-200 text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300"
-          id="user-menu-button" aria-expanded="dropdownOpen" data-dropdown-toggle="user-dropdown">
-          <span class="sr-only">Open user menu</span>
-          <img v-if="profilePictureUrl" :src="profilePictureUrl" alt="Profile"
-            class="w-8 h-8 rounded-full object-cover" />
-          <div v-else class="w-8 h-8 rounded-full avatar-placeholder">
-            {{ userInitials }}
+        <div class="flex-none">
+          <div class="dropdown dropdown-end" :class="{ 'dropdown-open': dropdownOpen }">
+            <div tabindex="0" role="button" id="user-menu-button" aria-expanded="dropdownOpen"
+              class="btn btn-ghost btn-circle avatar" @click="toggleDropdown">
+              <div class="w-8 rounded-full">
+                <img v-if="profilePictureUrl" :src="profilePictureUrl" alt="Profile" class="object-cover" />
+                <div v-else
+                  class="w-8 h-8 rounded-full flex items-center justify-center bg-primary text-primary-content">
+                  <span class="text-xs font-semibold">{{ userInitials }}</span>
+                </div>
+              </div>
+            </div>
+            <ul tabindex="0" id="user-dropdown"
+              class="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow">
+              <li>
+                <router-link @click="closeDropdown" :to="authStore.isAdmin ? '/admin-dashboard' : '/'">
+                  {{ authStore.isAdmin ? 'Admin Dashboard' : 'Dashboard' }}
+                </router-link>
+              </li>
+              <li>
+                <router-link @click="closeDropdown" to="/issues">Issues</router-link>
+              </li>
+              <li>
+                <router-link @click="closeDropdown" to="/profile">Profile</router-link>
+              </li>
+              <li>
+                <button @click="handleLogout" class="text-error">Log Out</button>
+              </li>
+            </ul>
           </div>
-        </button>
-
-        <!-- Dropdown menu -->
-        <div :class="['z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm absolute top-full right-0 min-w-48',
-          dropdownOpen ? 'block' : 'hidden']" id="user-dropdown">
-          <div class="px-4 py-3">
-            <span class="block text-sm text-gray-900">{{ user?.firstname }} {{ user?.lastname }}</span>
-            <span class="block text-sm text-gray-500 truncate">{{ user?.email }}</span>
-          </div>
-          <ul class="py-2" aria-labelledby="user-menu-button">
-            <li>
-              <router-link @click="closeDropdown" :to="authStore.isAdmin ? '/admin-dashboard' : '/'"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                {{ authStore.isAdmin ? 'Admin Dashboard' : 'Dashboard' }}
-              </router-link>
-            </li>
-            <li>
-              <router-link @click="closeDropdown" to="/issues"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Issues
-              </router-link>
-            </li>
-            <li>
-              <router-link @click="closeDropdown" to="/profile"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Profile
-              </router-link>
-            </li>
-            <li>
-              <button @click="handleLogout"
-                class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                Sign out
-              </button>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
@@ -61,14 +42,14 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import { useRouter } from 'vue-router'
 
-const router = useRouter()
 const authStore = useAuthStore()
+const router = useRouter()
 
-const dropdownOpen = ref(false)
 const mobileMenuOpen = ref(false)
+const dropdownOpen = ref(false)
 
 const user = computed(() => authStore.user)
 
@@ -86,7 +67,7 @@ const profilePictureUrl = computed(() => {
 
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value
-  mobileMenuOpen.value = false // Close mobile menu when opening dropdown
+  mobileMenuOpen.value = false
 }
 
 const closeDropdown = () => {
@@ -99,21 +80,18 @@ const handleLogout = async () => {
   closeDropdown()
 }
 
-// Close dropdowns when clicking outside
 const handleClickOutside = (event) => {
+  const mobileMenuButton = document.querySelector('[aria-controls="navbar-user"]')
   const userMenuButton = document.getElementById('user-menu-button')
   const userDropdown = document.getElementById('user-dropdown')
-  const mobileMenuButton = document.querySelector('[aria-controls="navbar-user"]')
   const mobileMenu = document.getElementById('navbar-user')
 
-  // Close dropdown if clicking outside
   if (userMenuButton && userDropdown &&
     !userMenuButton.contains(event.target) &&
     !userDropdown.contains(event.target)) {
     dropdownOpen.value = false
   }
 
-  // Close mobile menu if clicking outside (only on mobile)
   if (window.innerWidth < 768 && mobileMenuButton && mobileMenu &&
     !mobileMenuButton.contains(event.target) &&
     !mobileMenu.contains(event.target)) {
@@ -131,39 +109,5 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Ensure dropdown appears above other content */
-#user-dropdown {
-  z-index: 50;
-}
-
-/* Smooth transitions for dropdown */
-#user-dropdown {
-  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
-}
-
-/* Mobile menu improvements */
-@media (max-width: 767px) {
-  #navbar-user {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    z-index: 40;
-  }
-}
-
-/* Avatar styling */
-.avatar-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  font-weight: 600;
-  font-size: 0.875rem;
-}
+/* no custom styles needed; DaisyUI handles dropdown/avatars */
 </style>

@@ -1,30 +1,27 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen flex items-center justify-center bg-base-200 p-6">
     <div class="max-w-md w-full space-y-8">
       <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 class="mt-6 text-center text-3xl font-extrabold">
           Sign in to your account
         </h2>
       </div>
       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
         <div class="space-y-4">
           <div>
-            <label for="identifier" class="block mb-2 text-sm font-medium text-gray-900">Email or Phone</label>
+            <label for="identifier" class="label"><span class="label-text">Email or Phone</span></label>
             <input id="identifier" name="identifier" type="text" autocomplete="email" required
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="Email or Phone" v-model="credentials.identifier" />
+              class="input input-bordered w-full" placeholder="Email or Phone" v-model="credentials.identifier" />
           </div>
           <div>
-            <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
+            <label for="password" class="label"><span class="label-text">Password</span></label>
             <input id="password" name="password" type="password" autocomplete="current-password" required
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="Password" v-model="credentials.password" />
+              class="input input-bordered w-full" placeholder="Password" v-model="credentials.password" />
           </div>
         </div>
 
         <div>
-          <button type="submit" :disabled="loading"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center disabled:opacity-50">
+          <button type="submit" :disabled="loading" class="btn btn-primary w-full">
             <span v-if="loading" class="flex items-center justify-center">
               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">
@@ -40,12 +37,12 @@
         </div>
 
         <div class="text-center">
-          <router-link to="/register" class="font-medium text-indigo-600 hover:text-indigo-500">
+          <router-link to="/register" class="link link-primary">
             Don't have an account? Register here
           </router-link>
         </div>
 
-        <div v-if="error" class="text-red-600 text-center text-sm">
+        <div v-if="error" class="text-error text-center text-sm">
           {{ error }}
         </div>
       </form>

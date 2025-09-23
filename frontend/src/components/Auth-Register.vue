@@ -1,54 +1,47 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen flex items-center justify-center bg-base-200 p-6">
     <div class="max-w-md w-full space-y-8">
       <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 class="mt-6 text-center text-3xl font-extrabold">
           Create your account
         </h2>
       </div>
       <form class="mt-8 space-y-6" @submit.prevent="handleRegister">
         <div class="space-y-4">
           <div>
-            <label for="firstname" class="block mb-2 text-sm font-medium text-gray-900">First Name</label>
-            <input id="firstname" name="firstname" type="text" required
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            <label for="firstname" class="label"><span class="label-text">First Name</span></label>
+            <input id="firstname" name="firstname" type="text" required class="input input-bordered w-full"
               placeholder="First Name" v-model="userData.firstname" />
           </div>
           <div>
-            <label for="lastname" class="block mb-2 text-sm font-medium text-gray-900">Last Name</label>
-            <input id="lastname" name="lastname" type="text" required
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            <label for="lastname" class="label"><span class="label-text">Last Name</span></label>
+            <input id="lastname" name="lastname" type="text" required class="input input-bordered w-full"
               placeholder="Last Name" v-model="userData.lastname" />
           </div>
           <div>
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
-            <input id="email" name="email" type="email" required
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="Email" v-model="userData.email" />
+            <label for="email" class="label"><span class="label-text">Email</span></label>
+            <input id="email" name="email" type="email" required class="input input-bordered w-full" placeholder="Email"
+              v-model="userData.email" />
           </div>
           <div>
-            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">Phone</label>
-            <input id="phone" name="phone" type="tel" required
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="Phone" v-model="userData.phone" />
+            <label for="phone" class="label"><span class="label-text">Phone</span></label>
+            <input id="phone" name="phone" type="tel" required class="input input-bordered w-full" placeholder="Phone"
+              v-model="userData.phone" />
           </div>
           <div>
-            <label for="address" class="block mb-2 text-sm font-medium text-gray-900">Address</label>
-            <input id="address" name="address" type="text" required
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            <label for="address" class="label"><span class="label-text">Address</span></label>
+            <input id="address" name="address" type="text" required class="input input-bordered w-full"
               placeholder="Address" v-model="userData.address" />
           </div>
           <div>
-            <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
-            <input id="password" name="password" type="password" required
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            <label for="password" class="label"><span class="label-text">Password</span></label>
+            <input id="password" name="password" type="password" required class="input input-bordered w-full"
               placeholder="Password" v-model="userData.password" />
           </div>
         </div>
 
         <div>
-          <button type="submit" :disabled="loading"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center disabled:opacity-50">
+          <button type="submit" :disabled="loading" class="btn btn-primary w-full">
             <span v-if="loading" class="flex items-center justify-center">
               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">
@@ -64,12 +57,12 @@
         </div>
 
         <div class="text-center">
-          <router-link to="/login" class="font-medium text-indigo-600 hover:text-indigo-500">
+          <router-link to="/login" class="link link-primary">
             Already have an account? Sign in here
           </router-link>
         </div>
 
-        <div v-if="error" class="text-red-600 text-center text-sm">
+        <div v-if="error" class="text-error text-center text-sm">
           {{ error }}
         </div>
       </form>

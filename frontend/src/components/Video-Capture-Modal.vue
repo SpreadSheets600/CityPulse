@@ -1,15 +1,15 @@
 <template>
     <div v-if="isOpen" class="fixed inset-0 z-[10000] overflow-y-auto" @keydown.esc="closeModal">
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/60" @click="closeModal"></div>
+        <div class="fixed inset-0 bg-base-300/60" @click="closeModal"></div>
 
         <!-- Modal -->
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="relative bg-white rounded-lg shadow-xl max-w-lg w-full">
+            <div class="relative bg-base-100 rounded-lg shadow-xl max-w-lg w-full">
                 <!-- Header -->
-                <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900">Record Video</h3>
-                    <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
+                <div class="flex items-center justify-between p-4 border-b border-base-200">
+                    <h3 class="text-lg font-semibold">Record Video</h3>
+                    <button @click="closeModal" class="btn btn-ghost btn-sm">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12"></path>
@@ -28,9 +28,8 @@
                                 </path>
                             </svg>
                         </div>
-                        <p class="text-gray-500 mb-4">Camera and microphone access required</p>
-                        <button @click="startRecording" :disabled="loading"
-                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50">
+                        <p class="opacity-60 mb-4">Camera and microphone access required</p>
+                        <button @click="startRecording" :disabled="loading" class="btn btn-primary">
                             <span v-if="loading">Starting Camera...</span>
                             <span v-else>Start Recording</span>
                         </button>
@@ -50,14 +49,12 @@
 
                             <!-- Controls -->
                             <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-4">
-                                <button v-if="!isRecording" @click="startRecording"
-                                    class="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-lg">
+                                <button v-if="!isRecording" @click="startRecording" class="btn btn-error btn-circle">
                                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
                                         <circle cx="12" cy="12" r="10"></circle>
                                     </svg>
                                 </button>
-                                <button v-else @click="stopRecording"
-                                    class="bg-white hover:bg-gray-50 text-gray-700 rounded-full p-4 shadow-lg">
+                                <button v-else @click="stopRecording" class="btn btn-circle">
                                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
                                         <rect x="6" y="4" width="4" height="16"></rect>
                                         <rect x="14" y="4" width="4" height="16"></rect>
@@ -73,8 +70,7 @@
 
                         <!-- Controls -->
                         <div class="flex justify-between">
-                            <button @click="switchCamera" v-if="hasMultipleCameras"
-                                class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            <button @click="switchCamera" v-if="hasMultipleCameras" class="btn">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
@@ -82,8 +78,7 @@
                                 </svg>
                                 Switch Camera
                             </button>
-                            <button @click="closeModal"
-                                class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            <button @click="closeModal" class="btn">
                                 Cancel
                             </button>
                         </div>
@@ -92,8 +87,8 @@
 
                 <!-- Error Message -->
                 <div v-if="error" class="px-4 pb-4">
-                    <div class="bg-red-50 border border-red-200 rounded-md p-3">
-                        <p class="text-sm text-red-800">{{ error }}</p>
+                    <div class="alert alert-error">
+                        <span class="text-sm">{{ error }}</span>
                     </div>
                 </div>
             </div>

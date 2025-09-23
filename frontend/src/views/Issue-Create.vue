@@ -3,19 +3,14 @@
     <div class="max-w-4xl mx-auto py-4 px-3 sm:py-8 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
-        <div class="flex items-start sm:items-center justify-between gap-3">
-          <div>
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Report New Issue</h1>
-            <p class="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">Help us improve your community by reporting
-              issues</p>
-          </div>
-          <router-link to="/issues"
-            class="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 whitespace-nowrap">
+        <div class="flex justify-between items-center mb-8">
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Report New Issue</h1>
+          <button @click="$router.go(-1)" class="inline-flex items-center text-indigo-600 hover:text-indigo-500">
             <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Issues
-          </router-link>
+            Back To Issues
+          </button>
         </div>
       </div>
 
@@ -79,7 +74,7 @@
             <!-- Images -->
             <div class="mb-6 sm:mb-8">
               <label class="block text-sm font-medium text-gray-700 mb-4">
-                Images * (at least one required)
+                Images *
               </label>
 
               <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-4">

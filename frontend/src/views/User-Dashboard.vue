@@ -4,11 +4,11 @@
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div class="px-4 py-6 sm:px-0">
         <div class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900">Welcome back, {{ user?.firstname }}!</h2>
+          <h2 class="text-2xl font-bold text-gray-900">Welcome Back, {{ user?.firstname }}!</h2>
           <p class="mt-1 text-sm text-gray-600">Here's what's happening in your city.</p>
         </div>
 
-        <!-- Stats cards -->
+        <!-- Stats Cards -->
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <div class="bg-white overflow-hidden shadow rounded-lg">
             <div class="p-5">
@@ -87,7 +87,7 @@
           </div>
         </div>
 
-        <!-- Quick actions -->
+        <!-- Quick Actions -->
         <div class="bg-white shadow rounded-lg mb-8">
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
@@ -137,15 +137,17 @@
             </div>
             <div v-else class="space-y-4">
               <div v-for="issue in filteredIssues" :key="issue.id" class="border border-gray-200 rounded-lg p-4">
-                <div class="flex items-center justify-between">
-                  <h4 class="text-sm font-medium text-gray-900">{{ issue.title }}</h4>
-                  <span :class="getStatusClass(issue.status)"
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
-                    {{ issue.status }}
-                  </span>
-                </div>
-                <p class="mt-1 text-sm text-gray-600">{{ issue.description }}</p>
-                <p class="mt-2 text-xs text-gray-500">{{ formatDate(issue.created_at) }}</p>
+                <router-link :to="`/issues/${issue.id}`" class="block hover:bg-gray-50 px-4 py-4 sm:px-6">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-sm font-medium text-gray-900">{{ issue.title }}</h4>
+                    <span :class="getStatusClass(issue.status)"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                      {{ issue.status }}
+                    </span>
+                  </div>
+                  <p class="mt-1 text-sm text-gray-600">{{ issue.description }}</p>
+                  <p class="mt-2 text-xs text-gray-500">{{ formatDate(issue.created_at) }}</p>
+                </router-link>
               </div>
             </div>
           </div>
@@ -179,7 +181,7 @@ const stats = computed(() => {
 
 const filteredIssues = computed(() => {
   if (selectedStatus.value === 'all') {
-    return allIssues.value.slice(0, 10) // Show latest 10
+    return allIssues.value.slice(0, 10)
   }
   return allIssues.value.filter(issue => issue.status === selectedStatus.value).slice(0, 10)
 })
@@ -203,7 +205,6 @@ const fetchData = async () => {
   try {
     const response = await axios.get('/api/issues')
     if (response.status === 200) {
-      // Sort by created_at descending
       allIssues.value = response.data.issues.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     }
   } catch (error) {

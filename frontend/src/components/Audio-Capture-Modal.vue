@@ -1,15 +1,15 @@
 <template>
     <div v-if="isOpen" class="fixed inset-0 z-[10000] overflow-y-auto" @keydown.esc="closeModal">
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/60" @click="closeModal"></div>
+        <div class="fixed inset-0 bg-base-300/60" @click="closeModal"></div>
 
         <!-- Modal -->
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="relative bg-base-100 rounded-lg shadow-xl max-w-md w-full">
                 <!-- Header -->
-                <div class="flex items-center justify-between p-4 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900">Record Audio</h3>
-                    <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
+                <div class="flex items-center justify-between p-4 border-b border-base-200">
+                    <h3 class="text-lg font-semibold">Record Audio</h3>
+                    <button @click="closeModal" class="btn btn-ghost btn-sm">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12"></path>
@@ -42,8 +42,7 @@
                                     class="w-2 bg-blue-500 rounded-full transition-all duration-100"></div>
                             </div>
 
-                            <button @click="stopRecording"
-                                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                            <button @click="stopRecording" class="btn btn-error">
                                 <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                     <rect x="6" y="4" width="4" height="16"></rect>
                                     <rect x="14" y="4" width="4" height="16"></rect>
@@ -54,9 +53,8 @@
 
                         <!-- Start Recording -->
                         <div v-else>
-                            <p class="text-gray-500 mb-6">Click the button below to start recording</p>
-                            <button @click="startRecording" :disabled="loading"
-                                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50">
+                            <p class="opacity-60 mb-6">Click the button below to start recording</p>
+                            <button @click="startRecording" :disabled="loading" class="btn btn-primary">
                                 <svg v-if="loading" class="animate-spin -ml-1 mr-3 h-5 w-5" fill="none"
                                     viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
@@ -76,8 +74,7 @@
 
                     <!-- Controls -->
                     <div class="flex justify-center">
-                        <button @click="closeModal"
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        <button @click="closeModal" class="btn">
                             Cancel
                         </button>
                     </div>
@@ -85,8 +82,8 @@
 
                 <!-- Error Message -->
                 <div v-if="error" class="px-4 pb-4">
-                    <div class="bg-red-50 border border-red-200 rounded-md p-3">
-                        <p class="text-sm text-red-800">{{ error }}</p>
+                    <div class="alert alert-error">
+                        <span class="text-sm">{{ error }}</span>
                     </div>
                 </div>
             </div>
