@@ -16,7 +16,8 @@
         style="background: radial-gradient(circle at 70% 70%, #FB7185 0%, transparent 55%)" />
 
       <!-- Content container -->
-      <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24 w-full">
+      <div
+        class="relative mx-auto max-w-sm sm:max-w-2xl lg:max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 pb-20 sm:pb-24 w-full">
         <div class="grid gap-8 lg:gap-12 lg:items-center">
           <!-- Centered copy block -->
           <div class="motion-safe:animate-fade-up text-white text-center">
@@ -32,8 +33,8 @@
             </h1>
 
             <p class="mt-5 text-lg text-slate-200/90 max-w-2xl mx-auto">
-              City Pulse is the fastest way to report issues—potholes, outages, safety hazards—and
-              mobilize verified responders with real‑time maps and community updates.
+              City Pulse is the fastest way to report issues potholes, outages, safety hazards and
+              mobilize verified responders with real time maps and community updates.
             </p>
 
             <!-- CTAs -->
@@ -178,7 +179,7 @@
                         </svg> {{ Math.round(Math.random() * 2 + 0.5) }} km
                       </span>
                       <span>•</span><span>{{ timeAgo(issue.created_at)
-                      }}</span><span>•</span><span>{{ issue.address || 'Unknown' }}</span>
+                        }}</span><span>•</span><span>{{ issue.address || 'Unknown' }}</span>
                     </div>
                   </div>
                 </article>
