@@ -19,6 +19,11 @@ const router = createRouter({
     },
     {
       path: '/',
+      name: 'PublicLanding',
+      component: () => import('../views/Public-Landing.vue'),
+    },
+    {
+      path: '/dashboard',
       name: 'Dashboard',
       component: () => import('../views/User-Dashboard.vue'),
       meta: { requiresAuth: true },
@@ -86,10 +91,10 @@ router.beforeEach(async (to, from, next) => {
     if (isAdmin) {
       next('/admin-dashboard')
     } else {
-      next('/')
+      next('/dashboard')
     }
   } else if (to.meta.requiresAdmin && !isAdmin) {
-    next('/')
+    next('/dashboard')
   } else {
     next()
   }
