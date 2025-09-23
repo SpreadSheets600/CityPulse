@@ -69,4 +69,20 @@ class Issue(db.Model):
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
             "citizen_id": self.citizen_id,
+            "user": self.user.to_dict() if self.user else None,
+        }
+
+    def to_public_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "issue_type": self.issue_type,
+            "status": self.status.value,
+            "image_urls": self.image_urls,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "address": self.address,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat(),
         }

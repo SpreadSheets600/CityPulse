@@ -136,6 +136,14 @@ class AllIssues(Resource):
         return {"issues": [issue.to_dict() for issue in issues]}, 200
 
 
+class PublicIssues(Resource):
+    def get(self):
+        # Public endpoint for viewing issues without auth
+        issues = Issue.query.filter(Issue.status.in_(['pending', 'in_progress', 'verified'])).order_by(Issue.created_at.desc()).limit(20).all()
+
+        return {"issues": [issue.to_public_dict() for issue in issues]}, 200
+
+
 class GetIssue(Resource):
     @jwt_required()
     def get(self, issue_id):
