@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-base-100">
     <!-- Main content -->
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div class="px-4 py-6 sm:px-0">
@@ -10,7 +10,7 @@
 
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-          <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="bg-base-200 overflow-hidden shadow rounded-lg">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -29,7 +29,7 @@
             </div>
           </div>
 
-          <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="bg-base-200 overflow-hidden shadow rounded-lg">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -48,7 +48,7 @@
             </div>
           </div>
 
-          <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="bg-base-200 overflow-hidden shadow rounded-lg">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -67,7 +67,7 @@
             </div>
           </div>
 
-          <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="bg-base-200 overflow-hidden shadow rounded-lg">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -88,7 +88,7 @@
         </div>
 
         <!-- Quick Actions -->
-        <div class="bg-white shadow rounded-lg mb-8">
+        <div class="bg-base-200 shadow rounded-lg mb-8">
           <div class="px-4 py-5 sm:p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
             <div class="flex flex-wrap gap-4">
@@ -101,7 +101,7 @@
                 Report New Issue
               </router-link>
               <router-link to="/issues"
-                class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-base-200 hover:bg-gray-50">
                 View My Issues
               </router-link>
             </div>
@@ -109,25 +109,25 @@
         </div>
 
         <!-- Recent issues -->
-        <div class="bg-white shadow rounded-lg">
+        <div class="bg-base-200 shadow rounded-lg">
           <div class="px-4 py-5 sm:p-6">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
               <h3 class="text-lg leading-6 font-medium text-gray-900 truncate">Recent Issues</h3>
               <div class="flex flex-wrap gap-2 mt-2 sm:mt-0">
                 <button @click="selectedStatus = 'all'"
-                  :class="[selectedStatus === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md']">
+                  :class="[selectedStatus === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md hover:bg-opacity-80']">
                   All
                 </button>
                 <button @click="selectedStatus = 'pending'"
-                  :class="[selectedStatus === 'pending' ? 'bg-yellow-500 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md']">
+                  :class="[selectedStatus === 'pending' ? 'bg-yellow-500 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md hover:bg-opacity-80']">
                   Pending
                 </button>
                 <button @click="selectedStatus = 'in_progress'"
-                  :class="[selectedStatus === 'in_progress' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md']">
+                  :class="[selectedStatus === 'in_progress' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md hover:bg-opacity-80']">
                   In Progress
                 </button>
                 <button @click="selectedStatus = 'resolved'"
-                  :class="[selectedStatus === 'resolved' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md']">
+                  :class="[selectedStatus === 'resolved' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md hover:bg-opacity-80']">
                   Resolved
                 </button>
               </div>
@@ -136,17 +136,88 @@
               <p class="text-gray-500">No issues found.</p>
             </div>
             <div v-else class="space-y-4">
-              <div v-for="issue in filteredIssues" :key="issue.id" class="border border-gray-200 rounded-lg p-4">
-                <router-link :to="`/issues/${issue.id}`" class="block hover:bg-gray-50 px-4 py-4 sm:px-6">
-                  <div class="flex items-center justify-between">
-                    <h4 class="text-sm font-medium text-gray-900">{{ issue.title }}</h4>
-                    <span :class="getStatusClass(issue.status)"
-                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
-                      {{ issue.status }}
+              <div v-for="issue in filteredIssues" :key="issue.id"
+                class="border border-gray-200 rounded-lg hover:border-base-300 hover:shadow-md transition-all duration-200 bg-white">
+                <router-link :to="`/issues/${issue.id}`" class="block p-4 hover:bg-gray-50 rounded-lg">
+                  <!-- Header -->
+                  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2">
+                    <p class="text-sm font-medium text-indigo-600 truncate">{{ issue.title }}</p>
+                    <div class="flex items-center text-sm text-gray-500 mt-1 sm:mt-0">
+                      <span :class="getStatusClass(issue.status)"
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2">
+                        {{ issue.status }}
+                      </span>
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      {{ formatDate(issue.created_at) }}
+                    </div>
+                  </div>
+
+                  <!-- Details Row -->
+                  <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-3">
+                    <span v-if="issue.issue_type && issue.issue_type !== 'Unspecified'" class="flex items-center">
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      </svg>
+                      {{ issue.issue_type }}
+                    </span>
+                    <span v-if="issue.address" class="flex items-center">
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      {{ issue.address }}
                     </span>
                   </div>
-                  <p class="mt-1 text-sm text-gray-600">{{ issue.description }}</p>
-                  <p class="mt-2 text-xs text-gray-500">{{ formatDate(issue.created_at) }}</p>
+
+                  <!-- Media Row -->
+                  <div v-if="issue.image_urls?.length > 0 || issue.video_note_url || issue.voice_note_url"
+                    class="flex items-center gap-3 text-xs text-gray-500 mb-3">
+                    <span v-if="issue.image_urls && issue.image_urls.length > 0" class="flex items-center">
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {{ issue.image_urls.length }} image{{ issue.image_urls.length > 1 ? 's' : '' }}
+                    </span>
+                    <span v-if="issue.video_note_url" class="flex items-center">
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      Video
+                    </span>
+                    <span v-if="issue.voice_note_url" class="flex items-center">
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                      </svg>
+                      Audio
+                    </span>
+                  </div>
+
+                  <!-- Footer -->
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-gray-500">
+                    <div class="flex items-center mb-1 sm:mb-0">
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      Posted by {{ issue.user?.firstname }} {{ issue.user?.lastname }}
+                    </div>
+                    <div v-if="issue.updated_at !== issue.created_at" class="flex items-center">
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Updated {{ formatDate(issue.updated_at) }}
+                    </div>
+                  </div>
                 </router-link>
               </div>
             </div>
