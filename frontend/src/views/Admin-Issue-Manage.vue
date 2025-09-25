@@ -139,9 +139,25 @@
             <button @click="saveStatus" class="btn btn-primary mt-2 w-full">Save Status</button>
           </div>
 
+          <!-- Create department -->
+          <div class="bg-base-200 border border-gray-200 rounded-lg p-4 sm:p-6">
+            <h3 class="font-semibold mb-4">Create New Department</h3>
+            <input v-model="newDeptName" type="text" placeholder="Department Name"
+              class="input input-bordered w-full mb-2" />
+            <input v-model="newDeptDescription" type="text" placeholder="Description"
+              class="input input-bordered w-full mb-2" />
+            <input v-model="newDeptEmail" type="email" placeholder="Contact Email"
+              class="input input-bordered w-full mb-2" />
+            <input v-model="newDeptPhone" type="tel" placeholder="Contact Phone"
+              class="input input-bordered w-full mb-2" />
+            <button @click="createDepartment" class="btn btn-primary mt-2 w-full">Create Department</button>
+          </div>
+
           <!-- Assign department -->
           <div class="bg-base-200 border border-gray-200 rounded-lg p-4 sm:p-6">
             <h3 class="font-semibold mb-4">Assign Department</h3>
+            <p v-if="issue.department" class="mb-2 text-sm text-gray-600">Current Department: <span
+                class="font-medium">{{ issue.department.name }}</span></p>
             <select v-model="departmentId" class="select select-bordered w-full">
               <option disabled value="">Select Department</option>
               <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
@@ -210,6 +226,11 @@ const error = ref('')
 const status = ref('pending')
 const departments = ref([])
 const departmentId = ref('')
+
+const newDeptName = ref('')
+const newDeptDescription = ref('')
+const newDeptEmail = ref('')
+const newDeptPhone = ref('')
 
 const updateTitle = ref('')
 const updateBody = ref('')
@@ -289,6 +310,25 @@ const assignDepartment = async () => {
     issue.value = resp.data.issue
   } catch (e) {
     alert(e.response?.data?.error || 'Failed to assign department')
+  }
+}
+
+const createDepartment = async () => {
+  if (!newDeptName.value || !newDeptEmail.value || !newDeptPhone.value) return alert('Name, Email, and Phone are required')
+  try {
+    await axios.post('/api/admin/departments', {
+      name: newDeptName.value,
+      description: newDeptDescription.value,
+      contact_email: newDeptEmail.value,
+      contact_phone: newDeptPhone.value
+    })
+    newDeptName.value = ''
+    newDeptDescription.value = ''
+    newDeptEmail.value = ''
+    newDeptPhone.value = ''
+    await loadDepartments()
+  } catch (e) {
+    alert(e.response?.data?.error || 'Failed to create department')
   }
 }
 
