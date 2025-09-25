@@ -49,6 +49,8 @@ class Issue(db.Model):
         "IssueUpdate", backref="issue", lazy=True, cascade="all, delete-orphan"
     )
 
+    department = db.relationship("Department", backref="issues")
+
     def __repr__(self):
         return f"<Issue {self.title} - {self.status.value}>"
 
@@ -66,6 +68,7 @@ class Issue(db.Model):
             "longitude": self.longitude,
             "address": self.address,
             "department_id": self.department_id,
+            "department": self.department.to_dict() if self.department else None,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
             "citizen_id": self.citizen_id,
@@ -83,6 +86,7 @@ class Issue(db.Model):
             "latitude": self.latitude,
             "longitude": self.longitude,
             "address": self.address,
+            "department": self.department.name if self.department else None,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
         }

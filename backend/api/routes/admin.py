@@ -129,6 +129,43 @@ class ListDepartments(Resource):
         return {"departments": [d.to_dict() for d in departments]}, 200
 
 
+class CreateDepartment(Resource):
+    @jwt_required()
+    def post(self):
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user or user.role != UserRole.admin:
+            return {"error": "Admin Access Required"}, 403
+
+        data = request.get_json() or {}
+        name = (data.get("name") or "").strip()
+        description = (data.get("description") or "").strip()
+        contact_email = (data.get("contact_email") or "").strip()
+        contact_phone = (data.get("contact_phone") or "").strip()
+
+        if not name:
+            return {"error": "name required"}, 400
+        if not contact_email:
+            return {"error": "contact_email required"}, 400
+        if not contact_phone:
+            return {"error": "contact_phone required"}, 400
+
+        # Check if department already exists
+        existing = Department.query.filter_by(name=name).first()
+        if existing:
+            return {"error": "Department with this name already exists"}, 400
+
+        dept = Department(
+            name=name,
+            description=description,
+            contact_email=contact_email,
+            contact_phone=contact_phone,
+        )
+        db.session.add(dept)
+        db.session.commit()
+        return {"message": "Department created", "department": dept.to_dict()}, 201
+
+
 class AssignDepartment(Resource):
     @jwt_required()
     def put(self, issue_id):

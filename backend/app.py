@@ -5,7 +5,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate, upgrade, stamp, init, migrate as alembic_migrate
 
-from api.models import db, User, UserRole
+from api.models import db, User, UserRole, Department
 from api.routes.auth import Register, Login, Logout, Refresh, GetCurrentUser
 from api.routes.issues import (
     ReportIssue,
@@ -23,6 +23,7 @@ from api.routes.admin import (
     GetAllIssues,
     UpdateIssueStatus,
     ListDepartments,
+    CreateDepartment,
     AssignDepartment,
     CreateIssueUpdate,
 )
@@ -74,6 +75,7 @@ def create_app():
     api.add_resource(GetAllIssues, "/api/admin/issues")
     api.add_resource(UpdateIssueStatus, "/api/admin/issues/<int:issue_id>/status")
     api.add_resource(ListDepartments, "/api/admin/departments")
+    api.add_resource(CreateDepartment, "/api/admin/departments")
     api.add_resource(AssignDepartment, "/api/admin/issues/<int:issue_id>/department")
     api.add_resource(CreateIssueUpdate, "/api/admin/issues/<int:issue_id>/updates")
 
@@ -120,6 +122,34 @@ def create_db():
         except Exception as e:
             db.session.rollback()
             print(f"------ [ ERROR ] ------ Failed to create admin user: {e}")
+
+    # Create default departments
+    electricity_dept = Department.query.filter_by(name="Electricity").first()
+    if not electricity_dept:
+        electricity_dept = Department(
+            name="Electricity",
+            description="Handles electricity related issues",
+            contact_email="electricity@citypulse.com",
+            contact_phone="1234567891",
+        )
+        db.session.add(electricity_dept)
+
+    roads_dept = Department.query.filter_by(name="Roads").first()
+    if not roads_dept:
+        roads_dept = Department(
+            name="Roads",
+            description="Handles road and infrastructure issues",
+            contact_email="roads@citypulse.com",
+            contact_phone="1234567892",
+        )
+        db.session.add(roads_dept)
+
+    try:
+        db.session.commit()
+        print("------ [ INFO ] ------ Default Departments Created")
+    except Exception as e:
+        db.session.rollback()
+        print(f"------ [ ERROR ] ------ Failed to create departments: {e}")
 
 
 def run_migrations(app):
