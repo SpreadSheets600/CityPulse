@@ -15,15 +15,34 @@ All protected endpoints require a JWT token in the `Authorization` header:
 Authorization: Bearer <token>
 ```
 
-**Obtain a token via:**
-- `POST /api/auth/login` — Returns access token
-- `POST /api/auth/register` — Returns access token
+### Issue Reporting Flow
+
+```mermaid
+sequenceDiagram
+    participant C as Citizen
+    participant F as Frontend
+    participant B as Backend
+    participant S as S3 Storage
+    participant AI as AI Pipeline
+
+    C->>F: Fill form + media
+    F->>F: Validate inputs
+    F->>B: POST /api/issues/report (multipart)
+    B->>B: Parse & validate
+    B->>S: Upload images/audio/video
+    S-->>B: Presigned URLs
+    B->>B: Create Issue record
+    B->>AI: Classify + detect duplicates + score
+    AI-->>B: AI metadata
+    B-->>F: Issue + AI data
+    F-->>C: Confirmation screen
+```
 
 ---
 
 ## Authentication Endpoints
 
-### POST `/api/auth/register`
+### `POST /api/auth/register`
 
 Register a new user account.
 
@@ -57,31 +76,19 @@ Register a new user account.
 }
 ```
 
-**Errors:**
-- `400` — Missing required fields
-- `409` — Email or phone already registered
+**Errors:** `400` Missing required fields · `409` Email or phone already registered
 
 ---
 
-### POST `/api/auth/login`
+### `POST /api/auth/login`
 
 Login with email or phone number.
 
 **Request Body:**
 ```json
-{
-  "email": "john@example.com",
-  "password": "securepassword"
-}
-```
-
-OR
-
-```json
-{
-  "phone": "1234567890",
-  "password": "securepassword"
-}
+{ "email": "john@example.com", "password": "securepassword" }
+// or
+{ "phone": "1234567890", "password": "securepassword" }
 ```
 
 **Response (200):**
@@ -89,57 +96,31 @@ OR
 {
   "message": "Login successful",
   "access_token": "eyJhbGci...",
-  "user": {
-    "id": 1,
-    "firstname": "John",
-    "lastname": "Doe",
-    "email": "john@example.com",
-    "phone": "1234567890",
-    "role": "citizen",
-    "profile_picture": "https://api.dicebear.com/..."
-  }
+  "user": { "id": 1, "firstname": "John", ... }
 }
 ```
 
-**Errors:**
-- `400` — Missing credentials
-- `401` — Invalid credentials
+**Errors:** `400` Missing credentials · `401` Invalid credentials
 
 ---
 
-### POST `/api/auth/logout`
-
-Logout (clear JWT cookie).
+### `POST /api/auth/logout`
 
 **Headers:** `Authorization: Bearer <token>`
 
-**Response (200):**
-```json
-{
-  "message": "Logged out successfully"
-}
-```
+**Response (200):** `{ "message": "Logged out successfully" }`
 
 ---
 
-### POST `/api/auth/refresh`
-
-Refresh access token.
+### `POST /api/auth/refresh`
 
 **Headers:** `Authorization: Bearer <refresh_token>`
 
-**Response (200):**
-```json
-{
-  "access_token": "eyJhbGci..."
-}
-```
+**Response (200):** `{ "access_token": "eyJhbGci..." }`
 
 ---
 
-### GET `/api/auth/me`
-
-Get current authenticated user.
+### `GET /api/auth/me`
 
 **Headers:** `Authorization: Bearer <token>`
 
@@ -162,24 +143,25 @@ Get current authenticated user.
 
 ## Issue Endpoints
 
-### POST `/api/issues/report`
+### `POST /api/issues/report`
 
 Report a new issue (multipart/form-data).
 
 **Headers:** `Authorization: Bearer <token>`
 
-**Request Body (multipart/form-data):**
+**Request Body:**
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `title` | string | Yes | Issue title (max 100 chars) |
-| `description` | string | Yes | Issue description (max 500 chars) |
-| `issue_type` | string | Yes | One of: Pothole, Street Light, Water Supply, Sewage, Garbage, Traffic, Other |
+| `title` | string | Yes | Max 100 chars |
+| `description` | string | Yes | Max 500 chars |
+| `issue_type` | string | Yes | Pothole, Street Light, Water Supply, Sewage, Garbage, Traffic, Other |
 | `latitude` | float | Yes | Location latitude |
 | `longitude` | float | Yes | Location longitude |
 | `address` | string | No | Street address |
 | `images` | file[] | No | Up to 10 images (max 15MB each) |
-| `voice_note` | file | No | Audio file for voice note |
-| `video_note` | file | No | Video file for video note |
+| `voice_note` | file | No | Audio file |
+| `video_note` | file | No | Video file |
 
 **Response (201):**
 ```json
@@ -203,13 +185,11 @@ Report a new issue (multipart/form-data).
 }
 ```
 
-**Errors:**
-- `400` — Missing required fields
-- `413` — File too large (>15MB)
+**Errors:** `400` Missing required fields · `413` File too large (>15MB)
 
 ---
 
-### GET `/api/issues`
+### `GET /api/issues`
 
 Get all issues (authenticated).
 
@@ -239,13 +219,9 @@ Get all issues (authenticated).
 
 ---
 
-### GET `/api/issues/public`
+### `GET /api/issues/public`
 
-Get public issues (no auth required).
-
-Returns limited fields (no user data, no media URLs beyond images).
-
-**Query Parameters:** None
+Public issues (no auth required). Limited fields — no user data, no media URLs beyond images.
 
 **Response (200):**
 ```json
@@ -268,17 +244,13 @@ Returns limited fields (no user data, no media URLs beyond images).
 
 ---
 
-### GET `/api/issues/my-issues`
+### `GET /api/issues/my-issues`
 
-Get current user's issues.
-
-**Headers:** `Authorization: Bearer <token>`
-
-**Response (200):** Same as `GET /api/issues` but filtered to current user.
+Get current user's issues. Same response shape as `GET /api/issues` filtered to current user.
 
 ---
 
-### GET `/api/issues/<id>`
+### `GET /api/issues/<id>`
 
 Get single issue detail.
 
@@ -316,36 +288,21 @@ Get single issue detail.
 
 ---
 
-### PUT `/api/issues/<id>`
+### `PUT /api/issues/<id>`
 
-Add images to existing issue.
+Add images to existing issue (multipart/form-data).
 
-**Headers:** `Authorization: Bearer <token>`
-
-**Request Body (multipart/form-data):**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `images` | file[] | Yes | Additional images (max 15MB each) |
 
-**Response (200):**
-```json
-{
-  "message": "Images added successfully",
-  "issue": { ... }
-}
-```
-
-**Errors:**
-- `403` — Not the issue owner
-- `404` — Issue not found
+**Errors:** `403` Not the issue owner · `404` Issue not found
 
 ---
 
-### GET `/api/issues/<id>/updates`
+### `GET /api/issues/<id>/updates`
 
 Get updates for an issue.
-
-**Headers:** `Authorization: Bearer <token>`
 
 **Response (200):**
 ```json
@@ -358,11 +315,7 @@ Get updates for an issue.
       "progress": 25,
       "image_urls": [],
       "created_at": "2025-01-16T09:00:00",
-      "author": {
-        "id": 1,
-        "firstname": "Admin",
-        "lastname": "User"
-      }
+      "author": { "id": 1, "firstname": "Admin", "lastname": "User" }
     }
   ]
 }
@@ -372,13 +325,10 @@ Get updates for an issue.
 
 ## Geocoding Endpoints
 
-### GET `/api/geocode?q=<address>`
+### `GET /api/geocode?q=<address>`
 
 Geocode an address to coordinates.
 
-**Headers:** `Authorization: Bearer <token>`
-
-**Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `q` | string | Yes | Address to geocode |
@@ -398,24 +348,16 @@ Geocode an address to coordinates.
 
 ---
 
-### GET `/api/reverse-geocode?lat=<lat>&lon=<lon>`
+### `GET /api/reverse-geocode?lat=<lat>&lon=<lon>`
 
 Reverse geocode coordinates to address.
 
-**Headers:** `Authorization: Bearer <token>`
-
-**Query Parameters:**
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `lat` | float | Yes | Latitude |
 | `lon` | float | Yes | Longitude |
 
-**Response (200):**
-```json
-{
-  "address": "123 Main St, New York, NY 10001, USA"
-}
-```
+**Response (200):** `{ "address": "123 Main St, New York, NY 10001, USA" }`
 
 ---
 
@@ -423,221 +365,117 @@ Reverse geocode coordinates to address.
 
 All admin endpoints require `Authorization: Bearer <admin_token>` with `role: "admin"`.
 
-### GET `/api/admin/users`
+### `GET /api/admin/users`
 
 List all users.
-
-**Response (200):**
 ```json
-{
-  "users": [
-    {
-      "id": 1,
-      "firstname": "John",
-      "lastname": "Doe",
-      "email": "john@example.com",
-      "phone": "1234567890",
-      "role": "citizen",
-      "created_at": "2025-01-15T10:30:00"
-    }
-  ]
-}
+{ "users": [{ "id": 1, "firstname": "John", "lastname": "Doe", "email": "...", "phone": "...", "role": "citizen", "created_at": "..." }] }
 ```
 
----
+### `DELETE /api/admin/users/<id>`
 
-### DELETE `/api/admin/users/<id>`
+**Errors:** `404` User not found
 
-Delete a user.
+### `GET /api/admin/issues`
 
-**Response (200):**
-```json
-{
-  "message": "User deleted successfully"
-}
-```
+List all issues (admin view with citizen and department details).
 
-**Errors:**
-- `404` — User not found
+### `PUT /api/admin/issues/<id>/status`
 
----
+**Request Body:** `{ "status": "in_progress" }`
 
-### GET `/api/admin/issues`
+Valid statuses: `pending`, `in_progress`, `resolved`, `rejected`, `verified`
 
-List all issues (admin view with full details).
-
-**Response (200):**
-```json
-{
-  "issues": [
-    {
-      "id": 1,
-      "title": "...",
-      "status": "pending",
-      "citizen": {
-        "id": 1,
-        "firstname": "John",
-        "lastname": "Doe"
-      },
-      "department": null,
-      ...
-    }
-  ]
-}
-```
-
----
-
-### PUT `/api/admin/issues/<id>/status`
-
-Update issue status.
-
-**Request Body:**
-```json
-{
-  "status": "in_progress"
-}
-```
-
-**Valid statuses:** `pending`, `in_progress`, `resolved`, `rejected`, `verified`
-
-**Response (200):**
-```json
-{
-  "message": "Status updated successfully",
-  "issue": { ... }
-}
-```
-
----
-
-### GET `/api/admin/departments`
+### `GET /api/admin/departments`
 
 List all departments.
 
-**Response (200):**
-```json
-{
-  "departments": [
-    {
-      "id": 1,
-      "name": "Public Works",
-      "description": "Roads and infrastructure",
-      "contact_email": "works@city.gov",
-      "contact_phone": "555-0100"
-    }
-  ]
-}
-```
-
----
-
-### POST `/api/admin/departments`
-
-Create a new department.
+### `POST /api/admin/departments`
 
 **Request Body:**
 ```json
-{
-  "name": "Public Works",
-  "description": "Roads and infrastructure maintenance",
-  "contact_email": "works@city.gov",
-  "contact_phone": "555-0100"
-}
+{ "name": "Public Works", "description": "Roads and infrastructure", "contact_email": "works@city.gov", "contact_phone": "555-0100" }
 ```
 
-**Response (201):**
-```json
-{
-  "message": "Department created successfully",
-  "department": { ... }
-}
-```
+### `PUT /api/admin/issues/<id>/department`
 
----
+**Request Body:** `{ "department_id": 1 }`
 
-### PUT `/api/admin/issues/<id>/department`
+### `POST /api/admin/issues/<id>/updates`
 
-Assign a department to an issue.
+Post an update (multipart/form-data).
 
-**Request Body:**
-```json
-{
-  "department_id": 1
-}
-```
-
-**Response (200):**
-```json
-{
-  "message": "Department assigned successfully",
-  "issue": { ... }
-}
-```
-
----
-
-### POST `/api/admin/issues/<id>/updates`
-
-Post an update on an issue.
-
-**Request Body (multipart/form-data):**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `title` | string | Yes | Update title |
-| `body` | string | No | Update body text |
+| `body` | string | No | Update body |
 | `progress` | int | No | Progress percentage (0-100) |
 | `images` | file[] | No | Images for this update |
-
-**Response (201):**
-```json
-{
-  "message": "Update posted successfully",
-  "update": {
-    "id": 1,
-    "title": "Investigation Started",
-    "body": "Team dispatched...",
-    "progress": 25,
-    "image_urls": [],
-    "created_at": "2025-01-16T09:00:00"
-  }
-}
-```
 
 ---
 
 ## Health Check
 
-### GET `/ping`
+### `GET /ping`
 
-No auth required.
+No auth required. **Response (200):** `Pong!`
 
-**Response (200):**
+---
+
+## Chatbot
+
+### `POST /api/chatbot`
+
+**Request Body:** `{ "message": "How do I report an issue?" }`
+
+**Response (200):** `{ "response": "To report an issue..." }`
+
+---
+
+## AI Intelligence
+
+When reporting an issue, the response includes:
+
 ```json
 {
-  "status": "pong"
+  "classification": {
+    "issue_type": "Road Maintenance",
+    "confidence": 0.85
+  },
+  "priority": {
+    "level": "high",
+    "score": 65.0,
+    "breakdown": {
+      "text_urgency": 30.0,
+      "community_engagement": 0.0,
+      "age_factor": 0.0,
+      "type_severity": 12.0,
+      "evidence_bonus": 10.0,
+      "total": 65.0
+    }
+  },
+  "potential_duplicates": [
+    { "id": 42, "title": "Similar issue reported", "status": "pending", "similarity": 0.75 }
+  ]
 }
 ```
+
+**Classification Categories:** Road Maintenance · Electricity · Water Supply · Waste Management · Public Transportation
+
+**Priority Levels:** `critical` (≥70) · `high` (≥50) · `medium` (≥30) · `low` (<30)
 
 ---
 
 ## Error Response Format
 
-All errors follow this format:
+All errors follow: `{ "message": "Error description" }`
 
-```json
-{
-  "message": "Error description"
-}
-```
-
-Common HTTP status codes:
 | Code | Meaning |
 |------|---------|
 | `400` | Bad Request — Missing/invalid fields |
 | `401` | Unauthorized — Invalid or missing token |
 | `403` | Forbidden — Insufficient permissions |
-| `404` | Not Found — Resource doesn't exist |
+| `404` | Not Found |
 | `409` | Conflict — Duplicate resource |
-| `413` | Payload Too Large — File exceeds limit |
+| `413` | Payload Too Large |
 | `500` | Internal Server Error |

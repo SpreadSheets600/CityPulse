@@ -1,210 +1,225 @@
 # CityPulse Features
 
-## Current Features
-
-### 1. Authentication System
+## 1. Authentication System
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| User Registration | Implemented | Firstname, lastname, email, phone, address, password |
-| Login (Email/Phone) | Implemented | Supports both email and phone number |
-| JWT Authentication | Implemented | 7-day access tokens, header-based |
-| Password Hashing | Implemented | bcrypt via passlib |
-| Role-Based Access | Implemented | `citizen` and `admin` roles |
-| Auto Profile Pictures | Implemented | DiceBear API avatar generation |
+| User Registration | ✅ | Firstname, lastname, email, phone, address, password |
+| Login (Email/Phone) | ✅ | Supports both email and phone number |
+| JWT Authentication | ✅ | 7-day access tokens, header-based |
+| Password Hashing | ✅ | bcrypt via passlib |
+| Role-Based Access | ✅ | `citizen` and `admin` roles |
+| Auto Profile Pictures | ✅ | DiceBear API avatar generation |
+| Password Reset | ✅ | Email-based token reset flow |
+| OAuth2 SSO | ✅ | Google and GitHub login via Authlib |
 
 **Routes:**
-- `POST /api/auth/register` — Register new user
-- `POST /api/auth/login` — Login
-- `POST /api/auth/logout` — Logout
-- `POST /api/auth/refresh` — Refresh token
-- `GET /api/auth/me` — Get current user
+`POST /api/auth/register` · `POST /api/auth/login` · `POST /api/auth/logout` · `POST /api/auth/refresh` · `GET /api/auth/me` · `PUT /api/auth/profile` · `POST /api/auth/forgot-password` · `POST /api/auth/reset-password` · `GET /api/auth/oauth/google` · `GET /api/auth/oauth/github`
 
 ---
 
-### 2. Issue Reporting (Citizens)
+## 2. Issue Reporting (Citizens)
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| Multi-Field Form | Implemented | Title, description, type, location, media |
-| 7 Issue Types | Implemented | Pothole, Street Light, Water Supply, Sewage, Garbage, Traffic, Other |
-| Image Upload | Implemented | Multi-file, max 15MB, compressed to WEBP |
-| Voice Notes | Implemented | Audio recording via MediaRecorder API |
-| Video Notes | Implemented | Video recording with codec fallback |
-| Browser Geolocation | Implemented | One-click location from device GPS |
-| Interactive Map | Implemented | Click/drag on Leaflet map to set location |
-| Address Search | Implemented | Nominatim autocomplete with suggestion list |
-| Reverse Geocoding | Implemented | Convert coordinates to street address |
-
-**Issue Types:**
-1. 🕳️ Pothole
-2. 💡 Street Light
-3. 💧 Water Supply
-4. 🚰 Sewage
-5. 🗑️ Garbage
-6. 🚦 Traffic
-7. 📋 Other
+| Multi-Field Form | ✅ | Title, description, type, location, media |
+| Image Upload | ✅ | Multi-file, max 15MB, compressed to WEBP |
+| Voice Notes | ✅ | Audio recording via MediaRecorder API |
+| Video Notes | ✅ | Video recording with codec fallback |
+| Browser Geolocation | ✅ | One-click location from device GPS |
+| Interactive Map | ✅ | Click/drag on Leaflet map to set location |
+| Address Search | ✅ | Nominatim autocomplete with suggestion list |
+| Reverse Geocoding | ✅ | Convert coordinates to street address |
+| AI Auto-Classification | ✅ | Auto-categorize issues from text |
+| Duplicate Detection | ✅ | Find similar reported issues |
+| Priority Scoring | ✅ | AI-based urgency ranking |
 
 ---
 
-### 3. Media Features
+## 3. Media Features
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| Photo Capture | Implemented | Webcam/device camera via getUserMedia |
-| Audio Recording | Implemented | Microphone recording with visualization bars |
-| Video Recording | Implemented | Camera recording with codec fallback |
-| Image Compression | Implemented | Pillow-based, WEBP format, max 1.5MB |
-| Image Lightbox | Implemented | Full-screen gallery with prev/next navigation |
-| S3 Presigned URLs | Implemented | Secure temporary access to media (7-day expiry) |
-
-**Media Storage:**
-- Images compressed from original → WEBP → max 1.5MB
-- Quality scales down proportionally to meet size limit
-- All media stored in Synology C2 S3 bucket
-- Access via presigned URLs (no direct S3 access)
+| Photo Capture | ✅ | Webcam/device camera via getUserMedia |
+| Audio Recording | ✅ | Microphone recording with visualization bars |
+| Video Recording | ✅ | Camera recording with codec fallback |
+| Image Compression | ✅ | Pillow-based, WEBP format, max 1.5MB |
+| Image Lightbox | ✅ | Full-screen gallery with prev/next navigation |
+| S3 Presigned URLs | ✅ | Secure temporary access to media (7-day expiry) |
 
 ---
 
-### 4. Issue Management
+## 4. Issue Management
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| View All Issues | Implemented | Authenticated users see all issues |
-| View My Issues | Implemented | Filter to own reported issues |
-| Issue Detail Page | Implemented | Full details, map, media, updates timeline |
-| Add Images to Issue | Implemented | Upload additional images to existing issue |
-| Status Tracking | Implemented | 5 states: pending, in_progress, resolved, rejected, verified |
-| Department Assignment | Implemented | Assign issues to departments |
-| Progress Updates | Implemented | Admin posts updates with title, body, progress % |
-| Update Images | Implemented | Attach images to progress updates |
+| View All Issues | ✅ | Authenticated users see all issues |
+| View My Issues | ✅ | Filter to own reported issues |
+| Issue Detail Page | ✅ | Full details, map, media, updates timeline |
+| Add Images to Issue | ✅ | Upload additional images to existing issue |
+| Status Tracking | ✅ | 5 states with transitions |
+| Department Assignment | ✅ | Assign issues to departments |
+| Progress Updates | ✅ | Admin posts updates with title, body, progress % |
+| Upvoting | ✅ | Citizens can upvote issues to show priority |
+| Comments | ✅ | Threaded comments on issues |
+| Search & Filter | ✅ | Full-text search + filter by type, status, date |
 
-**Issue Statuses:**
-```
-pending → in_progress → resolved
-    │          │            │
-    │          │            └──→ verified
-    │          │
-    │          └──→ rejected
-    │
-    └──→ rejected
+### Issue Status Flow
+
+```mermaid
+stateDiagram-v2
+    [*] --> pending
+    pending --> in_progress
+    pending --> rejected
+    in_progress --> resolved
+    in_progress --> rejected
+    resolved --> verified
+    rejected --> [*]
+    verified --> [*]
 ```
 
 ---
 
-### 5. Public Features
+## 5. Public Features
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| Landing Page | Implemented | Hero section, feature cards, CTA |
-| Public Reports Feed | Implemented | Live nearby reports (limited fields) |
-| Interactive Map | Implemented | Leaflet map showing public issues |
-| Status-Colored Markers | Implemented | Map markers colored by issue status |
+| Landing Page | ✅ | Hero section, feature cards, CTA |
+| Public Reports Feed | ✅ | Live nearby reports (limited fields) |
+| Interactive Map | ✅ | Leaflet map showing public issues |
+| Status-Colored Markers | ✅ | Map markers colored by issue status |
 
 ---
 
-### 6. Admin Dashboard
+## 6. Admin Dashboard
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| Admin Stats | Implemented | Total users, issues, status breakdown |
-| Interactive Map | Implemented | All issues with status-colored markers |
-| Issue List | Implemented | Filterable by status, type, date |
-| User Management | Implemented | View all users, delete users |
-| Issue Management | Implemented | Update status, assign department |
-| Department Management | Implemented | Create departments, list all |
-| Issue Updates | Implemented | Post updates with progress tracking |
-
-**Admin Operations:**
-- `GET /api/admin/users` — List all users
-- `DELETE /api/admin/users/<id>` — Delete user
-- `GET /api/admin/issues` — List all issues
-- `PUT /api/admin/issues/<id>/status` — Update status
-- `GET /api/admin/departments` — List departments
-- `POST /api/admin/departments` — Create department
-- `PUT /api/admin/issues/<id>/department` — Assign department
-- `POST /api/admin/issues/<id>/updates` — Post update
+| Admin Stats | ✅ | Total users, issues, status breakdown |
+| Interactive Map | ✅ | All issues with status-colored markers |
+| Issue List | ✅ | Filterable by status, type, date |
+| User Management | ✅ | View all users, delete users |
+| Issue Management | ✅ | Update status, assign department |
+| Department Management | ✅ | Create departments, list all |
+| Issue Updates | ✅ | Post updates with progress tracking |
+| Analytics Dashboard | ✅ | Chart.js doughnut/bar charts |
+| CSV Export | ✅ | Export issues with filters |
+| SLA Tracking | ✅ | Track resolution time vs targets |
+| Geofence Management | ✅ | Auto-assign by location |
+| Audit Log | ✅ | Track all admin actions |
 
 ---
 
-### 7. UI/UX
+## 7. AI Intelligence
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| Responsive Design | Implemented | Tailwind CSS responsive utilities |
-| DaisyUI Components | Implemented | Modern UI component library |
-| Dark Theme Ready | Implemented | DaisyUI theme support |
-| Form Validation | Implemented | Client-side required fields |
-| Loading States | Implemented | Visual feedback during API calls |
-| Status Badges | Implemented | Color-coded issue status display |
-| Navigation Guards | Implemented | Auth-based route protection |
-| Auto-Redirect | Implemented | Admins → admin dashboard on login |
+| Issue Classification | ✅ | Keyword-based auto-categorization |
+| Duplicate Detection | ✅ | Jaccard/Cosine text similarity + location |
+| Priority Scoring | ✅ | Multi-factor 0-100 scoring system |
+| Chatbot | ✅ | FAQ-based issue reporting guidance |
+
+### AI Pipeline
+
+```mermaid
+flowchart LR
+    A[New Report] --> B[Classification]
+    B --> C[Duplicate Detection]
+    C --> D[Priority Scoring]
+    D --> E[Response with AI Data]
+```
+
+### Priority Scoring Factors
+
+| Factor | Description |
+|--------|-------------|
+| Text urgency | Keyword analysis |
+| Community engagement | Upvotes, comments |
+| Issue age | Time since reported |
+| Type severity | Base severity by category |
+| Evidence bonus | Has images/audio/video |
+
+**Priority Levels:**
+- **Critical** (score ≥ 70)
+- **High** (score ≥ 50)
+- **Medium** (score ≥ 30)
+- **Low** (score < 30)
 
 ---
 
-## Features We Can Implement
+## 8. UI/UX
 
-### High Priority
+| Feature | Status | Details |
+|---------|--------|---------|
+| Responsive Design | ✅ | Tailwind CSS responsive utilities |
+| DaisyUI Components | ✅ | Modern UI component library |
+| Dark Theme Ready | ✅ | DaisyUI theme support |
+| Form Validation | ✅ | Client-side required fields |
+| Loading States | ✅ | Visual feedback during API calls |
+| Status Badges | ✅ | Color-coded issue status display |
+| Navigation Guards | ✅ | Auth-based route protection |
+| Auto-Redirect | ✅ | Admins → admin dashboard on login |
+| Error Boundary | ✅ | Catch and display component errors |
+| Skeleton Loaders | ✅ | Better UX during data fetching |
+| Chatbot Widget | ✅ | Floating AI assistant on all pages |
 
-| Feature | Description | Effort |
-|---------|-------------|--------|
-| **Email Notifications** | Send email when issue status changes | Medium |
-| **Push Notifications** | Browser push notifications for updates | Medium |
-| **Pagination** | Paginate issue lists (currently returns all) | Low |
-| **Search & Filter** | Full-text search + advanced filters on issues | Medium |
-| **User Profile Edit** | Allow users to update profile info | Low |
-| **Password Reset** | Email-based password reset flow | Medium |
-| **Rate Limiting** | Prevent abuse on API endpoints | Low |
-| **CORS Restriction** | Limit origins in production | Low |
+---
 
-### Medium Priority
+## 9. Platform & DevOps
 
-| Feature | Description | Effort |
-|---------|-------------|--------|
-| **Issue Upvoting** | Citizens can upvote/like issues | Medium |
-| **Comments System** | Allow citizens to comment on issues | Medium |
-| **Issue Categories & Tags** | Sub-categories with tag system | Low |
-| **Image Annotations** | Draw/mark on images to highlight issues | High |
-| **Multi-Language Support** | i18n for different languages | High |
-| **Analytics Dashboard** | Charts, graphs, trends for admin | Medium |
-| **Export Reports** | CSV/PDF export of issues data | Medium |
-| **SMS Notifications** | Twilio/SNS SMS for status updates | Medium |
+| Feature | Status | Details |
+|---------|--------|---------|
+| Docker Setup | ✅ | Multi-stage builds + docker-compose |
+| CI/CD Pipeline | ✅ | GitHub Actions for test + build |
+| Unit Tests | ✅ | 16 backend (pytest) + 6 frontend (vitest) |
+| Integration Tests | ✅ | 9 full lifecycle tests |
+| API Versioning | ✅ | `/api/v1/` redirects to `/api/` |
+| Rate Limiting | ✅ | Flask-Limiter on auth endpoints |
+| SMS Notifications | ✅ | Twilio integration (graceful fallback) |
 
-### Low Priority (Future)
+---
 
-| Feature | Description | Effort |
-|---------|-------------|--------|
-| **Mobile App** | React Native / Flutter native app | Very High |
-| **AI Issue Classification** | Auto-categorize issues from images/text | High |
-| **Chatbot Support** | AI chatbot for issue reporting | High |
-| **Geofencing** | Auto-assign issues to departments by location | Medium |
-| **SLA Tracking** | Track resolution time vs SLA targets | Medium |
-| **Citizen Verification** | Community verification of issues | Medium |
-| **Live Chat** | Real-time admin-citizen communication | High |
-| **Webhook Integration** | Notify external systems on events | Medium |
-| **API Versioning** | v1/v2 API versioning | Medium |
-| **GraphQL API** | Alternative to REST | High |
-| **SSO Integration** | OAuth2 login (Google, GitHub) | Medium |
-| **Audit Log** | Track all admin actions | Medium |
+## Planned Features
+
+| Feature | Priority | Effort |
+|---------|----------|--------|
+| Mobile App | Medium | Very High |
+| Offline Support | Low | High |
+| Live Chat | Low | High |
+| Multi-Language Support | Low | High |
+| Image Annotations | Low | High |
+| Push Notifications | Medium | High |
+| GraphQL API | Low | High |
+| Webhook System | Low | Medium |
+| E2E Tests | Medium | High |
+| Citizen Verification | Medium | Medium |
 
 ---
 
 ## Feature Comparison Matrix
 
-| Capability | Current | Planned |
-|-----------|---------|---------|
-| Issue Reporting | ✅ Full | - |
-| Media (Photo/Audio/Video) | ✅ Full | - |
-| Geolocation | ✅ Full | - |
-| Authentication | ✅ JWT | + OAuth2 |
-| Role-Based Access | ✅ Basic | + Granular permissions |
-| Admin Dashboard | ✅ Basic | + Analytics, Charts |
-| Notifications | ❌ None | + Email, Push, SMS |
-| Search | ❌ None | + Full-text, Filters |
-| Pagination | ❌ None | + Infinite scroll |
-| Comments | ❌ None | + Threaded comments |
-| Upvoting | ❌ None | + Like/upvote system |
-| Mobile | ⚠️ Responsive | + Native app |
-| Testing | ❌ None | + Unit, Integration, E2E |
-| CI/CD | ❌ None | + GitHub Actions |
-| Docker | ❌ None | + Docker Compose |
+| Capability | Status |
+|-----------|--------|
+| Issue Reporting | ✅ Full |
+| Media (Photo/Audio/Video) | ✅ Full |
+| Geolocation | ✅ Full |
+| Authentication | ✅ JWT + OAuth2 |
+| Role-Based Access | ✅ citizen + admin |
+| Admin Dashboard | ✅ Full (analytics, SLA, export) |
+| Notifications | ✅ Email + SMS |
+| Search & Filter | ✅ Full-text + filters |
+| Pagination | ✅ All list endpoints |
+| Comments | ✅ Threaded |
+| Upvoting | ✅ Like/upvote system |
+| AI Classification | ✅ Keyword-based |
+| Duplicate Detection | ✅ Text similarity |
+| Priority Scoring | ✅ Multi-factor |
+| Chatbot | ✅ FAQ-based |
+| Geofencing | ✅ Auto-assign by location |
+| SLA Tracking | ✅ Resolution time targets |
+| Audit Log | ✅ Admin action tracking |
+| CSV Export | ✅ With filters |
+| Mobile | ⚠️ Responsive web |
+| Testing | ✅ Unit + Integration |
+| CI/CD | ✅ GitHub Actions |
+| Docker | ✅ Docker Compose |

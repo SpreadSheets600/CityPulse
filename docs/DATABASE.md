@@ -4,63 +4,78 @@
 
 CityPulse uses **PostgreSQL** as its primary database with **SQLAlchemy ORM** for data access. Migrations are managed via **Flask-Migrate** (Alembic).
 
----
-
 ## Entity Relationship Diagram
 
-```
-┌──────────────┐       ┌──────────────────┐       ┌──────────────┐
-│    users      │       │     issues       │       │ departments  │
-├──────────────┤       ├──────────────────┤       ├──────────────┤
-│ id (PK)      │◄──┐   │ id (PK)          │   ┌──►│ id (PK)      │
-│ firstname    │   │   │ title            │   │   │ name         │
-│ lastname     │   │   │ description      │   │   │ description  │
-│ address      │   │   │ image_urls (JSON)│   │   │ contact_email│
-│ role (enum)  │   │   │ voice_note_url   │   │   │ contact_phone│
-│ phone        │   │   │ video_note_url   │   │   │ created_at   │
-│ email        │   │   │ issue_type       │   │   │ updated_at   │
-│ password_hash│   │   │ status (enum)    │   │   └──────────────┘
-│ profile_pic  │   │   │ latitude         │   │
-│ created_at   │   │   │ longitude        │   │
-└──────────────┘   │   │ address          │   │
-                   │   │ department_id(FK)│───┘
-                   │   │ citizen_id (FK)  │───┘
-                   │   │ created_at       │
-                   │   │ updated_at       │
-                   │   └──────────────────┘
-                   │            │
-                   │            │ 1:N
-                   │            ▼
-                   │   ┌──────────────────┐
-                   │   │ issue_updates    │
-                   │   ├──────────────────┤
-                   │   │ id (PK)          │
-                   │   │ issue_id (FK)    │
-                   │   │ author_id (FK)   │
-                   │   │ title            │
-                   │   │ body             │
-                   │   │ progress         │
-                   │   │ image_urls (JSON)│
-                   │   │ created_at       │
-                   │   └──────────────────┘
-                   │
-                   │   ┌──────────────────┐
-                   │   │verification_stat │
-                   │   ├──────────────────┤
-                   │   │ id (PK)          │
-                   │   │ issue_id (FK)    │
-                   │   │ status (enum)    │
-                   │   │ verified_by (FK) │
-                   │   │ verified_at      │
-                   │   │ notes            │
-                   │   └──────────────────┘
-                   │
-                   └─── issues.citizen_id → users.id
-                        issue_updates.author_id → users.id
-                        verification_stat.verified_by → users.id
-```
+```mermaid
+erDiagram
+    users ||--o{ issues : "citizen reports"
+    users ||--o{ issue_updates : "author writes"
+    users ||--o{ verification_statuses : "verifier"
+    departments ||--o{ issues : "assigned to"
+    issues ||--o{ issue_updates : "has updates"
+    issues ||--o| verification_statuses : "has verification"
 
----
+    users {
+        int id PK
+        string firstname
+        string lastname
+        string address
+        enum role "citizen | admin"
+        string phone UK
+        string email UK
+        string password_hash
+        string profile_picture "nullable"
+        datetime created_at
+    }
+
+    issues {
+        int id PK
+        string title
+        string description
+        json image_urls
+        string voice_note_url "nullable"
+        string video_note_url "nullable"
+        string issue_type
+        enum status "pending | in_progress | resolved | rejected | verified"
+        float latitude
+        float longitude
+        string address "nullable"
+        int department_id FK "nullable"
+        int citizen_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    departments {
+        int id PK
+        string name UK
+        string description "nullable"
+        string contact_email UK
+        string contact_phone UK
+        datetime created_at
+        datetime updated_at
+    }
+
+    issue_updates {
+        int id PK
+        int issue_id FK
+        int author_id FK
+        string title
+        text body "nullable"
+        int progress "0-100"
+        json image_urls
+        datetime created_at
+    }
+
+    verification_statuses {
+        int id PK
+        int issue_id FK
+        enum status "pending | verified | rejected"
+        int verified_by FK "nullable"
+        datetime verified_at "nullable"
+        text notes "nullable"
+    }
+```
 
 ## Models
 
@@ -74,12 +89,12 @@ CityPulse uses **PostgreSQL** as its primary database with **SQLAlchemy ORM** fo
 | `firstname` | String(80) | Unique, Not Null | First name |
 | `lastname` | String(80) | Unique, Not Null | Last name |
 | `address` | String(200) | Not Null | Street address |
-| `role` | Enum | Not Null, Default: `citizen` | User role (`citizen` or `admin`) |
+| `role` | Enum | Not Null, Default: `citizen` | `citizen` or `admin` |
 | `phone` | String(15) | Unique, Not Null | Phone number |
 | `email` | String(120) | Unique, Not Null | Email address |
 | `password_hash` | String(120) | Not Null | bcrypt hashed password |
 | `profile_picture` | String(200) | Nullable | DiceBear avatar URL |
-| `created_at` | DateTime | Default: `datetime.utcnow` | Account creation time |
+| `created_at` | DateTime | Default: `utcnow` | Account creation time |
 
 **Relationships:**
 - `issues` → One-to-many with `Issue` (via `citizen_id`)
@@ -98,15 +113,15 @@ CityPulse uses **PostgreSQL** as its primary database with **SQLAlchemy ORM** fo
 | `image_urls` | JSON | Not Null | Array of S3 presigned URLs |
 | `voice_note_url` | String | Nullable | S3 presigned URL for audio |
 | `video_note_url` | String | Nullable | S3 presigned URL for video |
-| `issue_type` | String(50) | Default: `"Unspecified"` | Issue category |
+| `issue_type` | String(50) | Default: `Unspecified` | Issue category |
 | `status` | Enum | Default: `pending` | Current status |
 | `latitude` | Float | Not Null | Location latitude |
 | `longitude` | Float | Not Null | Location longitude |
 | `address` | String(200) | Nullable | Street address |
 | `department_id` | Integer | FK → `departments.id`, Nullable | Assigned department |
 | `citizen_id` | Integer | FK → `users.id`, Not Null | Reporter |
-| `created_at` | DateTime | Default: `datetime.utcnow` | Report time |
-| `updated_at` | DateTime | On update: `datetime.utcnow` | Last update time |
+| `created_at` | DateTime | Default: `utcnow` | Report time |
+| `updated_at` | DateTime | On update: `utcnow` | Last update time |
 
 **Status Enum Values:**
 - `pending` — New issue, awaiting review
@@ -116,14 +131,7 @@ CityPulse uses **PostgreSQL** as its primary database with **SQLAlchemy ORM** fo
 - `verified` — Resolution verified
 
 **Issue Type Values:**
-- `Pothole`
-- `Street Light`
-- `Water Supply`
-- `Sewage`
-- `Garbage`
-- `Traffic`
-- `Other`
-- `Unspecified` (default)
+- `Pothole`, `Street Light`, `Water Supply`, `Sewage`, `Garbage`, `Traffic`, `Other`, `Unspecified` (default)
 
 **Relationships:**
 - `citizen` → Many-to-one with `User`
@@ -146,11 +154,7 @@ CityPulse uses **PostgreSQL** as its primary database with **SQLAlchemy ORM** fo
 | `body` | Text | Nullable | Update description |
 | `progress` | Integer | Default: 0 | Progress percentage (0-100) |
 | `image_urls` | JSON | Default: `[]` | Array of S3 presigned URLs |
-| `created_at` | DateTime | Default: `datetime.utcnow` | Update time |
-
-**Relationships:**
-- `issue` → Many-to-one with `Issue`
-- `author` → Many-to-one with `User`
+| `created_at` | DateTime | Default: `utcnow` | Update time |
 
 ---
 
@@ -165,11 +169,8 @@ CityPulse uses **PostgreSQL** as its primary database with **SQLAlchemy ORM** fo
 | `description` | String(500) | Nullable | Department description |
 | `contact_email` | String(120) | Unique, Not Null | Contact email |
 | `contact_phone` | String(15) | Unique, Not Null | Contact phone |
-| `created_at` | DateTime | Default: `datetime.utcnow` | Creation time |
-| `updated_at` | DateTime | On update: `datetime.utcnow` | Last update time |
-
-**Relationships:**
-- `issues` → One-to-many with `Issue`
+| `created_at` | DateTime | Default: `utcnow` | Creation time |
+| `updated_at` | DateTime | On update: `utcnow` | Last update time |
 
 ---
 
@@ -181,15 +182,10 @@ CityPulse uses **PostgreSQL** as its primary database with **SQLAlchemy ORM** fo
 |--------|------|-------------|-------------|
 | `id` | Integer | PK, Auto-increment | Unique verification ID |
 | `issue_id` | Integer | FK → `issues.id`, Not Null | Verified issue |
-| `status` | Enum | Default: `pending` | Verification status |
+| `status` | Enum | Default: `pending` | `pending`, `verified`, or `rejected` |
 | `verified_by` | Integer | FK → `users.id`, Nullable | Verifier |
 | `verified_at` | DateTime | Nullable | Verification time |
 | `notes` | Text | Nullable | Verification notes |
-
-**Status Enum Values:**
-- `pending` — Not yet verified
-- `verified` — Issue verified
-- `rejected` — Verification rejected
 
 ---
 
@@ -197,13 +193,21 @@ CityPulse uses **PostgreSQL** as its primary database with **SQLAlchemy ORM** fo
 
 ### Admin Account (Seeded on First Run)
 
-```
-Email:    admin@citypulse.com
-Password: admin123
-Role:     admin
-```
+| Field | Value |
+|-------|-------|
+| Email | `admin@citypulse.com` |
+| Password | `admin123` |
+| Role | `admin` |
 
----
+### Departments (Loaded from `backend/api/data/departments.json`)
+
+| Department | Contact |
+|------------|---------|
+| Electricity | electricity@citypulse.com |
+| Water Supply | water@citypulse.com |
+| Waste Management | waste@citypulse.com |
+| Public Transportation | publictransport@citypulse.com |
+| Road Maintenance | roads@citypulse.com |
 
 ## Configuration
 
@@ -216,13 +220,13 @@ SQLALCHEMY_DATABASE_URI = "postgresql://postgres:password@localhost:5432/mydatab
 SQLALCHEMY_DATABASE_URI = "sqlite:///citypulse.db"
 ```
 
-**Recommended Production Settings:**
+**Production Settings:**
 ```python
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ENGINE_OPTIONS = {
-    "pool_pre_ping": True,      # Verify connections before use
-    "pool_recycle": 300,        # Recycle connections every 5 min
-    "pool_size": 10,            # Connection pool size
-    "max_overflow": 20,         # Extra connections beyond pool_size
+    "pool_pre_ping": True,
+    "pool_recycle": 300,
+    "pool_size": 10,
+    "max_overflow": 20,
 }
 ```

@@ -2,6 +2,28 @@
 
 ## Current Security Measures
 
+```mermaid
+mindmap
+  root((Security))
+    Authentication
+      bcrypt Password Hashing
+      JWT Tokens 7-day expiry
+      Role-Based Access
+      OAuth2 SSO
+    Data Protection
+      SQLAlchemy ORM
+      Vue Template Auto-Escaping
+      CORS Configuration
+      File Upload Validation
+    Infrastructure
+      Presigned S3 URLs
+      Rate Limiting
+      Connection Pooling
+    OAuth2
+      Google Login
+      GitHub Login
+```
+
 ### Authentication
 
 | Measure | Implementation |
@@ -47,7 +69,7 @@
 |-------|------|----------|-----|
 | No input sanitization | Medium | All form inputs | Add bleach/sanitize |
 | Debug mode in production | Medium | `app.py:170` | Disable in production |
-| No request size limits | Medium | File uploads | Configure nginx/client_max_body_size |
+| No request size limits | Medium | File uploads | Configure nginx |
 
 ### Low
 
@@ -65,7 +87,6 @@
 
 1. **Move all secrets to environment variables**
    ```python
-   # config.py — REMOVE hardcoded values
    S3_ACCESS_KEY = os.environ.get("S3_ACCESS_KEY")
    S3_SECRET_KEY = os.environ.get("S3_SECRET_KEY")
    ```
@@ -88,19 +109,19 @@
 
 ### Short-Term (First Month)
 
-5. **Add security headers** (flask-talisman)
-6. **Implement CSRF protection**
-7. **Add request logging**
-8. **Set up database backups**
-9. **Add input validation/sanitization**
+5. Add security headers (flask-talisman)
+6. Implement CSRF protection
+7. Add request logging
+8. Set up database backups
+9. Add input validation/sanitization
 
 ### Long-Term (Ongoing)
 
-10. **Regular dependency updates** (`pip-audit`, `npm audit`)
-11. **Penetration testing**
-12. **Security audit of S3 bucket policies**
-13. **Monitor for suspicious activity**
-14. **Implement account lockout after failed attempts**
+10. Regular dependency updates (`pip-audit`, `npm audit`)
+11. Penetration testing
+12. Security audit of S3 bucket policies
+13. Monitor for suspicious activity
+14. Implement account lockout after failed attempts
 
 ---
 
@@ -111,7 +132,7 @@
 | Max file size | 15MB per file |
 | Max files | 10 images per report |
 | File types | Images, audio, video (server-side validation) |
-| Storage | S3 with presigned URLs (no direct access) |
+| Storage | S3 with presigned URLs |
 | Processing | Image compression to WEBP before storage |
 
 **Recommendations:**
@@ -132,8 +153,7 @@
 | Algorithm | HS256 (default) | Acceptable for this use case |
 | Claims | user_id, role | Add token version for revocation |
 
-**Token Revocation:**
-Currently, there's no way to revoke tokens before expiry. Consider:
+**Token Revocation:** Currently no way to revoke tokens before expiry. Consider:
 - Token blacklist (Redis)
 - Token versioning in database
 - Short-lived access + long-lived refresh tokens
