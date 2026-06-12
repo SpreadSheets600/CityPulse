@@ -55,6 +55,16 @@ class Issue(db.Model):
         return f"<Issue {self.title} - {self.status.value}>"
 
     def to_dict(self):
+        from flask_jwt_extended import get_jwt_identity
+        try:
+            current_user_id = get_jwt_identity()
+        except Exception:
+            current_user_id = None
+
+        user_upvoted = False
+        if current_user_id:
+            user_upvoted = any(str(u.user_id) == str(current_user_id) for u in self.upvotes)
+
         return {
             "id": self.id,
             "title": self.title,
@@ -73,6 +83,8 @@ class Issue(db.Model):
             "updated_at": self.updated_at.isoformat(),
             "citizen_id": self.citizen_id,
             "user": self.user.to_dict() if self.user else None,
+            "upvote_count": len(self.upvotes),
+            "user_upvoted": user_upvoted,
         }
 
     def to_public_dict(self):
@@ -89,4 +101,5 @@ class Issue(db.Model):
             "department": self.department.name if self.department else None,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
+            "upvote_count": len(self.upvotes),
         }

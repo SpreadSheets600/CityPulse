@@ -7,6 +7,7 @@ class Department(db.Model):
     description = db.Column(db.String(500), nullable=True)
     contact_email = db.Column(db.String(120), unique=True, nullable=False)
     contact_phone = db.Column(db.String(15), unique=True, nullable=False)
+    sla_hours = db.Column(db.Integer, default=72)
 
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(
@@ -25,6 +26,7 @@ class Department(db.Model):
             "description": self.description,
             "contact_email": self.contact_email,
             "contact_phone": self.contact_phone,
+            "sla_hours": self.sla_hours,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
         }
