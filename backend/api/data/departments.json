@@ -1,0 +1,44 @@
+{
+    "departments": [
+        {
+            "name": "Electricity",
+            "description": "Department responsible for managing electricity supply and infrastructure in the city.",
+            "contact": {
+                "phone": "1234567890",
+                "email": "electricity@citypulse.com"
+            }
+        },
+        {
+            "name": "Water Supply",
+            "description": "Department responsible for managing water supply and infrastructure in the city.",
+            "contact": {
+                "phone": "0987654321",
+                "email": "water@citypulse.com"
+            }
+        },
+        {
+            "name": "Waste Management",
+            "description": "Department responsible for managing waste collection and disposal in the city.",
+            "contact": {
+                "phone": "1122334455",
+                "email": "waste@citypulse.com"
+            }
+        },
+        {
+            "name": "Public Transportation",
+            "description": "Department responsible for managing public transportation services in the city.",
+            "contact": {
+                "phone": "6677889900",
+                "email": "publictransport@citypulse.com"
+            }
+        },
+        {
+            "name": "Road Maintenance",
+            "description": "Department responsible for maintaining and repairing roads in the city.",
+            "contact": {
+                "phone": "5566778899",
+                "email": "roads@citypulse.com"
+            }
+        }
+    ]
+}
