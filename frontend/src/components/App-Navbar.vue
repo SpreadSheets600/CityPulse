@@ -1,44 +1,67 @@
 <template>
-  <nav class="navbar bg-base-200 shadow-sm">
+  <nav class="navbar sticky top-0 z-50 glass-panel shadow-lg px-4 md:px-8 transition-all duration-300">
     <div class="flex-1">
       <router-link @click="closeDropdown"
         :to="authStore.isAuthenticated ? (authStore.isAdmin ? '/admin-dashboard' : '/dashboard') : '/'"
-        class="btn btn-ghost text-2xl font-semibold">CityPulse</router-link>
+        class="btn btn-ghost text-2xl font-extrabold tracking-wider font-mono bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 bg-clip-text text-transparent hover:scale-105 transition-transform duration-200">
+        CityPulse<span class="text-xs text-primary font-sans font-medium px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 ml-2">SaaS</span>
+      </router-link>
     </div>
-    <div class="flex gap-2">
+    <div class="flex gap-4">
       <div v-if="authStore.isAuthenticated" class="dropdown dropdown-end" :class="{ 'dropdown-open': dropdownOpen }">
-        <div tabindex="0" role="button" id="user-menu-button" aria-expanded="dropdownOpen"
-          class="btn btn-ghost btn-circle avatar" @click="toggleDropdown">
-          <div class="w-8 rounded-full border border-gray-300">
+        <div tabindex="0" role="button" id="user-menu-button" :aria-expanded="dropdownOpen"
+          class="btn btn-ghost btn-circle avatar ring-2 ring-primary/20 hover:ring-primary/60 transition-all duration-300" @click="toggleDropdown">
+          <div class="w-9 rounded-full">
             <img v-if="profilePictureUrl" :src="profilePictureUrl" alt="Profile" class="object-cover" />
-            <div v-else class="w-8 h-8 rounded-full flex items-center justify-center bg-primary text-primary-content">
-              <span class="text-xs font-semibold">{{ userInitials }}</span>
+            <div v-else class="w-9 h-9 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-mono">
+              <span class="text-sm font-semibold">{{ userInitials }}</span>
             </div>
           </div>
         </div>
         <ul tabindex="0" id="user-dropdown"
-          class="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow">
+          class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-2xl z-[100] mt-4 w-56 p-2.5 shadow-2xl backdrop-blur-md">
+          <div class="px-3 py-2 border-b border-base-300 mb-2">
+            <p class="text-xs text-slate-400">Signed in as</p>
+            <p class="text-sm font-semibold text-slate-200 truncate">{{ user?.firstname }} {{ user?.lastname }}</p>
+          </div>
           <li>
-            <router-link @click="closeDropdown" :to="authStore.isAdmin ? '/admin-dashboard' : '/dashboard'">
+            <router-link @click="closeDropdown" :to="authStore.isAdmin ? '/admin-dashboard' : '/dashboard'" class="py-2.5 rounded-xl hover:bg-base-300 transition-colors">
+              <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
               {{ authStore.isAdmin ? 'Admin Dashboard' : 'Dashboard' }}
             </router-link>
           </li>
           <li>
-            <router-link @click="closeDropdown" to="/issues">Issues</router-link>
+            <router-link @click="closeDropdown" to="/issues" class="py-2.5 rounded-xl hover:bg-base-300 transition-colors">
+              <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+              </svg>
+              Issues
+            </router-link>
           </li>
           <li>
-            <router-link @click="closeDropdown" to="/profile">Profile</router-link>
+            <router-link @click="closeDropdown" to="/profile" class="py-2.5 rounded-xl hover:bg-base-300 transition-colors">
+              <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Profile
+            </router-link>
           </li>
-          <li class="border-t border-base-100 mt-2 pt-2">
-            <button @click="handleLogout" class="text-error">Log Out</button>
+          <li class="border-t border-base-300 mt-2 pt-2">
+            <button @click="handleLogout" class="py-2.5 rounded-xl text-error hover:bg-error/10 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Log Out
+            </button>
           </li>
         </ul>
       </div>
       <div v-else>
-        <router-link to="/login" class="btn btn-ghost">
-          <svg aria-hidden="true" class="h-4 w-4 text-current" viewBox="0 0 24 24" fill="none">
-            <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z"
-              fill="currentColor" opacity=".9" />
+        <router-link to="/login" class="btn btn-outline btn-primary btn-sm rounded-xl px-4 flex items-center gap-1.5 transition-all duration-300">
+          <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>
           <span>Sign in</span>
         </router-link>

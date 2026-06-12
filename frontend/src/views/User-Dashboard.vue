@@ -1,150 +1,135 @@
 <template>
-  <div class="min-h-screen bg-base-100">
-    <!-- Main content -->
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div class="px-4 py-6 sm:px-0">
+  <div class="min-h-screen bg-base-100 text-base-content antialiased">
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div>
+        <!-- Welcome Header -->
         <div class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900">Welcome Back, {{ user?.firstname }}!</h2>
-          <p class="mt-1 text-sm text-gray-600">Here's what's happening in your city.</p>
+          <h2 class="text-3xl font-extrabold text-slate-100">Welcome Back, {{ user?.firstname }}!</h2>
+          <p class="mt-1.5 text-sm text-slate-400">Monitor active geofences and verify community reports in real time.</p>
         </div>
 
-        <!-- Stats Cards -->
+        <!-- Stats Cards Grid -->
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5 mb-8">
-          <div class="bg-base-200 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                  </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">Reputation</dt>
-                    <dd class="text-lg font-medium text-gray-900">{{ reputation.total_points || 0 }}</dd>
-                  </dl>
-                </div>
+          <!-- Reputation Card -->
+          <div class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/40 transition-all duration-300 flex flex-col justify-between">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 h-10 w-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+                <svg class="h-5 w-5 text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                </svg>
               </div>
-              <div class="mt-2">
-                <ReputationBadge :trust-level="reputation.trust_level" :total-points="reputation.total_points" />
+              <div class="ml-4 flex-1">
+                <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Reputation</p>
+                <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">{{ reputation.total_points || 0 }}</p>
               </div>
+            </div>
+            <div class="mt-4">
+              <ReputationBadge :trust-level="reputation.trust_level" :total-points="reputation.total_points" />
             </div>
           </div>
 
-          <div class="bg-base-200 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">Total Issues</dt>
-                    <dd class="text-lg font-medium text-gray-900">{{ stats.totalIssues }}</dd>
-                  </dl>
-                </div>
-              </div>
+          <!-- Total Issues -->
+          <div class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/40 transition-all duration-300 flex items-center">
+            <div class="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center">
+              <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div class="ml-4 flex-1">
+              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Total Issues</p>
+              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">{{ stats.totalIssues }}</p>
             </div>
           </div>
 
-          <div class="bg-base-200 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">Pending</dt>
-                    <dd class="text-lg font-medium text-gray-900">{{ stats.pendingIssues }}</dd>
-                  </dl>
-                </div>
-              </div>
+          <!-- Pending Issues -->
+          <div class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/40 transition-all duration-300 flex items-center">
+            <div class="flex-shrink-0 h-10 w-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+              <svg class="h-5 w-5 text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="ml-4 flex-1">
+              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Pending</p>
+              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">{{ stats.pendingIssues }}</p>
             </div>
           </div>
 
-          <div class="bg-base-200 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">In Progress</dt>
-                    <dd class="text-lg font-medium text-gray-900">{{ stats.inProgressIssues }}</dd>
-                  </dl>
-                </div>
-              </div>
+          <!-- In Progress -->
+          <div class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/40 transition-all duration-300 flex items-center">
+            <div class="flex-shrink-0 h-10 w-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+              <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div class="ml-4 flex-1">
+              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">In Progress</p>
+              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">{{ stats.inProgressIssues }}</p>
             </div>
           </div>
 
-          <div class="bg-base-200 overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center">
-                <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div class="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt class="text-sm font-medium text-gray-500 truncate">Resolved</dt>
-                    <dd class="text-lg font-medium text-gray-900">{{ stats.resolvedIssues }}</dd>
-                  </dl>
-                </div>
-              </div>
+          <!-- Resolved -->
+          <div class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/40 transition-all duration-300 flex items-center">
+            <div class="flex-shrink-0 h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <svg class="h-5 w-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="ml-4 flex-1">
+              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Resolved</p>
+              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">{{ stats.resolvedIssues }}</p>
             </div>
           </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="bg-base-200 shadow rounded-lg mb-8">
-          <div class="px-4 py-5 sm:p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
-            <div class="flex flex-wrap gap-4">
+        <!-- Quick Actions & Filters Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <!-- Quick Actions -->
+          <div class="bg-base-200 border border-base-300 shadow-lg rounded-3xl p-6 lg:col-span-1">
+            <h3 class="text-lg font-bold text-slate-100 mb-4 font-mono uppercase tracking-wide text-xs">Quick Actions</h3>
+            <div class="flex flex-col gap-3">
               <router-link to="/issues/create"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                class="btn btn-primary rounded-xl flex items-center justify-center gap-2 font-bold py-3.5">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
                 Report New Issue
               </router-link>
               <router-link to="/issues"
-                class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-base-200 hover:bg-gray-50">
-                View My Issues
+                class="btn btn-outline border-base-300 hover:border-slate-500 rounded-xl flex items-center justify-center gap-2 font-bold py-3.5">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+                </svg>
+                View My Reports
               </router-link>
             </div>
           </div>
-        </div>
 
-        <!-- Search & Filter -->
-        <div class="bg-base-200 shadow rounded-lg mb-8">
-          <div class="px-4 py-5 sm:p-6">
-            <div class="flex flex-col sm:flex-row gap-3">
-              <input v-model="searchQuery" type="text" placeholder="Search issues..."
-                class="input input-bordered flex-1" @input="debouncedFetch" />
-              <select v-model="filterStatus" class="select select-bordered" @change="fetchData">
-                <option value="">All Status</option>
+          <!-- Search & Filter -->
+          <div class="bg-base-200 border border-base-300 shadow-lg rounded-3xl p-6 lg:col-span-2">
+            <h3 class="text-lg font-bold text-slate-100 mb-4 font-mono uppercase tracking-wide text-xs">Search & Filter</h3>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <div class="relative flex-1">
+                <input v-model="searchQuery" type="text" placeholder="Search issues by keyword..."
+                  class="input input-bordered w-full rounded-xl pl-10 border-base-300 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans" @input="debouncedFetch" />
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+              </div>
+              
+              <select v-model="filterStatus" class="select select-bordered rounded-xl border-base-300 focus:border-primary font-mono text-xs" @change="fetchData">
+                <option value="">Status: All</option>
                 <option value="pending">Pending</option>
                 <option value="in_progress">In Progress</option>
                 <option value="resolved">Resolved</option>
                 <option value="rejected">Rejected</option>
                 <option value="verified">Verified</option>
               </select>
-              <select v-model="filterType" class="select select-bordered" @change="fetchData">
-                <option value="">All Types</option>
+              
+              <select v-model="filterType" class="select select-bordered rounded-xl border-base-300 focus:border-primary font-mono text-xs" @change="fetchData">
+                <option value="">Type: All</option>
                 <option value="Road Damage">Road Damage</option>
                 <option value="Water Supply">Water Supply</option>
                 <option value="Electricity">Electricity</option>
@@ -156,118 +141,107 @@
           </div>
         </div>
 
-        <!-- Recent issues -->
-        <div class="bg-base-200 shadow rounded-lg">
-          <div class="px-4 py-5 sm:p-6">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
-              <h3 class="text-lg leading-6 font-medium text-gray-900 truncate">Recent Issues</h3>
-              <div class="flex flex-wrap gap-2 mt-2 sm:mt-0">
-                <button @click="selectedStatus = 'all'"
-                  :class="[selectedStatus === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md hover:bg-opacity-80']">
-                  All
-                </button>
-                <button @click="selectedStatus = 'pending'"
-                  :class="[selectedStatus === 'pending' ? 'bg-yellow-500 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md hover:bg-opacity-80']">
-                  Pending
-                </button>
-                <button @click="selectedStatus = 'in_progress'"
-                  :class="[selectedStatus === 'in_progress' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md hover:bg-opacity-80']">
-                  In Progress
-                </button>
-                <button @click="selectedStatus = 'resolved'"
-                  :class="[selectedStatus === 'resolved' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700', 'px-2 py-0.5 text-xs rounded-md hover:bg-opacity-80']">
-                  Resolved
-                </button>
-              </div>
+        <!-- Recent Issues List -->
+        <div class="bg-base-200 border border-base-300 shadow-lg rounded-3xl p-6">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+            <div>
+              <h3 class="text-xl font-bold text-slate-100">Recent Activity Feed</h3>
+              <p class="text-xs text-slate-400 mt-0.5">Showing nearest reported incident notifications</p>
             </div>
-            <div v-if="filteredIssues.length === 0" class="text-center py-8">
-              <p class="text-gray-500">No issues found.</p>
+            
+            <!-- Technical Status Tabs -->
+            <div class="flex flex-wrap gap-2">
+              <button @click="selectedStatus = 'all'"
+                :class="[selectedStatus === 'all' ? 'bg-primary text-white border-primary' : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300', 'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer']">
+                ALL
+              </button>
+              <button @click="selectedStatus = 'pending'"
+                :class="[selectedStatus === 'pending' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300', 'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer']">
+                PENDING
+              </button>
+              <button @click="selectedStatus = 'in_progress'"
+                :class="[selectedStatus === 'in_progress' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300', 'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer']">
+                IN PROGRESS
+              </button>
+              <button @click="selectedStatus = 'resolved'"
+                :class="[selectedStatus === 'resolved' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300', 'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer']">
+                RESOLVED
+              </button>
             </div>
-            <div v-else class="space-y-4">
-              <div v-for="issue in filteredIssues" :key="issue.id"
-                class="border border-gray-200 rounded-lg hover:border-base-300 hover:shadow-md transition-all duration-200 bg-white">
-                <router-link :to="`/issues/${issue.id}`" class="block p-4 hover:bg-gray-50 rounded-lg">
-                  <!-- Header -->
-                  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2">
-                    <p class="text-sm font-medium text-indigo-600 truncate">{{ issue.title }}</p>
-                    <div class="flex items-center text-sm text-gray-500 mt-1 sm:mt-0">
-                      <span :class="getStatusClass(issue.status)"
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2">
-                        {{ issue.status }}
-                      </span>
-                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          </div>
+
+          <div v-if="filteredIssues.length === 0" class="text-center py-12 border border-dashed border-base-300 rounded-2xl bg-base-100/30">
+            <svg class="mx-auto h-12 w-12 text-slate-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-slate-500 text-sm">No recent matching reports found in this neighborhood.</p>
+          </div>
+          
+          <div v-else class="space-y-4">
+            <div v-for="issue in filteredIssues" :key="issue.id"
+              class="border border-base-300 rounded-2xl hover:border-primary/40 hover:shadow-lg transition-all duration-300 bg-base-100/30 overflow-hidden">
+              <router-link :to="`/issues/${issue.id}`" class="block p-5 hover:bg-base-300/10">
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
+                  <div>
+                    <p class="text-lg font-bold text-slate-100 transition-colors group-hover:text-primary">{{ issue.title }}</p>
+                    <p class="text-xs text-slate-400 mt-1 font-sans line-clamp-1">{{ issue.description }}</p>
+                  </div>
+                  <div class="flex items-center text-xs font-mono text-slate-500 mt-1 sm:mt-0 gap-3">
+                    <span :class="getStatusClass(issue.status)"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-2xs font-bold uppercase tracking-wide">
+                      {{ issue.status }}
+                    </span>
+                    <span class="flex items-center">
+                      <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                       {{ formatDate(issue.created_at) }}
-                    </div>
+                    </span>
                   </div>
+                </div>
 
-                  <!-- Details Row -->
-                  <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-3">
-                    <span v-if="issue.issue_type && issue.issue_type !== 'Unspecified'" class="flex items-center">
-                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                      </svg>
-                      {{ issue.issue_type }}
-                    </span>
-                    <span v-if="issue.address" class="flex items-center">
-                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      {{ issue.address }}
-                    </span>
-                  </div>
+                <!-- Details & Tags Row -->
+                <div class="flex flex-wrap items-center gap-3 text-xs font-mono text-slate-500 border-b border-base-300/50 pb-3.5 mb-3.5">
+                  <span v-if="issue.issue_type && issue.issue_type !== 'Unspecified'" class="flex items-center rounded-md bg-blue-500/5 px-2 py-0.5 border border-blue-500/10 text-blue-400">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                    {{ issue.issue_type }}
+                  </span>
+                  
+                  <span v-if="issue.address" class="flex items-center">
+                    <svg class="w-3 h-3 mr-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {{ issue.address }}
+                  </span>
+                </div>
 
-                  <!-- Media Row -->
-                  <div v-if="issue.image_urls?.length > 0 || issue.video_note_url || issue.voice_note_url"
-                    class="flex items-center gap-3 text-xs text-gray-500 mb-3">
-                    <span v-if="issue.image_urls && issue.image_urls.length > 0" class="flex items-center">
-                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {{ issue.image_urls.length }} image{{ issue.image_urls.length > 1 ? 's' : '' }}
-                    </span>
-                    <span v-if="issue.video_note_url" class="flex items-center">
-                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                      </svg>
-                      Video
-                    </span>
-                    <span v-if="issue.voice_note_url" class="flex items-center">
-                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                      </svg>
-                      Audio
-                    </span>
+                <!-- Footer & User Info -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-slate-500 font-mono">
+                  <div class="flex items-center mb-1 sm:mb-0">
+                    <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Reported by: <span class="text-slate-300 ml-1">{{ issue.user?.firstname }} {{ issue.user?.lastname }}</span>
                   </div>
-
-                  <!-- Footer -->
-                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-gray-500">
-                    <div class="flex items-center mb-1 sm:mb-0">
-                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                      Posted by {{ issue.user?.firstname }} {{ issue.user?.lastname }}
-                    </div>
-                    <div v-if="issue.updated_at !== issue.created_at" class="flex items-center">
-                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      Updated {{ formatDate(issue.updated_at) }}
-                    </div>
+                  
+                  <div v-if="issue.updated_at !== issue.created_at" class="flex items-center mt-1 sm:mt-0">
+                    <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+                    </svg>
+                    Updated: {{ formatDate(issue.updated_at) }}
                   </div>
-                </router-link>
-              </div>
+                </div>
+              </router-link>
             </div>
           </div>
         </div>
@@ -313,13 +287,13 @@ const filteredIssues = computed(() => {
 
 const getStatusClass = (status) => {
   const classes = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    in_progress: 'bg-blue-100 text-blue-800',
-    resolved: 'bg-green-100 text-green-800',
-    rejected: 'bg-red-100 text-red-800',
-    verified: 'bg-purple-100 text-purple-800'
+    pending: 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20',
+    in_progress: 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
+    resolved: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
+    rejected: 'bg-red-500/10 text-red-400 border border-red-500/20',
+    verified: 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
   }
-  return classes[status] || 'bg-gray-100 text-gray-800'
+  return classes[status] || 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
 }
 
 const formatDate = (dateString) => {
@@ -357,3 +331,13 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  line-clamp: 1;
+  overflow: hidden;
+}
+</style>

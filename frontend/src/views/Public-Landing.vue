@@ -1,216 +1,238 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-white to-slate-50 text-slate-800 antialiased">
+  <div class="min-h-screen bg-base-100 text-base-content antialiased">
     <!-- Hero Section -->
     <section id="hero" class="hero relative isolate overflow-hidden min-h-screen flex items-center"
       aria-label="City Pulse hero">
 
-      <div aria-hidden="true" class="absolute inset-0 -z-20 bg-cover"
-        :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(https://miro.medium.com/v2/1*jA8GG75oUkXovmpSm2XQtA.jpeg)' }" />
+      <div aria-hidden="true" class="absolute inset-0 -z-20 bg-cover bg-center"
+        :style="{ backgroundImage: 'linear-gradient(rgba(7, 10, 19, 0.75), rgba(7, 10, 19, 0.95)), url(https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1600&auto=format&fit=crop)' }" />
 
-      <!-- Mesh blobs for depth -->
+      <!-- Deep Space Mesh Blobs -->
       <div aria-hidden="true"
-        class="pointer-events-none absolute -top-24 -left-24 h-[28rem] w-[28rem] rounded-full blur-3xl opacity-20"
-        style="background: radial-gradient(circle at 35% 35%, #06B6D4 0%, transparent 55%)" />
+        class="pointer-events-none absolute -top-40 -left-40 h-[32rem] w-[32rem] rounded-full blur-3xl opacity-30 animate-pulse-glow"
+        style="background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)" />
       <div aria-hidden="true"
-        class="pointer-events-none absolute -bottom-24 -right-24 h-[28rem] w-[28rem] rounded-full blur-3xl opacity-20"
-        style="background: radial-gradient(circle at 70% 70%, #FB7185 0%, transparent 55%)" />
+        class="pointer-events-none absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full blur-3xl opacity-30 animate-pulse-glow"
+        style="background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)" />
 
-      <!-- Content container -->
+      <!-- Content Container -->
       <div
         class="relative mx-auto max-w-sm sm:max-w-2xl lg:max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 pb-20 sm:pb-24 w-full">
         <div class="grid gap-8 lg:gap-12 lg:items-center">
-          <!-- Centered copy block -->
-          <div class="motion-safe:animate-fade-up text-white text-center">
-            <!-- Small live badge -->
+          <div class="motion-safe:animate-fade-up text-center">
+            <!-- Technical Live Badge -->
             <div
-              class="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-3 py-1 ring-1 ring-white/15 text-xs text-slate-200">
+              class="inline-flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/20 px-3.5 py-1.5 text-xs font-mono text-blue-400 tracking-wider uppercase mb-6">
               <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
               Live in your neighborhood
             </div>
 
-            <h1 class="mt-4 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-              Pulse your city to action.
+            <h1 class="mt-4 text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-none">
+              Pulse your city <br class="hidden sm:inline" />
+              <span class="bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 bg-clip-text text-transparent">to action.</span>
             </h1>
 
-            <p class="mt-5 text-lg text-slate-200/90 max-w-2xl mx-auto">
-              City Pulse is the fastest way to report issues potholes, outages, safety hazards and
-              mobilize verified responders with real time maps and community updates.
+            <p class="mt-6 text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+              City Pulse is the fastest way to report issues like potholes, outages, and safety hazards, 
+              mobilizing verified responders with real-time analytics and community-driven action.
             </p>
 
-            <!-- CTAs -->
-            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <!-- Primary CTA: gradient glow + ripple + glint -->
+            <!-- Premium CTAs -->
+            <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <router-link to="/login"
-                class="group relative inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 transition active:scale-[.98] shadow-[0_0_22px_rgba(6,182,212,.35),0_10px_24px_rgba(0,0,0,.25)]"
-                :style="{ background: 'linear-gradient(135deg,#06B6D4,#312E81)' }" @click="ripple">
-                <span
-                  class="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-10 transition"></span>
-                <span
-                  class="glint pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100"></span>
-                <svg aria-hidden="true" class="mr-2 h-5 w-5 text-white motion-safe:animate-bob" viewBox="0 0 24 24"
-                  fill="none">
-                  <path d="M6 12h4l2-5 2 10 2-5h4" stroke="white" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
+                class="group relative inline-flex items-center justify-center rounded-2xl px-8 py-4 text-base font-bold text-white transition active:scale-[.98] shadow-lg overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500"
+                @click="ripple">
+                <svg aria-hidden="true" class="mr-2.5 h-5 w-5 text-white motion-safe:animate-bob" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 Report an Issue
               </router-link>
 
-              <!-- Secondary CTA -->
               <a href="#reports"
-                class="inline-flex items-center justify-center rounded-xl px-6 py-3 text-base font-semibold ring-1 ring-white/25 text-white/90 hover:bg-white/10 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                class="inline-flex items-center justify-center rounded-2xl px-8 py-4 text-base font-bold border border-base-300 hover:border-slate-500 bg-base-200/50 hover:bg-base-200 transition duration-200">
                 See Nearby Reports
               </a>
             </div>
 
-            <!-- Trust bar -->
-            <div class="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-300">
-              <div class="inline-flex items-center gap-2">
-                <svg class="h-5 w-5 text-cyan-400" viewBox="0 0 24 24" fill="none">
-                  <path d="M20 7l-9 9-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
+            <!-- Technical Trust Bar -->
+            <div class="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm font-mono text-slate-400">
+              <div class="inline-flex items-center gap-2.5">
+                <svg class="h-5 w-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
                 </svg>
-                <span><strong class="text-white">{{ totalIssuesText }}</strong> reports solved</span>
+                <span><strong class="text-white font-semibold">{{ totalIssuesText }}</strong> issues solved</span>
               </div>
-              <div class="inline-flex items-center gap-2">
-                <svg class="h-5 w-5 text-rose-400" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z"
-                    fill="currentColor" />
+              <div class="inline-flex items-center gap-2.5">
+                <svg class="h-5 w-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                 </svg>
-                <span><strong class="text-white">{{ volunteersText }}</strong> active volunteers</span>
+                <span><strong class="text-white font-semibold">{{ volunteersText }}</strong> responders active</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Hero bottom divider styled for dark theme -->
       <div class="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 320" class="w-full">
-          <path fill="white"
-            d="M0,256L80,240C160,224,320,192,480,197.3C640,203,800,245,960,245.3C1120,245,1280,203,1360,181.3L1440,160V320H0Z">
+        <svg viewBox="0 0 1440 120" class="w-full h-auto" preserveAspectRatio="none">
+          <path fill="#070a13"
+            d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32V120H0Z">
           </path>
         </svg>
       </div>
     </section>
 
-    <main>
-      <!-- Feature strip -->
-      <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Card -->
+    <main class="bg-[#070a13] -mt-1 pb-20">
+      <!-- Feature Strip -->
+      <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Card 1 -->
           <article
-            class="group rounded-2xl p-6 border border-slate-200 bg-white shadow-soft transition transform hover:-translate-y-1 focus-within:-translate-y-1"
+            class="group rounded-3xl p-8 border border-base-300 bg-base-200/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)]"
             tabindex="0">
             <div
-              class="flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br from-cyan-500 to-indigo-600 text-white shadow-neo">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
+              class="flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-[0_4px_20px_rgba(59,130,246,0.3)]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="h-6 w-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5" />
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
             </div>
-            <h3 class="mt-4 text-lg font-semibold">Quick Report</h3>
-            <p class="mt-1 text-slate-600">File a report in under 30 seconds with photo, location, and
-              category. No app download required.</p>
+            <h3 class="mt-6 text-xl font-bold text-slate-100">Quick Report</h3>
+            <p class="mt-3 text-slate-400 leading-relaxed">File reports in under 30 seconds. Attach photos, voice notes, or videos with instant location capture.</p>
           </article>
-          <!-- Card -->
+          
+          <!-- Card 2 -->
           <article
-            class="group rounded-2xl p-6 border border-slate-200 bg-white shadow-soft transition transform hover:-translate-y-1 focus-within:-translate-y-1"
+            class="group rounded-3xl p-8 border border-base-300 bg-base-200/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)]"
             tabindex="0">
             <div
-              class="flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-600 to-cyan-500 text-white shadow-neo">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
+              class="flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-emerald-500 text-white shadow-[0_4px_20px_rgba(139,92,246,0.3)]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="h-6 w-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z" />
               </svg>
             </div>
-            <h3 class="mt-4 text-lg font-semibold">Real-time Map</h3>
-            <p class="mt-1 text-slate-600">See issues around you with live updates and smart clustering for
-              cleaner navigation.</p>
+            <h3 class="mt-6 text-xl font-bold text-slate-100">Interactive Maps</h3>
+            <p class="mt-3 text-slate-400 leading-relaxed">Visualize verified issues surrounding your area. Real-time geofencing keeps you in the pulse of updates.</p>
           </article>
-          <!-- Card -->
+
+          <!-- Card 3 -->
           <article
-            class="group rounded-2xl p-6 border border-slate-200 bg-white shadow-soft transition transform hover:-translate-y-1 focus-within:-translate-y-1"
+            class="group rounded-3xl p-8 border border-base-300 bg-base-200/40 backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)]"
             tabindex="0">
             <div
-              class="flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-br from-cyan-500 to-indigo-600 text-white shadow-neo">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
+              class="flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-blue-500 text-white shadow-[0_4px_20px_rgba(16,185,129,0.3)]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="h-6 w-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
               </svg>
             </div>
-            <h3 class="mt-4 text-lg font-semibold">Verified Responders</h3>
-            <p class="mt-1 text-slate-600">Partnered municipal teams and trained volunteers ensure fast,
-              accountable action.</p>
+            <h3 class="mt-6 text-xl font-bold text-slate-100">AI Verification</h3>
+            <p class="mt-3 text-slate-400 leading-relaxed">Integrated multi-modal AI models analyze and categorize reports immediately, filtering false entries.</p>
           </article>
         </div>
       </section>
 
-      <!-- Live reports feed -->
-      <section id="reports" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-        <div class="items-start">
-          <!-- Horizontal scrollable cards -->
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-2xl font-bold text-slate-900">Live Nearby Reports</h2>
-              <router-link to="/login" class="text-sm text-cyan-700 hover:text-cyan-600">View
-                all</router-link>
+      <!-- Live Reports Feed -->
+      <section id="reports" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+          <!-- Left: Feed (Span 2) -->
+          <div class="lg:col-span-2">
+            <div class="flex items-center justify-between mb-8">
+              <div>
+                <h2 class="text-3xl font-extrabold text-slate-100">Live Nearby Reports</h2>
+                <p class="text-sm text-slate-400 mt-1">Real-time reports reported by residents</p>
+              </div>
+              <router-link to="/login" class="btn btn-ghost text-sm text-primary hover:text-blue-400 flex items-center gap-1">
+                View all
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </router-link>
             </div>
+
             <div class="relative">
-              <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-3" role="list"
+              <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-6" role="list"
                 aria-label="Scrollable list of recent reports">
                 <!-- Report Card Template -->
                 <article v-for="issue in issues" :key="issue.id" role="listitem" tabindex="0"
-                  class="snap-start min-w-[280px] w-[280px] rounded-2xl border border-slate-200 bg-white shadow-soft transition transform hover:-translate-y-1 focus:-translate-y-1">
-                  <div class="p-4">
-                    <!-- Thumbnail -->
-                    <div class="relative h-36 rounded-xl overflow-hidden bg-gradient-to-br from-cyan-100 to-indigo-100">
-                      <img v-if="issue.image_urls && issue.image_urls.length > 0" :src="issue.image_urls[0]"
-                        :alt="issue.title" class="w-full h-full object-cover" />
+                  class="snap-start min-w-[300px] w-[300px] rounded-3xl border border-base-300 bg-base-200/50 hover:bg-base-200/80 hover:border-primary/30 transition-all duration-300 shadow-lg p-5">
+                  <!-- Thumbnail -->
+                  <div class="relative h-40 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-base-300">
+                    <img v-if="issue.image_urls && issue.image_urls.length > 0" :src="issue.image_urls[0]"
+                      :alt="issue.title" class="w-full h-full object-cover" />
+                    <div v-else class="w-full h-full flex items-center justify-center text-slate-600">
+                      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
                     </div>
-                    <h3 class="mt-3 font-semibold">{{ issue.title }}</h3>
-                    <p class="mt-1 text-sm text-slate-600 line-clamp-2">{{ issue.description }}</p>
-                    <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                      <span
-                        class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 ring-1 ring-slate-200">
-                        <svg class="h-3 w-3 text-cyan-600" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 2l3 7h7l-5.5 4 2 7-6.5-4.5L5 20l2-7L1.5 9H9z" fill="currentColor" opacity=".7" />
-                        </svg> {{ Math.round(Math.random() * 2 + 0.5) }} km
-                      </span>
-                      <span>•</span><span>{{ timeAgo(issue.created_at)
-                        }}</span><span>•</span><span>{{ issue.address || 'Unknown' }}</span>
-                    </div>
+                    <!-- Badges -->
+                    <span class="absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-2xs font-mono font-semibold uppercase tracking-wider"
+                      :class="{
+                        'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20': issue.status === 'pending',
+                        'bg-blue-500/10 text-blue-400 border border-blue-500/20': issue.status === 'in_progress',
+                        'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20': issue.status === 'resolved' || issue.status === 'verified',
+                        'bg-red-500/10 text-red-400 border border-red-500/20': issue.status === 'rejected',
+                      }">
+                      {{ issue.status }}
+                    </span>
+                  </div>
+                  
+                  <h3 class="mt-4 text-lg font-bold text-slate-100 truncate">{{ issue.title }}</h3>
+                  <p class="mt-2 text-sm text-slate-400 line-clamp-2 leading-relaxed h-10">{{ issue.description }}</p>
+                  
+                  <div class="mt-4 pt-4 border-t border-base-300 flex items-center justify-between text-xs font-mono text-slate-500">
+                    <span class="inline-flex items-center gap-1 rounded-md bg-blue-500/5 px-2 py-1 border border-blue-500/10">
+                      <svg class="h-3 w-3 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      </svg> 
+                      {{ Math.round(Math.random() * 2 + 0.5) }} km
+                    </span>
+                    <span>{{ timeAgo(issue.created_at) }}</span>
                   </div>
                 </article>
               </div>
             </div>
           </div>
 
-          <!-- Map below the issues -->
-          <aside class="mt-8" aria-label="Map preview">
-            <div class="rounded-3xl border border-slate-200 bg-white shadow-soft p-4">
-              <h3 class="mb-3 font-semibold text-slate-900">Map Preview</h3>
-              <div class="relative h-72 rounded-2xl overflow-hidden">
+          <!-- Right: Map Preview (Span 1) -->
+          <aside class="lg:col-span-1" aria-label="Map preview">
+            <div class="rounded-3xl border border-base-300 bg-base-200/40 backdrop-blur-md p-6 shadow-xl">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                <h3 class="font-bold text-slate-100 font-mono text-sm tracking-wider uppercase">Interactive Map</h3>
+              </div>
+              <div class="relative h-80 rounded-2xl overflow-hidden border border-base-300">
                 <l-map v-model:zoom="zoom" :center="center" :use-global-leaflet="false" style="height: 100%;">
-                  <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'></l-tile-layer>
-                  <l-marker v-for="issue in issues" :key="issue.id" :lat-lng="[issue.latitude, issue.longitude]"
-                    :class="issue.status">
+                  <!-- CartoDB Dark Matter tile layer for premium dark aesthetics -->
+                  <l-tile-layer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'></l-tile-layer>
+                  <l-marker v-for="issue in issues" :key="issue.id" :lat-lng="[issue.latitude, issue.longitude]">
                     <l-popup>
-                      <div class="w-48 sm:w-56">
-                        <div class="space-y-1 text-sm">
+                      <div class="w-48 text-slate-200">
+                        <div class="space-y-1.5 text-xs">
+                          <p class="font-bold border-b border-slate-700 pb-1 mb-1 text-slate-100">{{ issue.title }}</p>
                           <p><strong>Type:</strong> {{ issue.issue_type }}</p>
-                          <p><strong>Address:</strong> {{ issue.address }}</p>
-                          <p><strong>Status:</strong> {{ issue.status }}</p>
+                          <p class="truncate"><strong>Loc:</strong> {{ issue.address }}</p>
+                          <p><strong>Status:</strong> <span class="capitalize text-blue-400">{{ issue.status }}</span></p>
                         </div>
                       </div>
                     </l-popup>
                   </l-marker>
                 </l-map>
               </div>
-              <p class="mt-3 text-sm text-slate-600">Zoomed to your neighborhood. Aggregated clusters
-                reduce clutter and show activity hotspots.</p>
+              <p class="mt-4 text-xs text-slate-400 leading-relaxed font-mono">
+                Centered on active reports. Live clustering dynamically counts reports to prevent noise overlay.
+              </p>
             </div>
           </aside>
         </div>
@@ -280,31 +302,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-:root {
-  --cp-teal: #06B6D4;
-  --cp-indigo: #4F46E5;
-}
-
-.shadow-soft {
-  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
-}
-
-.animate-fade-up {
-  animation: fade-up 0.7s ease both;
-}
-
-@keyframes fade-up {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -313,146 +310,25 @@ onMounted(() => {
   overflow: hidden;
 }
 
-/* Hero visual enhancements */
-::v-deep(.hero) {
-  position: relative;
+/* Fix popup styling inside dark leaflet map */
+::v-deep(.leaflet-popup-content-wrapper) {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
 
-::v-deep(.hero .relative) {
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+::v-deep(.leaflet-popup-tip) {
+  background-color: #0f172a !important;
+  border: 1px solid #334155;
 }
 
-
-/* Soft vignette around edges */
-::v-deep(.hero::before) {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(120% 80% at 50% 40%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.35) 100%);
+::v-deep(.leaflet-container a.leaflet-popup-close-button) {
+  color: #94a3b8 !important;
 }
 
-/* Decorative curved mask at bottom */
-::v-deep(.hero::after) {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 120px;
-  background: radial-gradient(200% 100% at 50% -20%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 1) 61%);
-}
-
-@media (max-width: 640px) {
-
-  /* Slightly stronger overlay on small screens for readability */
-  ::v-deep(.hero > .absolute.inset-0) {
-    background-image: linear-gradient(to right, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.6));
-  }
-}
-
-/* Custom marker colors based on status */
-::v-deep(.leaflet-marker-icon) {
-  filter: hue-rotate(0deg);
-}
-
-::v-deep(.leaflet-marker-icon.pending) {
-  filter: hue-rotate(45deg);
-  /* Yellow tint */
-}
-
-::v-deep(.leaflet-marker-icon.in_progress) {
-  filter: hue-rotate(200deg);
-  /* Blue tint */
-}
-
-::v-deep(.leaflet-marker-icon.resolved) {
-  filter: hue-rotate(120deg);
-  /* Green tint */
-}
-
-::v-deep(.leaflet-marker-icon.rejected) {
-  filter: hue-rotate(0deg);
-  /* Red tint */
-}
-
-::v-deep(.leaflet-marker-icon.verified) {
-  filter: hue-rotate(270deg);
-  /* Purple tint */
-}
-
-/* Keyframes */
-@keyframes gradient-pan {
-  0% {
-    background-position: 0% 50%
-  }
-
-  50% {
-    background-position: 100% 50%
-  }
-
-  100% {
-    background-position: 0% 50%
-  }
-}
-
-@keyframes fade-up {
-  0% {
-    opacity: 0;
-    transform: translateY(12px)
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0)
-  }
-}
-
-@keyframes bob {
-
-  0%,
-  100% {
-    transform: translateY(0)
-  }
-
-  50% {
-    transform: translateY(-1.5px)
-  }
-}
-
-@keyframes scroll-dot {
-  0% {
-    transform: translateY(2px);
-    opacity: .9
-  }
-
-  70% {
-    transform: translateY(10px);
-    opacity: .4
-  }
-
-  100% {
-    transform: translateY(2px);
-    opacity: 0
-  }
-}
-
-.animate-gradient-pan {
-  animation: gradient-pan 16s ease infinite;
-}
-
-.motion-safe\:animate-fade-up {
-  animation: fade-up .7s ease both;
-}
-
-.motion-safe\:animate-bob {
-  animation: bob 1.4s ease-in-out infinite;
-}
-
-/* CTA ripple */
+/* Custom ripple animation */
 .cp-ripple {
   position: absolute;
   width: 14px;
@@ -461,9 +337,9 @@ onMounted(() => {
   transform: translate(-50%, -50%);
   border-radius: 9999px;
   background: radial-gradient(circle at center,
-      rgba(255, 255, 255, 0.55) 0%,
-      rgba(255, 255, 255, 0.35) 25%,
-      rgba(255, 255, 255, 0.2) 45%,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.25) 25%,
+      rgba(255, 255, 255, 0.1) 45%,
       transparent 60%);
   animation: cp-ripple 520ms ease-out forwards;
 }
@@ -473,38 +349,17 @@ onMounted(() => {
     opacity: .45;
     transform: translate(-50%, -50%) scale(0)
   }
-
   to {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(3)
+    transform: translate(-50%, -50%) scale(4)
   }
 }
 
-/* Button glint on hover */
-.glint {
-  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .25) 40%, transparent 80%);
-  transform: translateX(-120%);
-  transition: transform .6s ease;
-}
-
-.group:hover .glint {
-  transform: translateX(120%)
-}
-
-/* Scroll cue mouse + dot */
-.mouse-outline {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, .06), transparent)
-}
-
-
-/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-
-  .animate-gradient-pan,
+  .animate-pulse-glow,
   .motion-safe\:animate-fade-up,
   .motion-safe\:animate-bob,
-  .cp-ripple,
-  .dot {
+  .cp-ripple {
     animation: none !important;
   }
 }
