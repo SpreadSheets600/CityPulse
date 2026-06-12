@@ -20,6 +20,8 @@ app.component('ImageLightbox', ImageLightbox)
 
 import { useAuthStore } from './stores/auth'
 const authStore = useAuthStore(pinia)
-await authStore.initializeAuth()
+authStore.initializeAuth().catch(() => {
+  console.warn('Auth initialization skipped — user may need to re-login')
+})
 
 app.mount('#app')

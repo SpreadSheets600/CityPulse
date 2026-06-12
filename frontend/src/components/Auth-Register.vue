@@ -100,7 +100,11 @@ const handleRegister = async () => {
   loading.value = false
 
   if (result.success) {
-    router.push('/login')
+    if (authStore.isAdmin) {
+      router.push('/admin-dashboard')
+    } else {
+      router.push('/')
+    }
   } else {
     error.value = result.error
   }

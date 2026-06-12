@@ -39,7 +39,12 @@ export const useAuthStore = defineStore('auth', () => {
 
   const register = async (userData) => {
     try {
-      await axios.post('/api/auth/register', userData)
+      const response = await axios.post('/api/auth/register', userData)
+      const { access_token, user: userData_res } = response.data
+      if (access_token) {
+        setToken(access_token)
+        setUser(userData_res)
+      }
       return { success: true }
     } catch (error) {
       return { success: false, error: error.response?.data?.error || 'Registration Failed' }
@@ -70,6 +75,16 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const updateProfile = async (profileData) => {
+    try {
+      const response = await axios.put('/api/auth/profile', profileData)
+      setUser(response.data.user)
+      return { success: true }
+    } catch (error) {
+      return { success: false, error: error.response?.data?.error || 'Update Failed' }
+    }
+  }
+
   return {
     user,
     token,
@@ -77,6 +92,7 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     register,
     initializeAuth,
+    updateProfile,
     isAuthenticated,
     isAdmin,
   }
