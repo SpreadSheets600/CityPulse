@@ -1,84 +1,89 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div class="px-4 py-6 sm:px-0">
-        <div class="flex justify-between items-center mb-8">
+  <div class="min-h-screen bg-base-100 text-base-content antialiased py-8 px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto">
+      <div>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
           <div>
-            <h2 class="text-2xl font-bold text-gray-900">Geofencing</h2>
-            <p class="mt-1 text-sm text-gray-600">Map geographic zones to departments for auto-assignment.</p>
+            <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">Geofencing</h2>
+            <p class="mt-1 text-sm text-slate-400 font-sans">Map geographic boundary coordinates to specific departments for auto-dispatching.</p>
           </div>
-          <button @click="showForm = !showForm" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-            {{ showForm ? 'Cancel' : 'Add Geofence' }}
+          <button @click="showForm = !showForm" class="btn btn-primary rounded-xl font-bold px-5 shadow-lg shadow-blue-500/10 cursor-pointer">
+            {{ showForm ? 'CANCEL' : 'ADD GEOFENCE' }}
           </button>
         </div>
 
-        <div v-if="showForm" class="bg-white shadow rounded-lg p-6 mb-6">
-          <h3 class="text-lg font-medium text-gray-900 mb-4">New Geofence</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Create Geofence Form -->
+        <div v-if="showForm" class="bg-base-200 border border-base-300 rounded-3xl p-6 md:p-8 shadow-xl mb-8">
+          <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest mb-6">New Boundary Rules</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label class="block text-sm font-medium text-gray-700">Name</label>
-              <input v-model="form.name" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Boundary Name</span></label>
+              <input v-model="form.name" class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary font-sans text-sm" placeholder="e.g. North Ward Zone A" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Department</label>
-              <select v-model="form.department_id" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm">
+              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Assigned Department</span></label>
+              <select v-model="form.department_id" class="select select-bordered w-full rounded-xl border-base-300 focus:border-primary font-mono text-xs">
                 <option value="">Select department</option>
                 <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Min Latitude</label>
-              <input v-model.number="form.min_lat" type="number" step="any" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Min Latitude</span></label>
+              <input v-model.number="form.min_lat" type="number" step="any" class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary font-mono text-xs" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Max Latitude</label>
-              <input v-model.number="form.max_lat" type="number" step="any" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Max Latitude</span></label>
+              <input v-model.number="form.max_lat" type="number" step="any" class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary font-mono text-xs" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Min Longitude</label>
-              <input v-model.number="form.min_lng" type="number" step="any" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Min Longitude</span></label>
+              <input v-model.number="form.min_lng" type="number" step="any" class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary font-mono text-xs" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Max Longitude</label>
-              <input v-model.number="form.max_lng" type="number" step="any" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Max Longitude</span></label>
+              <input v-model.number="form.max_lng" type="number" step="any" class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary font-mono text-xs" />
             </div>
           </div>
-          <div class="mt-4">
-            <button @click="createGeofence" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
-              Save Geofence
+          <div class="mt-6">
+            <button @click="createGeofence" class="btn btn-accent rounded-xl font-bold px-6 cursor-pointer">
+              SAVE GEOFENCE RULE
             </button>
           </div>
         </div>
 
-        <div v-if="loading" class="flex justify-center py-8">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <!-- Loading -->
+        <div v-if="loading" class="flex justify-center py-16">
+          <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
         </div>
 
-        <div v-else-if="geofences.length" class="bg-white shadow overflow-hidden sm:rounded-lg">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bounds (Lat)</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bounds (Lng)</th>
-                <th class="px-6 py-3"></th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-              <tr v-for="f in geofences" :key="f.id">
-                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ f.name }}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ f.department_name }}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ f.min_lat }} — {{ f.max_lat }}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">{{ f.min_lng }} — {{ f.max_lng }}</td>
-                <td class="px-6 py-4 text-right">
-                  <button @click="deleteGeofence(f.id)" class="text-red-600 hover:text-red-900 text-sm">Delete</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Geofences Table -->
+        <div v-else-if="geofences.length" class="bg-base-200 border border-base-300 shadow-xl rounded-3xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-base-300 bg-base-200">
+              <thead class="bg-base-300/60 font-mono text-2xs uppercase tracking-wider text-slate-400">
+                <tr>
+                  <th class="px-6 py-4 text-left font-bold">Name</th>
+                  <th class="px-6 py-4 text-left font-bold">Department</th>
+                  <th class="px-6 py-4 text-left font-bold">Bounds (Latitude)</th>
+                  <th class="px-6 py-4 text-left font-bold">Bounds (Longitude)</th>
+                  <th class="px-6 py-4"></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-base-300/40 text-slate-200">
+                <tr v-for="f in geofences" :key="f.id" class="hover:bg-base-300/10 transition-colors">
+                  <td class="px-6 py-4 text-sm font-bold text-slate-100">{{ f.name }}</td>
+                  <td class="px-6 py-4 text-sm text-slate-300">{{ f.department_name }}</td>
+                  <td class="px-6 py-4 text-sm font-mono text-xs text-slate-400">{{ f.min_lat }} — {{ f.max_lat }}</td>
+                  <td class="px-6 py-4 text-sm font-mono text-xs text-slate-400">{{ f.min_lng }} — {{ f.max_lng }}</td>
+                  <td class="px-6 py-4 text-right">
+                    <button @click="deleteGeofence(f.id)" class="text-error hover:text-red-400 text-xs font-mono cursor-pointer bg-transparent border-0">DELETE</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div v-else class="text-center py-8 text-gray-500">No geofences configured yet.</div>
+        <div v-else class="text-center py-16 border border-dashed border-base-300 rounded-3xl bg-base-200/40 text-slate-500 font-mono text-sm">No geofences configured yet.</div>
       </div>
     </main>
   </div>
@@ -138,3 +143,7 @@ const deleteGeofence = async (id) => {
 
 onMounted(() => fetchAll())
 </script>
+
+<style scoped>
+/* Scoped styles */
+</style>

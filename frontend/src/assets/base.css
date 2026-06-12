@@ -3,11 +3,13 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: citypulse-dark --default, light;
+  themes: citypulse-dark --default --prefersdark;
 }
 
 @plugin "daisyui/theme" {
   name: "citypulse-dark";
+  prefersdark: true;
+  color-scheme: dark;
   --color-primary: #3b82f6; /* Electric blue primary */
   --color-primary-content: #ffffff;
   --color-secondary: #8b5cf6; /* Vibrant violet secondary */

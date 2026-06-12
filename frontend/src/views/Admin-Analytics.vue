@@ -1,71 +1,74 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div class="px-4 py-6 sm:px-0">
+  <div class="min-h-screen bg-base-100 text-base-content antialiased py-8 px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto">
+      <div>
         <div class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900">Analytics Dashboard</h2>
-          <p class="mt-1 text-sm text-gray-600">Overview of city issue reporting activity.</p>
+          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">Analytics Dashboard</h2>
+          <p class="mt-1 text-sm text-slate-400 font-sans">Overview of municipal response indicators and neighborhood reporting metrics.</p>
         </div>
 
-        <div v-if="loading" class="flex justify-center py-12">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <div v-if="loading" class="flex justify-center py-16">
+          <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
         </div>
 
         <template v-else>
+          <!-- Stats Grid -->
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-            <div v-for="stat in summaryCards" :key="stat.label" class="bg-white overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6">
-              <dt class="text-sm font-medium text-gray-500 truncate">{{ stat.label }}</dt>
-              <dd class="mt-1 text-3xl font-semibold text-gray-900">{{ stat.value }}</dd>
+            <div v-for="stat in summaryCards" :key="stat.label" class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/45 transition-all duration-300">
+              <dt class="text-xs font-mono text-slate-500 uppercase tracking-widest truncate">{{ stat.label }}</dt>
+              <dd class="mt-2 text-3xl font-extrabold text-slate-100 font-mono">{{ stat.value }}</dd>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <div class="bg-white shadow rounded-lg p-6">
-              <h3 class="text-lg font-medium text-gray-900 mb-4">Issues by Status</h3>
+          <!-- Charts -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
+              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-4">Issues by Status</h3>
               <div class="h-64">
                 <Doughnut v-if="statusChartData" :data="statusChartData" :options="doughnutOptions" />
               </div>
             </div>
-            <div class="bg-white shadow rounded-lg p-6">
-              <h3 class="text-lg font-medium text-gray-900 mb-4">Monthly Trend</h3>
+            <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
+              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-4">Monthly Trend</h3>
               <div class="h-64">
                 <Bar v-if="trendChartData" :data="trendChartData" :options="barOptions" />
               </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white shadow rounded-lg p-6">
-              <h3 class="text-lg font-medium text-gray-900 mb-4">Issues by Type</h3>
-              <div v-if="Object.keys(typeBreakdown).length" class="space-y-3">
+          <!-- Type Breakdown & Dept Breakdown -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
+              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-6">Issues by Type</h3>
+              <div v-if="Object.keys(typeBreakdown).length" class="space-y-4">
                 <div v-for="(count, type) in typeBreakdown" :key="type" class="flex items-center">
-                  <span class="text-sm text-gray-700 w-40 truncate">{{ type }}</span>
-                  <div class="flex-1 mx-3 bg-gray-200 rounded-full h-4">
+                  <span class="text-sm text-slate-300 w-40 truncate font-mono text-xs">{{ type }}</span>
+                  <div class="flex-1 mx-3 bg-base-300 rounded-full h-3 overflow-hidden">
                     <div
-                      class="bg-indigo-500 h-4 rounded-full"
+                      class="bg-indigo-500 h-3 rounded-full"
                       :style="{ width: (count / maxTypeCount * 100) + '%' }"
                     ></div>
                   </div>
-                  <span class="text-sm font-medium text-gray-900 w-12 text-right">{{ count }}</span>
+                  <span class="text-sm font-bold text-slate-100 w-12 text-right font-mono">{{ count }}</span>
                 </div>
               </div>
-              <p v-else class="text-gray-500 text-sm">No data yet.</p>
+              <p v-else class="text-slate-500 text-sm font-mono">No data collected yet.</p>
             </div>
-            <div class="bg-white shadow rounded-lg p-6">
-              <h3 class="text-lg font-medium text-gray-900 mb-4">Issues by Department</h3>
-              <div v-if="Object.keys(deptBreakdown).length" class="space-y-3">
+            <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
+              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-6">Issues by Department</h3>
+              <div v-if="Object.keys(deptBreakdown).length" class="space-y-4">
                 <div v-for="(count, dept) in deptBreakdown" :key="dept" class="flex items-center">
-                  <span class="text-sm text-gray-700 w-40 truncate">{{ dept }}</span>
-                  <div class="flex-1 mx-3 bg-gray-200 rounded-full h-4">
+                  <span class="text-sm text-slate-300 w-40 truncate font-mono text-xs">{{ dept }}</span>
+                  <div class="flex-1 mx-3 bg-base-300 rounded-full h-3 overflow-hidden">
                     <div
-                      class="bg-emerald-500 h-4 rounded-full"
+                      class="bg-emerald-500 h-3 rounded-full"
                       :style="{ width: (count / maxDeptCount * 100) + '%' }"
                     ></div>
                   </div>
-                  <span class="text-sm font-medium text-gray-900 w-12 text-right">{{ count }}</span>
+                  <span class="text-sm font-bold text-slate-100 w-12 text-right font-mono">{{ count }}</span>
                 </div>
               </div>
-              <p v-else class="text-gray-500 text-sm">No data yet.</p>
+              <p v-else class="text-slate-500 text-sm font-mono">No data collected yet.</p>
             </div>
           </div>
         </template>
@@ -133,7 +136,7 @@ const trendChartData = computed(() => {
     datasets: [{
       label: 'Issues',
       data: monthlyTrend.value.map(t => t.count),
-      backgroundColor: '#6366f1',
+      backgroundColor: '#3b82f6',
     }],
   }
 })
@@ -141,14 +144,32 @@ const trendChartData = computed(() => {
 const doughnutOptions = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins: { legend: { position: 'bottom' } },
+  plugins: { 
+    legend: { 
+      position: 'bottom',
+      labels: {
+        color: '#94a3b8',
+        font: { family: 'Fira Code', size: 10 }
+      }
+    } 
+  },
 }
 
 const barOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: { legend: { display: false } },
-  scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+  scales: { 
+    y: { 
+      beginAtZero: true, 
+      ticks: { stepSize: 1, color: '#94a3b8', font: { family: 'Fira Code', size: 10 } },
+      grid: { color: '#1e293b' }
+    },
+    x: {
+      ticks: { color: '#94a3b8', font: { family: 'Fira Code', size: 10 } },
+      grid: { color: '#1e293b' }
+    }
+  },
 }
 
 const fetchAnalytics = async () => {
@@ -171,3 +192,7 @@ onMounted(() => {
   fetchAnalytics()
 })
 </script>
+
+<style scoped>
+/* Scoped styles */
+</style>

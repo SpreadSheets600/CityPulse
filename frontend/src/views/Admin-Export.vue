@@ -1,17 +1,17 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div class="px-4 py-6 sm:px-0">
+  <div class="min-h-screen bg-base-100 text-base-content antialiased py-8 px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto">
+      <div>
         <div class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900">Export Reports</h2>
-          <p class="mt-1 text-sm text-gray-600">Download issue data as CSV for reporting and analysis.</p>
+          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">Export Reports</h2>
+          <p class="mt-1 text-sm text-slate-400 font-sans">Download aggregated issue database snapshots as CSV for external analytics.</p>
         </div>
 
-        <div class="bg-white shadow rounded-lg p-6 max-w-lg">
-          <div class="space-y-4">
+        <div class="bg-base-200 border border-base-300 rounded-3xl p-6 md:p-8 shadow-xl max-w-lg">
+          <div class="space-y-5">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Filter by Status</label>
-              <select v-model="filters.status" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm">
+              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Filter by Status</span></label>
+              <select v-model="filters.status" class="select select-bordered w-full rounded-xl border-base-300 focus:border-primary font-mono text-xs">
                 <option value="">All statuses</option>
                 <option value="pending">Pending</option>
                 <option value="in_progress">In Progress</option>
@@ -22,18 +22,18 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Filter by Type</label>
+              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Filter by Type</span></label>
               <input v-model="filters.issue_type" type="text" placeholder="e.g. Pothole, Streetlight"
-                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm" />
+                class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary font-sans text-sm" />
             </div>
 
             <div class="pt-4">
               <button @click="downloadCSV"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                class="btn btn-primary w-full rounded-xl font-bold py-3 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/10">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                Download CSV
+                DOWNLOAD CSV EXPORT
               </button>
             </div>
           </div>
@@ -72,3 +72,7 @@ const downloadCSV = async () => {
   }
 }
 </script>
+
+<style scoped>
+/* Scoped styles */
+</style>

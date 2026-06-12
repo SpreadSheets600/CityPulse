@@ -1,15 +1,13 @@
 <template>
-  <div class="location-selector">
+  <div class="location-selector font-sans text-base-content">
     <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700 mb-2">
-        Location *
-      </label>
+      <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Report Location *</span></label>
 
       <!-- Location Input Options -->
       <div class="flex flex-col sm:flex-row gap-3 mb-4">
-        <button @click="useCurrentLocation" :disabled="gettingLocation"
-          class="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex-1 sm:flex-initial">
-          <svg v-if="gettingLocation" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+        <button type="button" @click="useCurrentLocation" :disabled="gettingLocation"
+          class="btn btn-primary rounded-xl flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-initial text-sm py-2">
+          <svg v-if="gettingLocation" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
             </circle>
@@ -17,39 +15,39 @@
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
             </path>
           </svg>
-          <svg v-else class="-ml-1 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          <svg v-else class="-ml-1 mr-2 h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
               d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
             </path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z">
-            </path>
+            <circle cx="12" cy="11" r="3" />
           </svg>
-          <span class="text-sm">{{ gettingLocation ? 'Getting Location...' : 'Use Current Location' }}</span>
+          <span>{{ gettingLocation ? 'GETTING LOCATION...' : 'USE CURRENT GPS' }}</span>
         </button>
 
-        <button @click="showMap = !showMap"
-          class="flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex-1 sm:flex-initial">
-          <svg class="-ml-1 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        <button type="button" @click="showMap = !showMap"
+          class="btn btn-accent rounded-xl flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-initial text-sm py-2">
+          <svg class="-ml-1 mr-2 h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
               d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
             </path>
           </svg>
-          <span class="text-sm">{{ showMap ? 'Hide Map' : 'Select on Map' }}</span>
+          <span>{{ showMap ? 'HIDE MAP' : 'SELECT ON MAP' }}</span>
         </button>
       </div>
 
       <!-- Address/Pincode Input -->
-      <div class="mb-4">
-        <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
-          Or enter address/pincode
+      <div class="mb-4 relative">
+        <label for="address" class="label">
+          <span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Or search address / landmark</span>
         </label>
         <input id="address" v-model="address" type="text" placeholder="Enter address or pincode"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans text-sm"
           @input="onAddressChange" />
+        
         <div v-if="addressSuggestions.length > 0"
-          class="mt-2 bg-white border border-gray-300 rounded-lg shadow-lg max-h-40 overflow-y-auto">
+          class="absolute left-0 right-0 mt-2 bg-base-200 border border-base-300 rounded-2xl shadow-2xl max-h-48 overflow-y-auto z-[200]">
           <div v-for="suggestion in addressSuggestions" :key="suggestion.place_id" @click="selectAddress(suggestion)"
-            class="px-3 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-200 last:border-b-0">
+            class="px-4 py-3 hover:bg-base-300 cursor-pointer border-b border-base-300 last:border-b-0 text-slate-200 text-xs font-mono">
             {{ suggestion.display_name }}
           </div>
         </div>
@@ -57,28 +55,28 @@
 
       <!-- Map Container -->
       <div v-if="showMap" class="mb-4">
-        <div class="h-64 sm:h-80 border border-gray-300 rounded-lg overflow-hidden">
+        <div class="h-64 sm:h-80 border border-base-300 rounded-2xl overflow-hidden shadow-inner">
           <div ref="mapContainer" class="h-full w-full"></div>
         </div>
-        <p class="text-sm text-gray-600 mt-2">
-          Click on the map to set your location, or drag the marker to adjust.
+        <p class="text-xs font-mono text-slate-400 mt-2">
+          Click on map to position the flag marker, or drag it to refine.
         </p>
       </div>
 
       <!-- Selected Location Display -->
-      <div v-if="selectedLocation" class="bg-gray-50 p-3 rounded-lg">
-        <h4 class="text-sm font-medium text-gray-700 mb-2">Selected Location:</h4>
-        <p class="text-sm text-gray-600">
-          <strong>Coordinates:</strong> {{ selectedLocation.lat.toFixed(6) }}, {{
+      <div v-if="selectedLocation" class="bg-base-300/30 border border-base-300/80 p-4 rounded-2xl">
+        <h4 class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">Selected Location Meta:</h4>
+        <p class="text-xs font-mono text-slate-300">
+          <strong>GPS Coordinates:</strong> {{ selectedLocation.lat.toFixed(6) }}, {{
             selectedLocation.lng.toFixed(6) }}
         </p>
-        <p v-if="address" class="text-sm text-gray-600">
-          <strong>Address:</strong> {{ address }}
+        <p v-if="address" class="text-xs font-sans text-slate-300 mt-1 leading-relaxed">
+          <strong>Physical Address:</strong> {{ address }}
         </p>
       </div>
 
       <!-- Error Messages -->
-      <div v-if="locationError" class="mt-2 text-red-600 text-sm">
+      <div v-if="locationError" class="mt-3 border border-error/20 bg-error/5 text-error text-center text-xs font-mono p-3 rounded-xl">
         {{ locationError }}
       </div>
     </div>
@@ -182,7 +180,8 @@ const useCurrentLocation = async () => {
       }
     } catch {
       console.log('Could not reverse geocode location')
-    }        // Update map if visible
+    }
+    // Update map if visible
     if (map.value) {
       initializeMap()
     }
@@ -213,9 +212,9 @@ const initializeMap = () => {
     selectedLocation.value ? 15 : 5
   )
 
-  // Add OpenStreetMap tiles
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
+  // Add CartoDB Dark Matter tile layer for dark styling
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     maxZoom: 19
   }).addTo(map.value)
 
@@ -294,7 +293,6 @@ const emitLocation = () => {
 }
 
 const onAddressChange = () => {
-  // Debounce address search
   clearTimeout(window.addressSearchTimeout)
   window.addressSearchTimeout = setTimeout(() => {
     searchAddress(address.value)
@@ -356,5 +354,18 @@ if (props.autoLocate) {
 :deep(.leaflet-top),
 :deep(.leaflet-bottom) {
   z-index: 100 !important;
+}
+
+/* Custom styles for leaflet dark map popup override */
+:deep(.leaflet-popup-content-wrapper) {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155;
+  border-radius: 12px;
+}
+
+:deep(.leaflet-popup-tip) {
+  background-color: #0f172a !important;
+  border: 1px solid #334155;
 }
 </style>

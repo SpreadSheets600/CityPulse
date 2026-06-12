@@ -1,66 +1,96 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div class="px-4 py-6 sm:px-0">
+  <div class="min-h-screen bg-base-100 text-base-content antialiased py-8 px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto">
+      <div>
         <div class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900">SLA Tracking</h2>
-          <p class="mt-1 text-sm text-gray-600">Resolution time vs SLA targets by department.</p>
+          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">SLA Tracking</h2>
+          <p class="mt-1 text-sm text-slate-400 font-sans">Compare municipal resolution performance times against SLA response targets.</p>
         </div>
 
-        <div v-if="loading" class="flex justify-center py-12">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <div v-if="loading" class="flex justify-center py-16">
+          <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
         </div>
 
         <template v-else>
+          <!-- SLA Summary Grid -->
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-3 mb-8">
-            <div class="bg-white overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6">
-              <dt class="text-sm font-medium text-gray-500 truncate">Overall Compliance</dt>
-              <dd class="mt-1 text-3xl font-semibold" :class="overall.compliance_rate >= 80 ? 'text-green-600' : overall.compliance_rate >= 50 ? 'text-yellow-600' : 'text-red-600'">
-                {{ overall.compliance_rate }}%
-              </dd>
+            <!-- Compliance -->
+            <div class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/45 transition-all duration-300 flex items-center">
+              <div class="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center">
+                <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="ml-4 flex-1">
+                <p class="text-xs font-mono text-slate-400 uppercase tracking-widest">Overall Compliance</p>
+                <p class="text-2xl font-extrabold font-mono mt-0.5" :class="overall.compliance_rate >= 80 ? 'text-emerald-400' : overall.compliance_rate >= 50 ? 'text-yellow-400' : 'text-error'">
+                  {{ overall.compliance_rate }}%
+                </p>
+              </div>
             </div>
-            <div class="bg-white overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6">
-              <dt class="text-sm font-medium text-gray-500 truncate">Avg Resolution Time</dt>
-              <dd class="mt-1 text-3xl font-semibold text-gray-900">{{ overall.avg_resolution_hours }}h</dd>
+
+            <!-- Avg Time -->
+            <div class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/45 transition-all duration-300 flex items-center">
+              <div class="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center">
+                <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="ml-4 flex-1">
+                <p class="text-xs font-mono text-slate-400 uppercase tracking-widest">Avg Resolution Time</p>
+                <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">{{ overall.avg_resolution_hours }}h</p>
+              </div>
             </div>
-            <div class="bg-white overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6">
-              <dt class="text-sm font-medium text-gray-500 truncate">Issues Breached</dt>
-              <dd class="mt-1 text-3xl font-semibold" :class="overall.breached_sla > 0 ? 'text-red-600' : 'text-green-600'">
-                {{ overall.breached_sla }} / {{ overall.total_resolved }}
-              </dd>
+
+            <!-- Breached -->
+            <div class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/45 transition-all duration-300 flex items-center">
+              <div class="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center">
+                <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div class="ml-4 flex-1">
+                <p class="text-xs font-mono text-slate-400 uppercase tracking-widest">Issues Breached</p>
+                <p class="text-2xl font-extrabold font-mono mt-0.5" :class="overall.breached_sla > 0 ? 'text-error' : 'text-emerald-400'">
+                  {{ overall.breached_sla }} <span class="text-sm font-normal text-slate-500">/ {{ overall.total_resolved }}</span>
+                </p>
+              </div>
             </div>
           </div>
 
-          <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SLA Target</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resolved</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Met SLA</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compliance</th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Time</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="row in departments" :key="row.department">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ row.department }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ row.sla_hours }}h</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ row.total_resolved }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ row.met_sla }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">
-                    <span :class="row.compliance_rate >= 80 ? 'text-green-600' : row.compliance_rate >= 50 ? 'text-yellow-600' : 'text-red-600'" class="font-medium">
-                      {{ row.compliance_rate }}%
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ row.avg_resolution_hours }}h</td>
-                </tr>
-                <tr v-if="!departments.length">
-                  <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">No department data yet.</td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- Table -->
+          <div class="bg-base-200 border border-base-300 shadow-xl rounded-3xl overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-base-300 bg-base-200">
+                <thead class="bg-base-300/60 font-mono text-2xs uppercase tracking-wider text-slate-400">
+                  <tr>
+                    <th class="px-6 py-4 text-left font-bold">Department</th>
+                    <th class="px-6 py-4 text-left font-bold">SLA Target</th>
+                    <th class="px-6 py-4 text-left font-bold">Resolved</th>
+                    <th class="px-6 py-4 text-left font-bold">Met SLA</th>
+                    <th class="px-6 py-4 text-left font-bold">Compliance</th>
+                    <th class="px-6 py-4 text-left font-bold">Avg Time</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-base-300/40 text-slate-200">
+                  <tr v-for="row in departments" :key="row.department" class="hover:bg-base-300/10 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-100">{{ row.department }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-300 text-xs">{{ row.sla_hours }}h</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-300 text-xs">{{ row.total_resolved }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-300 text-xs">{{ row.met_sla }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                      <span :class="row.compliance_rate >= 80 ? 'text-emerald-400' : row.compliance_rate >= 50 ? 'text-yellow-400' : 'text-error'" class="font-bold">
+                        {{ row.compliance_rate }}%
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-300">{{ row.avg_resolution_hours }}h</td>
+                  </tr>
+                  <tr v-if="!departments.length">
+                    <td colspan="6" class="px-6 py-8 text-center text-sm font-mono text-slate-500 bg-base-200">No department SLA records compiled yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </template>
       </div>
@@ -93,3 +123,7 @@ onMounted(() => {
   fetchSLA()
 })
 </script>
+
+<style scoped>
+/* Scoped styles */
+</style>
