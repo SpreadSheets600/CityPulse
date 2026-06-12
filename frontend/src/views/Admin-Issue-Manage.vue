@@ -139,20 +139,6 @@
             <button @click="saveStatus" class="btn btn-primary mt-2 w-full">Save Status</button>
           </div>
 
-          <!-- Create department -->
-          <div class="bg-base-200 border border-gray-200 rounded-lg p-4 sm:p-6">
-            <h3 class="font-semibold mb-4">Create New Department</h3>
-            <input v-model="newDeptName" type="text" placeholder="Department Name"
-              class="input input-bordered w-full mb-2" />
-            <input v-model="newDeptDescription" type="text" placeholder="Description"
-              class="input input-bordered w-full mb-2" />
-            <input v-model="newDeptEmail" type="email" placeholder="Contact Email"
-              class="input input-bordered w-full mb-2" />
-            <input v-model="newDeptPhone" type="tel" placeholder="Contact Phone"
-              class="input input-bordered w-full mb-2" />
-            <button @click="createDepartment" class="btn btn-primary mt-2 w-full">Create Department</button>
-          </div>
-
           <!-- Assign department -->
           <div class="bg-base-200 border border-gray-200 rounded-lg p-4 sm:p-6">
             <h3 class="font-semibold mb-4">Assign Department</h3>
@@ -163,6 +149,91 @@
               <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
             </select>
             <button @click="assignDepartment" class="btn btn-success mt-2 w-full">Assign Department</button>
+          </div>
+        </div>
+
+        <!-- AI Verification Panel -->
+        <div class="bg-base-200 border border-gray-200 rounded-lg p-4 sm:p-6 mt-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold flex items-center gap-2">
+              <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              AI Image Verification
+            </h3>
+            <button @click="runVerification" :disabled="verifying || !issue.image_urls?.length"
+              class="btn btn-sm btn-outline btn-indigo">
+              <span v-if="verifying" class="loading loading-spinner loading-xs"></span>
+              {{ verifying ? 'Analyzing...' : 'Run Verification' }}
+            </button>
+          </div>
+
+          <div v-if="!verification && !verifying" class="text-sm text-gray-500 py-4">
+            Click "Run Verification" to analyze the uploaded images against the reported issue type using LocateAnything-3B AI.
+          </div>
+
+          <div v-if="verification" class="space-y-4">
+            <!-- Verification Status Banner -->
+            <div :class="{
+              'bg-green-50 border-green-200': verification.status === 'consistent',
+              'bg-red-50 border-red-200': verification.status === 'misleading',
+              'bg-yellow-50 border-yellow-200': verification.status === 'uncertain',
+            }" class="border rounded-lg p-4">
+              <div class="flex items-start gap-3">
+                <div :class="{
+                  'text-green-600': verification.status === 'consistent',
+                  'text-red-600': verification.status === 'misleading',
+                  'text-yellow-600': verification.status === 'uncertain',
+                }" class="flex-shrink-0 mt-0.5">
+                  <svg v-if="verification.status === 'consistent'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <svg v-else-if="verification.status === 'misleading'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p :class="{
+                    'text-green-800': verification.status === 'consistent',
+                    'text-red-800': verification.status === 'misleading',
+                    'text-yellow-800': verification.status === 'uncertain',
+                  }" class="font-medium text-sm">{{ verification.message }}</p>
+                  <div class="mt-2 flex flex-wrap gap-3 text-xs text-gray-600">
+                    <span>Reported: <strong>{{ verification.reported_type }}</strong></span>
+                    <span>AI Detected: <strong>{{ verification.ai_category }}</strong></span>
+                    <span>Confidence: <strong>{{ (verification.ai_confidence * 100).toFixed(1) }}%</strong></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Per-image detections -->
+            <div v-if="detections.length > 0">
+              <h4 class="text-sm font-medium text-gray-700 mb-2">Image Analysis Details</h4>
+              <div class="space-y-2">
+                <div v-for="det in detections" :key="det.image_index"
+                  class="bg-white border border-gray-200 rounded-lg p-3 text-sm">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="font-medium">Image {{ det.image_index + 1 }}</span>
+                    <span :class="{
+                      'badge badge-success': det.category !== 'Unspecified' && det.category !== 'error',
+                      'badge badge-warning': det.category === 'Unspecified',
+                      'badge badge-error': det.category === 'error',
+                    }" class="badge badge-sm">{{ det.category }}</span>
+                  </div>
+                  <div v-if="det.detections?.length > 0" class="flex flex-wrap gap-1 mt-1">
+                    <span v-for="(d, i) in det.detections" :key="i"
+                      class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700">
+                      {{ d.label }} ({{ (d.confidence * 100).toFixed(0) }}%)
+                    </span>
+                  </div>
+                  <div v-if="det.error" class="text-red-500 text-xs mt-1">{{ det.error }}</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -227,11 +298,6 @@ const status = ref('pending')
 const departments = ref([])
 const departmentId = ref('')
 
-const newDeptName = ref('')
-const newDeptDescription = ref('')
-const newDeptEmail = ref('')
-const newDeptPhone = ref('')
-
 const updateTitle = ref('')
 const updateBody = ref('')
 const progress = ref(0)
@@ -245,6 +311,10 @@ const mapCenter = ref([0, 0])
 
 const lightboxImages = ref([])
 const lightboxIndex = ref(null)
+
+const verifying = ref(false)
+const verification = ref(null)
+const detections = ref([])
 
 const getStatusClass = (status) => {
   const classes = {
@@ -313,22 +383,18 @@ const assignDepartment = async () => {
   }
 }
 
-const createDepartment = async () => {
-  if (!newDeptName.value || !newDeptEmail.value || !newDeptPhone.value) return alert('Name, Email, and Phone are required')
+const runVerification = async () => {
+  verifying.value = true
+  verification.value = null
+  detections.value = []
   try {
-    await axios.post('/api/admin/departments', {
-      name: newDeptName.value,
-      description: newDeptDescription.value,
-      contact_email: newDeptEmail.value,
-      contact_phone: newDeptPhone.value
-    })
-    newDeptName.value = ''
-    newDeptDescription.value = ''
-    newDeptEmail.value = ''
-    newDeptPhone.value = ''
-    await loadDepartments()
+    const resp = await axios.post(`/api/admin/issues/${route.params.id}/verify`)
+    verification.value = resp.data.verification
+    detections.value = resp.data.detections || []
   } catch (e) {
-    alert(e.response?.data?.error || 'Failed to create department')
+    alert(e.response?.data?.error || 'Verification failed')
+  } finally {
+    verifying.value = false
   }
 }
 
