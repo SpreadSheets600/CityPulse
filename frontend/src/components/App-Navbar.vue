@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar sticky top-0 z-50 glass-strong px-4 md:px-6 transition-all duration-300">
+  <nav class="navbar sticky top-0 z-50 glass-strong border-x-0 border-t-0 px-4 md:px-6 transition-all duration-300">
     <div class="navbar-start">
       <router-link
         @click="closeDropdown"
@@ -226,13 +226,14 @@
       <template v-else>
         <router-link
           to="/login"
-          class="btn btn-ghost btn-sm rounded-lg text-base-content/70 hover:text-base-content"
+          class="btn btn-ghost btn-sm text-base-content/75 hover:text-base-content hover:bg-base-300/50 rounded-xl px-3 font-semibold transition-colors"
         >
-          Sign in
+          Sign In
         </router-link>
+
         <router-link
           to="/register"
-          class="btn btn-primary btn-sm rounded-lg shadow-lg shadow-primary/20"
+          class="btn btn-primary btn-sm rounded-xl px-4 font-semibold shadow-sm hover:shadow transition-all duration-200 ml-1"
         >
           Get Started
         </router-link>
