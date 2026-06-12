@@ -7,11 +7,46 @@ from flask_jwt_extended import (
 )
 
 from uuid import uuid4
+import os
 import urllib.request
 import urllib.parse
 import json
-from api.models import db, User, Issue, IssueUpdate, UserRole
+from api.models import db, User, Issue, IssueUpdate, UserRole, Upvote, Comment
+from sqlalchemy import or_
 from ..utils.s3 import upload_file_to_s3, compress_image
+from ..utils.classifier import classify_issue, get_priority_level
+from ..utils.duplicate_detector import find_duplicate_candidates, is_likely_duplicate
+from ..utils.priority_scorer import calculate_priority_score
+
+
+def apply_issue_filters(query):
+    search = request.args.get("search", "").strip()
+    status = request.args.get("status", "").strip()
+    issue_type = request.args.get("issue_type", "").strip()
+    date_from = request.args.get("date_from", "").strip()
+    date_to = request.args.get("date_to", "").strip()
+
+    if search:
+        pattern = f"%{search}%"
+        query = query.filter(or_(
+            Issue.title.ilike(pattern),
+            Issue.description.ilike(pattern),
+            Issue.address.ilike(pattern),
+        ))
+
+    if status:
+        query = query.filter(Issue.status == status)
+
+    if issue_type:
+        query = query.filter(Issue.issue_type == issue_type)
+
+    if date_from:
+        query = query.filter(Issue.created_at >= date_from)
+
+    if date_to:
+        query = query.filter(Issue.created_at <= date_to + " 23:59:59")
+
+    return query
 
 
 class ReportIssue(Resource):
@@ -92,6 +127,79 @@ class ReportIssue(Resource):
             except Exception as e:
                 return {"error": f"Failed To Upload Video Note : {str(e)}"}, 500
 
+        # ── AI Image Classification (LocateAnything-3B) ─────────────
+        image_classification = None
+        img_cls_enabled = os.getenv("IMAGE_CLASSIFICATION_ENABLED", "false").lower() in ("true", "1", "yes")
+        if img_cls_enabled and files:
+            try:
+                from ..utils.image_classifier import classify_image_from_bytes
+                # Classify the first image
+                files[0].seek(0)
+                image_classification = classify_image_from_bytes(
+                    files[0].read(), files[0].filename
+                )
+                # Use image classification to enhance issue_type if still unspecified
+                if (issue_type == "Unspecified" or not issue_type) and image_classification["confidence"] > 0.3:
+                    issue_type = image_classification["category"]
+            except Exception as e:
+                print(f"------ [ WARN ] ------ Image classification failed: {e}")
+
+        # ── AI Text Classification (Ollama) ─────────────────────────
+        ai_text_enabled = os.getenv("AI_TEXT_ENABLED", "false").lower() in ("true", "1", "yes")
+        if ai_text_enabled and (issue_type == "Unspecified" or not issue_type):
+            try:
+                from ..utils.ai_client import classify_issue_text
+                ai_result = classify_issue_text(title, description)
+                if ai_result["confidence"] > 0.3 and ai_result["category"]:
+                    issue_type = ai_result["category"]
+            except Exception as e:
+                print(f"------ [ WARN ] ------ Ollama classification failed: {e}")
+
+        # Fallback: keyword-based classification
+        if issue_type == "Unspecified" or not issue_type:
+            category, confidence, suggested_dept = classify_issue(title, description)
+            if confidence > 0.3:
+                issue_type = category
+
+        # Duplicate Detection
+        duplicates = find_duplicate_candidates(
+            db.session,
+            Issue,
+            title,
+            description,
+            latitude,
+            longitude,
+            threshold=0.4,
+            max_results=3
+        )
+
+        # ── Priority Scoring ────────────────────────────────────────
+        priority_level = "medium"
+        priority_score = 50
+        priority_breakdown = {}
+
+        if ai_text_enabled:
+            try:
+                from ..utils.ai_client import assess_priority
+                ai_priority = assess_priority(title, description, issue_type, upvote_count=0)
+                priority_level = ai_priority["level"]
+                priority_score = ai_priority["score"]
+                priority_breakdown = {"ai_reasoning": ai_priority["reasoning"]}
+            except Exception as e:
+                print(f"------ [ WARN ] ------ Ollama priority failed, using heuristic: {e}")
+
+        if not priority_breakdown:
+            priority_level, priority_score, priority_breakdown = calculate_priority_score(
+                issue_type=issue_type,
+                title=title,
+                description=description,
+                upvote_count=0,
+                comment_count=0,
+                created_at=None,
+                status="pending",
+                has_images=len(image_urls) > 0
+            )
+
         issue = Issue(
             citizen_id=user_id,
             title=title,
@@ -107,41 +215,92 @@ class ReportIssue(Resource):
         db.session.add(issue)
         db.session.commit()
 
-        return (
-            {"message": "Issue Reported Successfully", "issue": issue.to_dict()},
-            201,
-        )
+        from ..utils.reputation import award_points
+        award_points(user_id, "issue_reported", db)
+
+        response = {
+            "message": "Issue Reported Successfully",
+            "issue": issue.to_dict(),
+            "classification": {
+                "issue_type": issue_type,
+                "confidence": confidence if 'confidence' in locals() else 0.0
+            },
+            "priority": {
+                "level": priority_level,
+                "score": priority_score,
+                "breakdown": priority_breakdown
+            }
+        }
+
+        if image_classification:
+            response["image_analysis"] = {
+                "category": image_classification["category"],
+                "confidence": image_classification["confidence"],
+                "detections": image_classification["detections"],
+            }
+
+        if duplicates:
+            response["potential_duplicates"] = duplicates
+
+        return response, 201
 
 
 class MyIssues(Resource):
     @jwt_required()
     def get(self):
         user_id = get_jwt_identity()
+        page = request.args.get("page", 1, type=int)
+        per_page = request.args.get("per_page", 20, type=int)
 
-        issues = (
-            Issue.query.filter_by(citizen_id=user_id)
-            .order_by(Issue.created_at.desc())
-            .all()
-        )
+        query = Issue.query.filter_by(citizen_id=user_id).order_by(Issue.created_at.desc())
+        total = query.count()
+        issues = query.offset((page - 1) * per_page).limit(per_page).all()
 
-        return {"issues": [issue.to_dict() for issue in issues]}, 200
+        return {
+            "issues": [issue.to_dict() for issue in issues],
+            "total": total,
+            "page": page,
+            "per_page": per_page,
+            "pages": (total + per_page - 1) // per_page,
+        }, 200
 
 
 class AllIssues(Resource):
     @jwt_required()
     def get(self):
-        # Allow all authenticated users to view all issues
-        issues = Issue.query.order_by(Issue.created_at.desc()).all()
+        page = request.args.get("page", 1, type=int)
+        per_page = request.args.get("per_page", 20, type=int)
 
-        return {"issues": [issue.to_dict() for issue in issues]}, 200
+        query = Issue.query.order_by(Issue.created_at.desc())
+        query = apply_issue_filters(query)
+        total = query.count()
+        issues = query.offset((page - 1) * per_page).limit(per_page).all()
+
+        return {
+            "issues": [issue.to_dict() for issue in issues],
+            "total": total,
+            "page": page,
+            "per_page": per_page,
+            "pages": (total + per_page - 1) // per_page,
+        }, 200
 
 
 class PublicIssues(Resource):
     def get(self):
-        # Public endpoint for viewing issues without auth
-        issues = Issue.query.filter(Issue.status.in_(['pending', 'in_progress', 'verified'])).order_by(Issue.created_at.desc()).limit(20).all()
+        page = request.args.get("page", 1, type=int)
+        per_page = request.args.get("per_page", 20, type=int)
 
-        return {"issues": [issue.to_public_dict() for issue in issues]}, 200
+        query = Issue.query.filter(Issue.status.in_(['pending', 'in_progress', 'verified'])).order_by(Issue.created_at.desc())
+        total = query.count()
+        issues = query.offset((page - 1) * per_page).limit(per_page).all()
+
+        return {
+            "issues": [issue.to_public_dict() for issue in issues],
+            "total": total,
+            "page": page,
+            "per_page": per_page,
+            "pages": (total + per_page - 1) // per_page,
+        }, 200
 
 
 class GetIssue(Resource):
@@ -297,3 +456,90 @@ class ReverseGeocode(Resource):
         except Exception as e:
             print(f"Reverse geocoding error: {e}")
             return {"error": "Reverse geocoding service unavailable"}, 500
+
+
+class UpvoteIssue(Resource):
+    @jwt_required()
+    def post(self, issue_id):
+        user_id = get_jwt_identity()
+        issue = Issue.query.get(issue_id)
+        if not issue:
+            return {"error": "Issue not found"}, 404
+
+        existing = Upvote.query.filter_by(user_id=user_id, issue_id=issue_id).first()
+        if existing:
+            return {"message": "Already upvoted"}, 200
+
+        upvote = Upvote(user_id=user_id, issue_id=issue_id)
+        db.session.add(upvote)
+        db.session.commit()
+
+        return {"message": "Upvoted", "upvote_count": len(issue.upvotes)}, 201
+
+    @jwt_required()
+    def delete(self, issue_id):
+        user_id = get_jwt_identity()
+        issue = Issue.query.get(issue_id)
+        if not issue:
+            return {"error": "Issue not found"}, 404
+
+        upvote = Upvote.query.filter_by(user_id=user_id, issue_id=issue_id).first()
+        if not upvote:
+            return {"error": "Not upvoted"}, 404
+
+        db.session.delete(upvote)
+        db.session.commit()
+
+        return {"message": "Upvote removed", "upvote_count": len(issue.upvotes)}, 200
+
+
+class IssueComments(Resource):
+    @jwt_required()
+    def get(self, issue_id):
+        issue = Issue.query.get(issue_id)
+        if not issue:
+            return {"error": "Issue not found"}, 404
+
+        comments = Comment.query.filter_by(issue_id=issue_id).order_by(Comment.created_at.asc()).all()
+        return {"comments": [c.to_dict() for c in comments]}, 200
+
+    @jwt_required()
+    def post(self, issue_id):
+        user_id = get_jwt_identity()
+        issue = Issue.query.get(issue_id)
+        if not issue:
+            return {"error": "Issue not found"}, 404
+
+        data = request.get_json()
+        body = (data.get("body") or "").strip()
+        if not body:
+            return {"error": "Comment body is required"}, 400
+
+        comment = Comment(issue_id=issue_id, author_id=user_id, body=body)
+        db.session.add(comment)
+        db.session.commit()
+
+        return {"message": "Comment added", "comment": comment.to_dict()}, 201
+
+
+class VerifyIssueImages(Resource):
+    @jwt_required()
+    def get(self, issue_id):
+        """Get AI verification status for an issue (if available)."""
+        from ..models import VerificationStatus
+
+        issue = Issue.query.get(issue_id)
+        if not issue:
+            return {"error": "Issue not found"}, 404
+
+        verification = VerificationStatus.query.filter_by(issue_id=issue_id).first()
+        if not verification:
+            return {"verification": None}, 200
+
+        return {
+            "verification": {
+                "status": verification.status.value,
+                "notes": verification.notes,
+                "verified_at": verification.verified_at.isoformat() if verification.verified_at else None,
+            }
+        }, 200
