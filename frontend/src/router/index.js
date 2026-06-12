@@ -18,6 +18,23 @@ const router = createRouter({
       component: Register,
     },
     {
+      path: '/forgot-password',
+      name: 'ForgotPassword',
+      component: () => import('../views/Forgot-Password.vue'),
+    },
+    {
+      path: '/reset-password/:token',
+      name: 'ResetPassword',
+      component: () => import('../views/Reset-Password.vue'),
+      meta: { guest: true },
+    },
+    {
+      path: '/auth/callback',
+      name: 'OAuthCallback',
+      component: () => import('../views/OAuth-Callback.vue'),
+      meta: { guest: true },
+    },
+    {
       path: '/',
       name: 'PublicLanding',
       component: () => import('../views/Public-Landing.vue'),
@@ -62,6 +79,42 @@ const router = createRouter({
       path: '/admin-dashboard',
       name: 'AdminDashboard',
       component: () => import('../views/Admin-Dashboard.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/audit-log',
+      name: 'AdminAuditLog',
+      component: () => import('../views/Admin-Audit-Log.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/analytics',
+      name: 'AdminAnalytics',
+      component: () => import('../views/Admin-Analytics.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/export',
+      name: 'AdminExport',
+      component: () => import('../views/Admin-Export.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/sla',
+      name: 'AdminSLA',
+      component: () => import('../views/Admin-SLA.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/geofence',
+      name: 'AdminGeofence',
+      component: () => import('../views/Admin-Geofence.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/departments',
+      name: 'AdminDepartments',
+      component: () => import('../views/Admin-Departments.vue'),
       meta: { requiresAuth: true, requiresAdmin: true },
     },
     {
