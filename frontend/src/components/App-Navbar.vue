@@ -49,38 +49,15 @@
     </div>
 
     <div class="navbar-end gap-2">
-      <!-- Theme Switcher Dropdown -->
-      <div class="dropdown dropdown-end">
-        <div
-          tabindex="0"
-          role="button"
-          class="btn btn-ghost btn-circle hover:bg-base-300/50"
-          aria-label="Theme switcher"
-        >
-          <Palette class="w-5 h-5 text-base-content/70 hover:text-base-content" :stroke-width="2" />
-        </div>
-        <ul
-          tabindex="0"
-          class="dropdown-content menu bg-base-200 border border-base-300/60 rounded-xl z-[100] mt-3 w-56 p-2 shadow-2xl shadow-black/30 animate-fade-in"
-        >
-          <div class="px-3 py-2 border-b border-base-300/60 mb-1">
-            <p class="text-xs text-base-content/50 font-medium">Select Theme</p>
-          </div>
-          <li v-for="t in themes" :key="t.name">
-            <button
-              @click="setTheme(t.name)"
-              class="py-2 rounded-lg flex items-center justify-between text-left"
-              :class="{ 'active bg-primary text-primary-content': currentTheme === t.name }"
-            >
-              <span class="flex items-center gap-2">
-                <component :is="t.icon" class="w-4 h-4" />
-                {{ t.label }}
-              </span>
-              <span v-if="currentTheme === t.name" class="w-1.5 h-1.5 rounded-full bg-current" />
-            </button>
-          </li>
-        </ul>
-      </div>
+      <!-- Theme Switcher Toggle -->
+      <button
+        @click="toggleTheme"
+        class="btn btn-ghost btn-circle hover:bg-base-300/50 text-base-content/70 hover:text-base-content"
+        aria-label="Toggle light/dark theme"
+      >
+        <Sun v-if="currentTheme === 'dark'" class="w-5 h-5 animate-fade-in" :stroke-width="2" />
+        <Moon v-else class="w-5 h-5 animate-fade-in" :stroke-width="2" />
+      </button>
 
       <div
         v-if="authStore.isAuthenticated"
@@ -269,33 +246,18 @@ import {
   LogOut,
   LogIn,
   UserPlus,
-  Palette,
   Sun,
   Moon,
-  Sparkles,
-  Snowflake,
-  Sunset,
-  Cloud,
 } from '@lucide/vue'
 
-const themes = [
-  { name: 'citypulse', label: 'CityPulse Light', icon: Sun },
-  { name: 'citypulse-dark', label: 'CityPulse Dark', icon: Moon },
-  { name: 'light', label: 'Default Light', icon: Sun },
-  { name: 'dark', label: 'Default Dark', icon: Moon },
-  { name: 'cupcake', label: 'Cupcake', icon: Sparkles },
-  { name: 'nord', label: 'Nord', icon: Snowflake },
-  { name: 'sunset', label: 'Sunset', icon: Sunset },
-  { name: 'dim', label: 'Dim', icon: Cloud }
-]
+const currentTheme = ref(localStorage.getItem('theme') || 'light')
 
-const currentTheme = ref(localStorage.getItem('theme') || 'citypulse')
-
-const setTheme = (themeName) => {
-  currentTheme.value = themeName
-  document.documentElement.setAttribute('data-theme', themeName)
-  localStorage.setItem('theme', themeName)
-  window.dispatchEvent(new CustomEvent('theme-changed', { detail: themeName }))
+const toggleTheme = () => {
+  const newTheme = currentTheme.value === 'light' ? 'dark' : 'light'
+  currentTheme.value = newTheme
+  document.documentElement.setAttribute('data-theme', newTheme)
+  localStorage.setItem('theme', newTheme)
+  window.dispatchEvent(new CustomEvent('theme-changed', { detail: newTheme }))
 }
 
 const authStore = useAuthStore()
