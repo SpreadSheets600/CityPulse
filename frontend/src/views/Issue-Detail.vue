@@ -53,6 +53,14 @@
                 class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ml-4">
                 {{ issue.status }}
               </span>
+              <button @click="toggleUpvote"
+                :class="['btn btn-sm ml-2', issue.user_upvoted ? 'btn-primary' : 'btn-outline']">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 15l7-7 7 7" />
+                </svg>
+                {{ issue.upvote_count || 0 }}
+              </button>
             </div>
           </div>
 
@@ -99,6 +107,33 @@
                   {{ issue.department.name }}
                 </dd>
               </div>
+            </div>
+          </div>
+
+          <!-- AI Verification Status (shown if admin has run verification) -->
+          <div v-if="aiVerification" class="border-t border-gray-200 px-4 py-5 sm:px-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              AI Analysis
+            </h3>
+            <div :class="{
+              'bg-green-50 border-green-200': aiVerification.status === 'verified',
+              'bg-red-50 border-red-200': aiVerification.status === 'rejected',
+              'bg-yellow-50 border-yellow-200': aiVerification.status === 'pending',
+            }" class="border rounded-lg p-3 text-sm">
+              <div class="flex items-center gap-2 mb-1">
+                <span :class="{
+                  'badge badge-success': aiVerification.status === 'verified',
+                  'badge badge-error': aiVerification.status === 'rejected',
+                  'badge badge-warning': aiVerification.status === 'pending',
+                }" class="badge badge-sm">{{ aiVerification.status }}</span>
+                <span v-if="aiVerification.verified_at" class="text-xs text-gray-500">
+                  {{ new Date(aiVerification.verified_at).toLocaleDateString() }}
+                </span>
+              </div>
+              <p class="text-gray-700">{{ aiVerification.notes }}</p>
             </div>
           </div>
 
@@ -200,6 +235,26 @@
               </div>
             </div>
           </div>
+
+          <!-- Comments section -->
+          <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Comments ({{ comments.length }})</h3>
+            <div v-if="comments.length === 0" class="text-sm text-gray-500 mb-4">No comments yet.</div>
+            <div v-else class="space-y-4 mb-4">
+              <div v-for="c in comments" :key="c.id" class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm font-medium text-gray-900">{{ c.author?.firstname }} {{ c.author?.lastname }}</span>
+                  <span class="text-xs text-gray-500">{{ formatDate(c.created_at) }}</span>
+                </div>
+                <p class="text-sm text-gray-700">{{ c.body }}</p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <input v-model="newComment" type="text" placeholder="Add a comment..."
+                class="input input-bordered flex-1 input-sm" @keyup.enter="submitComment" />
+              <button @click="submitComment" :disabled="!newComment.trim()" class="btn btn-primary btn-sm">Post</button>
+            </div>
+          </div>
         </div>
 
         <!-- Error State -->
@@ -234,7 +289,10 @@ const issue = ref(null)
 const loading = ref(false)
 const mapCenter = ref([0, 0])
 const updates = ref([])
+const comments = ref([])
+const newComment = ref('')
 const zoom = ref(15)
+const aiVerification = ref(null)
 
 const lightboxImages = ref([])
 const lightboxIndex = ref(null)
@@ -295,9 +353,59 @@ const openImageModal = (url, images) => {
   lightboxIndex.value = index
 }
 
+const fetchComments = async () => {
+  try {
+    const resp = await axios.get(`/api/issues/${route.params.id}/comments`)
+    comments.value = resp.data.comments || []
+  } catch (e) {
+    console.error('Failed to fetch comments', e)
+  }
+}
+
+const fetchAIVerification = async () => {
+  try {
+    const resp = await axios.get(`/api/issues/${route.params.id}/verify`)
+    aiVerification.value = resp.data.verification
+  } catch (e) {
+    // Silently ignore - verification may not exist yet
+  }
+}
+
+const submitComment = async () => {
+  if (!newComment.value.trim()) return
+  try {
+    const resp = await axios.post(`/api/issues/${route.params.id}/comments`, {
+      body: newComment.value.trim(),
+    })
+    comments.value.push(resp.data.comment)
+    newComment.value = ''
+  } catch (e) {
+    console.error('Failed to post comment', e)
+  }
+}
+
+const toggleUpvote = async () => {
+  if (!issue.value) return
+  try {
+    if (issue.value.user_upvoted) {
+      const resp = await axios.delete(`/api/issues/${issue.value.id}/upvote`)
+      issue.value.user_upvoted = false
+      issue.value.upvote_count = resp.data.upvote_count
+    } else {
+      const resp = await axios.post(`/api/issues/${issue.value.id}/upvote`)
+      issue.value.user_upvoted = true
+      issue.value.upvote_count = resp.data.upvote_count
+    }
+  } catch (e) {
+    console.error('Upvote failed', e)
+  }
+}
+
 onMounted(() => {
   console.log('IssueDetail component mounted, route params:', route.params)
   fetchIssue()
   fetchUpdates()
+  fetchComments()
+  fetchAIVerification()
 })
 </script>

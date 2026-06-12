@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Main content -->
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div class="px-4 py-6 sm:px-0">
         <div class="mb-8">
@@ -25,15 +24,37 @@
               </div>
             </div>
 
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Personal Information</h3>
+            <div v-if="success" class="alert alert-success mb-4">
+              <span>Profile Updated Successfully</span>
+            </div>
+            <div v-if="error" class="alert alert-error mb-4">
+              <span>{{ error }}</span>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">Personal Information</h3>
+              <button v-if="!editing" @click="startEditing"
+                class="btn btn-sm btn-outline">Edit</button>
+              <div v-else class="flex gap-2">
+                <button @click="saveProfile" :disabled="saving" class="btn btn-sm btn-primary">
+                  {{ saving ? 'Saving...' : 'Save' }}
+                </button>
+                <button @click="cancelEditing" class="btn btn-sm btn-ghost">Cancel</button>
+              </div>
+            </div>
+
             <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
               <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">First Name</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ user?.firstname }}</dd>
+                <dd v-if="!editing" class="mt-1 text-sm text-gray-900">{{ user?.firstname }}</dd>
+                <input v-else v-model="form.firstname" type="text"
+                  class="mt-1 input input-bordered input-sm w-full" />
               </div>
               <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Last Name</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ user?.lastname }}</dd>
+                <dd v-if="!editing" class="mt-1 text-sm text-gray-900">{{ user?.lastname }}</dd>
+                <input v-else v-model="form.lastname" type="text"
+                  class="mt-1 input input-bordered input-sm w-full" />
               </div>
               <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Email</dt>
@@ -41,11 +62,15 @@
               </div>
               <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Phone</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ user?.phone }}</dd>
+                <dd v-if="!editing" class="mt-1 text-sm text-gray-900">{{ user?.phone }}</dd>
+                <input v-else v-model="form.phone" type="text"
+                  class="mt-1 input input-bordered input-sm w-full" />
               </div>
               <div class="sm:col-span-2">
                 <dt class="text-sm font-medium text-gray-500">Address</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ user?.address }}</dd>
+                <dd v-if="!editing" class="mt-1 text-sm text-gray-900">{{ user?.address }}</dd>
+                <input v-else v-model="form.address" type="text"
+                  class="mt-1 input input-bordered input-sm w-full" />
               </div>
               <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">Role</dt>
@@ -64,12 +89,18 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useAuthStore } from '../stores/auth'
 
 const authStore = useAuthStore()
 
 const user = computed(() => authStore.user)
+
+const editing = ref(false)
+const saving = ref(false)
+const error = ref('')
+const success = ref(false)
+const form = ref({ firstname: '', lastname: '', phone: '', address: '' })
 
 const userInitials = computed(() => {
   if (!user.value) return 'U'
@@ -85,5 +116,37 @@ const profilePictureUrl = computed(() => {
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString()
+}
+
+const startEditing = () => {
+  form.value = {
+    firstname: user.value.firstname || '',
+    lastname: user.value.lastname || '',
+    phone: user.value.phone || '',
+    address: user.value.address || '',
+  }
+  editing.value = true
+  error.value = ''
+  success.value = false
+}
+
+const cancelEditing = () => {
+  editing.value = false
+  error.value = ''
+}
+
+const saveProfile = async () => {
+  saving.value = true
+  error.value = ''
+  success.value = false
+
+  const result = await authStore.updateProfile(form.value)
+  if (result.success) {
+    success.value = true
+    editing.value = false
+  } else {
+    error.value = result.error
+  }
+  saving.value = false
 }
 </script>
