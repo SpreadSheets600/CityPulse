@@ -3,15 +3,26 @@
     <main class="max-w-7xl mx-auto">
       <div>
         <div class="mb-8">
-          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">Export Reports</h2>
-          <p class="mt-1 text-sm text-slate-400 font-sans">Download aggregated issue database snapshots as CSV for external analytics.</p>
+          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+            Export Reports
+          </h2>
+          <p class="mt-1 text-sm text-slate-400 font-sans">
+            Download aggregated issue database snapshots as CSV for external analytics.
+          </p>
         </div>
 
         <div class="bg-base-200 border border-base-300 rounded-3xl p-6 md:p-8 shadow-xl max-w-lg">
           <div class="space-y-5">
             <div>
-              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Filter by Status</span></label>
-              <select v-model="filters.status" class="select select-bordered w-full rounded-xl border-base-300 focus:border-primary font-mono text-xs">
+              <label class="label"
+                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                  >Filter by Status</span
+                ></label
+              >
+              <select
+                v-model="filters.status"
+                class="select select-bordered w-full rounded-xl border-base-300 focus:border-primary font-mono text-xs"
+              >
                 <option value="">All statuses</option>
                 <option value="pending">Pending</option>
                 <option value="in_progress">In Progress</option>
@@ -22,16 +33,36 @@
             </div>
 
             <div>
-              <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Filter by Type</span></label>
-              <input v-model="filters.issue_type" type="text" placeholder="e.g. Pothole, Streetlight"
-                class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary font-sans text-sm" />
+              <label class="label"
+                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                  >Filter by Type</span
+                ></label
+              >
+              <input
+                v-model="filters.issue_type"
+                type="text"
+                placeholder="e.g. Pothole, Streetlight"
+                class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary font-sans text-sm"
+              />
             </div>
 
             <div class="pt-4">
-              <button @click="downloadCSV"
-                class="btn btn-primary w-full rounded-xl font-bold py-3 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/10">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              <button
+                @click="downloadCSV"
+                class="btn btn-primary w-full rounded-xl font-bold py-3 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-blue-500/10"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  />
                 </svg>
                 DOWNLOAD CSV EXPORT
               </button>

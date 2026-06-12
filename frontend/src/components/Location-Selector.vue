@@ -1,35 +1,76 @@
 <template>
   <div class="location-selector font-sans text-base-content">
     <div class="mb-4">
-      <label class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Report Location *</span></label>
+      <label class="label"
+        ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+          >Report Location *</span
+        ></label
+      >
 
       <!-- Location Input Options -->
       <div class="flex flex-col sm:flex-row gap-3 mb-4">
-        <button type="button" @click="useCurrentLocation" :disabled="gettingLocation"
-          class="btn btn-primary rounded-xl flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-initial text-sm py-2">
-          <svg v-if="gettingLocation" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-            </circle>
-            <path class="opacity-75" fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-            </path>
+        <button
+          type="button"
+          @click="useCurrentLocation"
+          :disabled="gettingLocation"
+          class="btn btn-primary rounded-xl flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-initial text-sm py-2"
+        >
+          <svg
+            v-if="gettingLocation"
+            class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
           </svg>
-          <svg v-else class="-ml-1 mr-2 h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-            </path>
+          <svg
+            v-else
+            class="-ml-1 mr-2 h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+            ></path>
             <circle cx="12" cy="11" r="3" />
           </svg>
           <span>{{ gettingLocation ? 'GETTING LOCATION...' : 'USE CURRENT GPS' }}</span>
         </button>
 
-        <button type="button" @click="showMap = !showMap"
-          class="btn btn-accent rounded-xl flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-initial text-sm py-2">
-          <svg class="-ml-1 mr-2 h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7">
-            </path>
+        <button
+          type="button"
+          @click="showMap = !showMap"
+          class="btn btn-accent rounded-xl flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-initial text-sm py-2"
+        >
+          <svg
+            class="-ml-1 mr-2 h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+            ></path>
           </svg>
           <span>{{ showMap ? 'HIDE MAP' : 'SELECT ON MAP' }}</span>
         </button>
@@ -38,16 +79,29 @@
       <!-- Address/Pincode Input -->
       <div class="mb-4 relative">
         <label for="address" class="label">
-          <span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Or search address / landmark</span>
+          <span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+            >Or search address / landmark</span
+          >
         </label>
-        <input id="address" v-model="address" type="text" placeholder="Enter address or pincode"
+        <input
+          id="address"
+          v-model="address"
+          type="text"
+          placeholder="Enter address or pincode"
           class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans text-sm"
-          @input="onAddressChange" />
-        
-        <div v-if="addressSuggestions.length > 0"
-          class="absolute left-0 right-0 mt-2 bg-base-200 border border-base-300 rounded-2xl shadow-2xl max-h-48 overflow-y-auto z-[200]">
-          <div v-for="suggestion in addressSuggestions" :key="suggestion.place_id" @click="selectAddress(suggestion)"
-            class="px-4 py-3 hover:bg-base-300 cursor-pointer border-b border-base-300 last:border-b-0 text-slate-200 text-xs font-mono">
+          @input="onAddressChange"
+        />
+
+        <div
+          v-if="addressSuggestions.length > 0"
+          class="absolute left-0 right-0 mt-2 bg-base-200 border border-base-300 rounded-2xl shadow-2xl max-h-48 overflow-y-auto z-[200]"
+        >
+          <div
+            v-for="suggestion in addressSuggestions"
+            :key="suggestion.place_id"
+            @click="selectAddress(suggestion)"
+            class="px-4 py-3 hover:bg-base-300 cursor-pointer border-b border-base-300 last:border-b-0 text-slate-200 text-xs font-mono"
+          >
             {{ suggestion.display_name }}
           </div>
         </div>
@@ -65,10 +119,12 @@
 
       <!-- Selected Location Display -->
       <div v-if="selectedLocation" class="bg-base-300/30 border border-base-300/80 p-4 rounded-2xl">
-        <h4 class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">Selected Location Meta:</h4>
+        <h4 class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">
+          Selected Location Meta:
+        </h4>
         <p class="text-xs font-mono text-slate-300">
-          <strong>GPS Coordinates:</strong> {{ selectedLocation.lat.toFixed(6) }}, {{
-            selectedLocation.lng.toFixed(6) }}
+          <strong>GPS Coordinates:</strong> {{ selectedLocation.lat.toFixed(6) }},
+          {{ selectedLocation.lng.toFixed(6) }}
         </p>
         <p v-if="address" class="text-xs font-sans text-slate-300 mt-1 leading-relaxed">
           <strong>Physical Address:</strong> {{ address }}
@@ -76,7 +132,10 @@
       </div>
 
       <!-- Error Messages -->
-      <div v-if="locationError" class="mt-3 border border-error/20 bg-error/5 text-error text-center text-xs font-mono p-3 rounded-xl">
+      <div
+        v-if="locationError"
+        class="mt-3 border border-error/20 bg-error/5 text-error text-center text-xs font-mono p-3 rounded-xl"
+      >
         {{ locationError }}
       </div>
     </div>
@@ -92,12 +151,12 @@ import axios from '../api/client'
 const props = defineProps({
   modelValue: {
     type: Object,
-    default: () => null
+    default: () => null,
   },
   autoLocate: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 // Emits
@@ -136,7 +195,7 @@ const selectAddress = (suggestion) => {
   address.value = suggestion.display_name
   selectedLocation.value = {
     lat: Number(suggestion.lat),
-    lng: Number(suggestion.lon)
+    lng: Number(suggestion.lon),
   }
   addressSuggestions.value = []
 
@@ -163,7 +222,7 @@ const useCurrentLocation = async () => {
       navigator.geolocation.getCurrentPosition(resolve, reject, {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 300000
+        maximumAge: 300000,
       })
     })
 
@@ -190,13 +249,15 @@ const useCurrentLocation = async () => {
   } catch (error) {
     console.error('Geolocation error:', error)
     if (error.code === 1) {
-      locationError.value = 'Location access denied. Please enable location permissions and try again.'
+      locationError.value =
+        'Location access denied. Please enable location permissions and try again.'
     } else if (error.code === 2) {
       locationError.value = 'Location unavailable. Please check your GPS settings and try again.'
     } else if (error.code === 3) {
       locationError.value = 'Location request timed out. Please try again.'
     } else {
-      locationError.value = 'Unable to get your location. Please enter address manually or select on map.'
+      locationError.value =
+        'Unable to get your location. Please enter address manually or select on map.'
     }
   } finally {
     gettingLocation.value = false
@@ -208,27 +269,30 @@ const initializeMap = () => {
 
   // Initialize map
   map.value = L.map(mapContainer.value).setView(
-    selectedLocation.value ? [selectedLocation.value.lat, selectedLocation.value.lng] : [20.5937, 78.9629],
-    selectedLocation.value ? 15 : 5
+    selectedLocation.value
+      ? [selectedLocation.value.lat, selectedLocation.value.lng]
+      : [20.5937, 78.9629],
+    selectedLocation.value ? 15 : 5,
   )
 
   // Add CartoDB Dark Matter tile layer for dark styling
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    maxZoom: 19
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    maxZoom: 19,
   }).addTo(map.value)
 
   // Add marker if location is selected
   if (selectedLocation.value) {
     marker.value = L.marker([selectedLocation.value.lat, selectedLocation.value.lng], {
-      draggable: true
+      draggable: true,
     }).addTo(map.value)
 
     marker.value.on('dragend', (event) => {
       const position = event.target.getLatLng()
       selectedLocation.value = {
         lat: position.lat,
-        lng: position.lng
+        lng: position.lng,
       }
 
       // Try to get address for new position
@@ -250,14 +314,14 @@ const initializeMap = () => {
 
     // Add new marker
     marker.value = L.marker([lat, lng], {
-      draggable: true
+      draggable: true,
     }).addTo(map.value)
 
     marker.value.on('dragend', (event) => {
       const position = event.target.getLatLng()
       selectedLocation.value = {
         lat: position.lat,
-        lng: position.lng
+        lng: position.lng,
       }
       reverseGeocode(position.lat, position.lng)
       emitLocation()
@@ -285,7 +349,7 @@ const emitLocation = () => {
     emit('update:modelValue', {
       latitude: selectedLocation.value.lat,
       longitude: selectedLocation.value.lng,
-      address: address.value
+      address: address.value,
     })
   } else {
     emit('update:modelValue', null)
@@ -300,15 +364,18 @@ const onAddressChange = () => {
 }
 
 // Watch for external changes
-watch(() => props.modelValue, (newValue) => {
-  if (newValue) {
-    selectedLocation.value = {
-      lat: newValue.latitude,
-      lng: newValue.longitude
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (newValue) {
+      selectedLocation.value = {
+        lat: newValue.latitude,
+        lng: newValue.longitude,
+      }
+      address.value = newValue.address || ''
     }
-    address.value = newValue.address || ''
-  }
-})
+  },
+)
 
 // Initialize map when showMap becomes true
 watch(showMap, (newValue) => {

@@ -27,7 +27,7 @@ export const useChatbotStore = defineStore('chatbot', () => {
       id: Date.now(),
       role: 'user',
       content: text,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     })
 
     loading.value = true
@@ -39,7 +39,7 @@ export const useChatbotStore = defineStore('chatbot', () => {
         id: Date.now() + 1,
         role: 'assistant',
         content: res.data.response,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
     } catch (e) {
       error.value = e.response?.data?.error || 'Failed to get response'
@@ -47,7 +47,7 @@ export const useChatbotStore = defineStore('chatbot', () => {
         id: Date.now() + 1,
         role: 'assistant',
         content: 'Sorry, I encountered an error. Please try again.',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
     } finally {
       loading.value = false
@@ -67,6 +67,6 @@ export const useChatbotStore = defineStore('chatbot', () => {
     openChatbot,
     closeChatbot,
     sendMessage,
-    clearMessages
+    clearMessages,
   }
 })

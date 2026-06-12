@@ -11,7 +11,12 @@
           <h3 class="text-lg font-semibold">Take Photo</h3>
           <button @click="closeModal" class="btn btn-ghost btn-sm">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
             </svg>
           </button>
         </div>
@@ -20,12 +25,24 @@
         <div class="p-4">
           <div v-if="!stream" class="text-center py-8">
             <div class="mb-4">
-              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
-                </path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              <svg
+                class="mx-auto h-12 w-12 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
               </svg>
             </div>
             <p class="opacity-60 mb-4">Camera access required</p>
@@ -38,16 +55,33 @@
           <div v-else class="space-y-4">
             <!-- Video Preview -->
             <div class="relative">
-              <video ref="videoElement" autoplay playsinline muted
-                class="w-full h-64 bg-black rounded-lg object-cover"></video>
+              <video
+                ref="videoElement"
+                autoplay
+                playsinline
+                muted
+                class="w-full h-64 bg-black rounded-lg object-cover"
+              ></video>
               <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                 <button @click="capturePhoto" :disabled="capturing" class="btn btn-circle">
-                  <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
-                    </path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <svg
+                    class="w-8 h-8 text-gray-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                    ></path>
                   </svg>
                 </button>
               </div>
@@ -57,15 +91,16 @@
             <div class="flex justify-between">
               <button @click="switchCamera" v-if="hasMultipleCameras" class="btn">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                  </path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  ></path>
                 </svg>
                 Switch Camera
               </button>
-              <button @click="closeModal" class="btn">
-                Cancel
-              </button>
+              <button @click="closeModal" class="btn">Cancel</button>
             </div>
           </div>
         </div>
@@ -85,7 +120,7 @@
 import { ref, watch, computed } from 'vue'
 
 const props = defineProps({
-  modelValue: Boolean
+  modelValue: Boolean,
 })
 
 const emit = defineEmits(['update:modelValue', 'capture'])
@@ -101,23 +136,26 @@ const availableCameras = ref([])
 const isVideoReady = ref(false)
 
 // Watch for modal state changes
-watch(() => props.modelValue, async (newValue) => {
-  isOpen.value = newValue
-  if (newValue) {
-    // Reset state when opening and auto-start camera for better UX
-    error.value = ''
-    isVideoReady.value = false
-    stream.value = null
-    try {
-      await startCamera()
-    } catch {
-      // keep error message if set inside startCamera
+watch(
+  () => props.modelValue,
+  async (newValue) => {
+    isOpen.value = newValue
+    if (newValue) {
+      // Reset state when opening and auto-start camera for better UX
+      error.value = ''
+      isVideoReady.value = false
+      stream.value = null
+      try {
+        await startCamera()
+      } catch {
+        // keep error message if set inside startCamera
+      }
+    } else {
+      // Clean up when closing
+      stopCamera()
     }
-  } else {
-    // Clean up when closing
-    stopCamera()
-  }
-})
+  },
+)
 
 watch(isOpen, (newValue) => {
   emit('update:modelValue', newValue)
@@ -135,11 +173,20 @@ const startCamera = async () => {
     // Build constraints: prefer deviceId if we already discovered cameras
     let videoConstraints
     if (availableCameras.value.length > 0) {
-      const target = availableCameras.value[currentCameraIndex.value % availableCameras.value.length]
-      videoConstraints = { deviceId: { exact: target.deviceId }, width: { ideal: 1280 }, height: { ideal: 720 } }
+      const target =
+        availableCameras.value[currentCameraIndex.value % availableCameras.value.length]
+      videoConstraints = {
+        deviceId: { exact: target.deviceId },
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+      }
     } else {
       // Hint to use environment camera when possible (mobile). Desktop will choose default.
-      videoConstraints = { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+      videoConstraints = {
+        facingMode: 'environment',
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+      }
     }
 
     stream.value = await navigator.mediaDevices.getUserMedia({ video: videoConstraints })
@@ -147,7 +194,7 @@ const startCamera = async () => {
     // After permission, enumerate to get full device list with labels
     try {
       const devices = await navigator.mediaDevices.enumerateDevices()
-      availableCameras.value = devices.filter(d => d.kind === 'videoinput')
+      availableCameras.value = devices.filter((d) => d.kind === 'videoinput')
     } catch {
       // Non-fatal
     }
@@ -161,14 +208,18 @@ const startCamera = async () => {
           videoElement.value?.removeEventListener('loadedmetadata', onReady)
           resolve()
         }
-        if (videoElement.value.readyState >= 1 && videoElement.value.videoWidth && videoElement.value.videoHeight) {
+        if (
+          videoElement.value.readyState >= 1 &&
+          videoElement.value.videoWidth &&
+          videoElement.value.videoHeight
+        ) {
           isVideoReady.value = true
           resolve()
         } else {
           videoElement.value.addEventListener('loadedmetadata', onReady, { once: true })
         }
         // Also try to play to kick off rendering
-        videoElement.value.play?.().catch(() => { })
+        videoElement.value.play?.().catch(() => {})
       })
     }
   } catch (err) {
@@ -198,7 +249,7 @@ const capturePhoto = async () => {
   if (!stream.value || !videoElement.value) return
   if (!isVideoReady.value) {
     // Wait briefly in case metadata is still settling
-    await new Promise(r => setTimeout(r, 100))
+    await new Promise((r) => setTimeout(r, 100))
   }
 
   capturing.value = true
@@ -223,20 +274,24 @@ const capturePhoto = async () => {
     }
 
     // Prefer toBlob but fall back to dataURL when null (Safari quirks)
-    canvas.toBlob((blob) => {
-      if (blob) return makeFile(blob)
-      try {
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.8)
-        const byteString = atob(dataUrl.split(',')[1])
-        const ab = new ArrayBuffer(byteString.length)
-        const ia = new Uint8Array(ab)
-        for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i)
-        makeFile(new Blob([ab], { type: 'image/jpeg' }))
-      } catch (e) {
-        console.error('toDataURL fallback failed', e)
-        error.value = 'Failed to capture photo. Please try again.'
-      }
-    }, 'image/jpeg', 0.8)
+    canvas.toBlob(
+      (blob) => {
+        if (blob) return makeFile(blob)
+        try {
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.8)
+          const byteString = atob(dataUrl.split(',')[1])
+          const ab = new ArrayBuffer(byteString.length)
+          const ia = new Uint8Array(ab)
+          for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i)
+          makeFile(new Blob([ab], { type: 'image/jpeg' }))
+        } catch (e) {
+          console.error('toDataURL fallback failed', e)
+          error.value = 'Failed to capture photo. Please try again.'
+        }
+      },
+      'image/jpeg',
+      0.8,
+    )
   } catch (err) {
     console.error('Photo capture error:', err)
     error.value = 'Failed to capture photo. Please try again.'
@@ -247,7 +302,7 @@ const capturePhoto = async () => {
 
 const stopCamera = () => {
   if (stream.value) {
-    stream.value.getTracks().forEach(track => track.stop())
+    stream.value.getTracks().forEach((track) => track.stop())
     stream.value = null
   }
   isVideoReady.value = false

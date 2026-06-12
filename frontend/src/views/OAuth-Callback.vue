@@ -30,11 +30,14 @@ onMounted(() => {
   const token = route.query.token
   if (token) {
     authStore.setToken(token)
-    authStore.initializeAuth().then(() => {
-      router.push('/')
-    }).catch(() => {
-      error.value = 'Failed to load user profile.'
-    })
+    authStore
+      .initializeAuth()
+      .then(() => {
+        router.push('/')
+      })
+      .catch(() => {
+        error.value = 'Failed to load user profile.'
+      })
   } else {
     error.value = 'No authentication token received.'
   }

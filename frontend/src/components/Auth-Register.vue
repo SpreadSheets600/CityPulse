@@ -1,87 +1,203 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-base-100 p-6 relative overflow-hidden text-base-content antialiased">
-    <!-- Background mesh blobs -->
-    <div aria-hidden="true"
-      class="pointer-events-none absolute top-1/4 right-1/4 h-[30rem] w-[30rem] rounded-full blur-3xl opacity-20 animate-pulse-glow"
-      style="background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%)" />
-    <div aria-hidden="true"
-      class="pointer-events-none absolute bottom-1/4 left-1/4 h-[30rem] w-[30rem] rounded-full blur-3xl opacity-20 animate-pulse-glow"
-      style="background: radial-gradient(circle, rgba(59,130,246,0.25) 0%, transparent 70%)" />
+  <div
+    class="min-h-screen flex items-center justify-center bg-base-100 p-6 relative overflow-hidden"
+  >
+    <!-- Background -->
+    <div class="absolute inset-0 -z-20 gradient-mesh opacity-60" />
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute top-1/4 right-1/4 h-80 w-80 rounded-full blur-3xl opacity-20"
+      style="background: oklch(55% 0.22 285 / 0.12)"
+    />
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute bottom-1/4 left-1/4 h-80 w-80 rounded-full blur-3xl opacity-15"
+      style="background: oklch(55% 0.24 255 / 0.1)"
+    />
 
-    <div class="max-w-lg w-full space-y-8 relative z-10 py-12">
-      <!-- Card Container -->
-      <div class="glass-panel shadow-2xl rounded-3xl p-8 md:p-10 border border-base-300 bg-base-200/55 backdrop-blur-lg">
+    <div class="w-full max-w-lg relative z-10 py-8">
+      <!-- Card -->
+      <div class="glass-strong rounded-2xl p-8 md:p-10 shadow-2xl shadow-black/40">
+        <!-- Logo -->
         <div class="text-center mb-8">
-          <router-link to="/" class="text-3xl font-extrabold tracking-wider font-mono bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 bg-clip-text text-transparent hover:scale-105 transition-transform duration-200 inline-block mb-3">
-            CityPulse
+          <router-link to="/" class="inline-flex items-center gap-2.5 mb-6">
+            <div
+              class="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-lg shadow-primary/25"
+            >
+              <Zap class="w-5 h-5 text-white" :stroke-width="2.5" />
+            </div>
+            <span class="text-xl font-bold tracking-tight"
+              >City<span class="text-primary">Pulse</span></span
+            >
           </router-link>
-          <h2 class="text-xl font-bold text-slate-100 font-sans">
-            Create your account
-          </h2>
-          <p class="text-xs text-slate-400 mt-1.5 font-mono">JOIN THE COMMUNITY ACTION NETWORK</p>
+          <h2 class="text-xl font-bold text-base-content">Create your account</h2>
+          <p class="text-sm text-base-content/50 mt-1">Join the community action network</p>
         </div>
 
+        <!-- Form -->
         <form class="space-y-4" @submit.prevent="handleRegister">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label for="firstname" class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">First Name</span></label>
-              <input id="firstname" name="firstname" type="text" required class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans"
-                placeholder="John" v-model="userData.firstname" />
+              <label for="firstname" class="label pb-1.5">
+                <span
+                  class="label-text text-xs font-semibold text-base-content/60 uppercase tracking-wider"
+                  >First Name</span
+                >
+              </label>
+              <input
+                id="firstname"
+                name="firstname"
+                type="text"
+                required
+                class="input input-bordered w-full bg-base-300/30 border-base-300/60 focus:border-primary focus:bg-base-300/50 transition-all rounded-xl text-sm"
+                placeholder="John"
+                v-model="userData.firstname"
+              />
             </div>
             <div>
-              <label for="lastname" class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Last Name</span></label>
-              <input id="lastname" name="lastname" type="text" required class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans"
-                placeholder="Doe" v-model="userData.lastname" />
+              <label for="lastname" class="label pb-1.5">
+                <span
+                  class="label-text text-xs font-semibold text-base-content/60 uppercase tracking-wider"
+                  >Last Name</span
+                >
+              </label>
+              <input
+                id="lastname"
+                name="lastname"
+                type="text"
+                required
+                class="input input-bordered w-full bg-base-300/30 border-base-300/60 focus:border-primary focus:bg-base-300/50 transition-all rounded-xl text-sm"
+                placeholder="Doe"
+                v-model="userData.lastname"
+              />
             </div>
           </div>
 
           <div>
-            <label for="email" class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Email</span></label>
-            <input id="email" name="email" type="email" required class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans" 
-              placeholder="john@example.com" v-model="userData.email" />
+            <label for="email" class="label pb-1.5">
+              <span
+                class="label-text text-xs font-semibold text-base-content/60 uppercase tracking-wider"
+                >Email</span
+              >
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <Mail class="h-4 w-4 text-base-content/30" :stroke-width="2" />
+              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                class="input input-bordered w-full pl-10 bg-base-300/30 border-base-300/60 focus:border-primary focus:bg-base-300/50 transition-all rounded-xl text-sm"
+                placeholder="john@example.com"
+                v-model="userData.email"
+              />
+            </div>
           </div>
 
           <div>
-            <label for="phone" class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Phone</span></label>
-            <input id="phone" name="phone" type="tel" required class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans" 
-              placeholder="+1 (555) 000-0000" v-model="userData.phone" />
+            <label for="phone" class="label pb-1.5">
+              <span
+                class="label-text text-xs font-semibold text-base-content/60 uppercase tracking-wider"
+                >Phone</span
+              >
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <Phone class="h-4 w-4 text-base-content/30" :stroke-width="2" />
+              </div>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                required
+                class="input input-bordered w-full pl-10 bg-base-300/30 border-base-300/60 focus:border-primary focus:bg-base-300/50 transition-all rounded-xl text-sm"
+                placeholder="+1 (555) 000-0000"
+                v-model="userData.phone"
+              />
+            </div>
           </div>
 
           <div>
-            <label for="address" class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Address</span></label>
-            <input id="address" name="address" type="text" required class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans"
-              placeholder="123 Main St, City" v-model="userData.address" />
+            <label for="address" class="label pb-1.5">
+              <span
+                class="label-text text-xs font-semibold text-base-content/60 uppercase tracking-wider"
+                >Address</span
+              >
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <MapPin class="h-4 w-4 text-base-content/30" :stroke-width="2" />
+              </div>
+              <input
+                id="address"
+                name="address"
+                type="text"
+                required
+                class="input input-bordered w-full pl-10 bg-base-300/30 border-base-300/60 focus:border-primary focus:bg-base-300/50 transition-all rounded-xl text-sm"
+                placeholder="123 Main St, City"
+                v-model="userData.address"
+              />
+            </div>
           </div>
 
           <div>
-            <label for="password" class="label"><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider">Password</span></label>
-            <input id="password" name="password" type="password" required class="input input-bordered w-full rounded-xl border-base-300 focus:border-primary focus:ring-1 focus:ring-primary transition-all font-sans"
-              placeholder="Min. 8 characters" v-model="userData.password" />
+            <label for="password" class="label pb-1.5">
+              <span
+                class="label-text text-xs font-semibold text-base-content/60 uppercase tracking-wider"
+                >Password</span
+              >
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <Lock class="h-4 w-4 text-base-content/30" :stroke-width="2" />
+              </div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="input input-bordered w-full pl-10 bg-base-300/30 border-base-300/60 focus:border-primary focus:bg-base-300/50 transition-all rounded-xl text-sm"
+                placeholder="Min. 8 characters"
+                v-model="userData.password"
+              />
+            </div>
           </div>
 
-          <div class="pt-4">
-            <button type="submit" :disabled="loading" class="btn btn-primary w-full rounded-xl font-bold py-3.5 shadow-lg shadow-blue-500/10">
-              <span v-if="loading" class="flex items-center justify-center gap-2">
-                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                CREATING ACCOUNT...
-              </span>
-              <span v-else>CREATE ACCOUNT</span>
+          <div class="pt-3">
+            <button
+              type="submit"
+              :disabled="loading"
+              class="btn btn-primary w-full rounded-xl font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all gap-2"
+            >
+              <template v-if="loading">
+                <span class="loading loading-spinner loading-sm"></span>
+                Creating account...
+              </template>
+              <template v-else>
+                <UserPlus class="w-4 h-4" :stroke-width="2" />
+                Create account
+              </template>
             </button>
           </div>
 
-          <div class="text-center pt-2">
-            <router-link to="/login" class="text-xs font-mono text-primary hover:text-blue-400 transition-colors">
-              Already have an account? Sign in here
-            </router-link>
-          </div>
-
-          <div v-if="error" class="text-error text-center text-xs font-mono border border-error/20 bg-error/5 p-2.5 rounded-xl mt-4">
+          <div v-if="error" role="alert" class="alert alert-error rounded-xl text-sm">
+            <CircleAlert class="w-4 h-4 shrink-0" :stroke-width="2" />
             {{ error }}
           </div>
         </form>
+
+        <!-- Login link -->
+        <p class="text-center text-sm text-base-content/50 mt-8">
+          Already have an account?
+          <router-link
+            to="/login"
+            class="text-primary hover:text-primary/80 font-semibold transition-colors ml-1"
+          >
+            Sign in
+          </router-link>
+        </p>
       </div>
     </div>
   </div>
@@ -91,6 +207,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import { Zap, Mail, Phone, MapPin, Lock, UserPlus, CircleAlert } from '@lucide/vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -102,7 +219,7 @@ const userData = ref({
   phone: '',
   address: '',
   password: '',
-  role: 'citizen'
+  role: 'citizen',
 })
 
 const loading = ref(false)
@@ -127,7 +244,3 @@ const handleRegister = async () => {
   }
 }
 </script>
-
-<style scoped>
-/* Scoped styles */
-</style>

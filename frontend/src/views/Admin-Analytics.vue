@@ -3,8 +3,12 @@
     <main class="max-w-7xl mx-auto">
       <div>
         <div class="mb-8">
-          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">Analytics Dashboard</h2>
-          <p class="mt-1 text-sm text-slate-400 font-sans">Overview of municipal response indicators and neighborhood reporting metrics.</p>
+          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+            Analytics Dashboard
+          </h2>
+          <p class="mt-1 text-sm text-slate-400 font-sans">
+            Overview of municipal response indicators and neighborhood reporting metrics.
+          </p>
         </div>
 
         <div v-if="loading" class="flex justify-center py-16">
@@ -14,22 +18,38 @@
         <template v-else>
           <!-- Stats Grid -->
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-            <div v-for="stat in summaryCards" :key="stat.label" class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/45 transition-all duration-300">
-              <dt class="text-xs font-mono text-slate-500 uppercase tracking-widest truncate">{{ stat.label }}</dt>
-              <dd class="mt-2 text-3xl font-extrabold text-slate-100 font-mono">{{ stat.value }}</dd>
+            <div
+              v-for="stat in summaryCards"
+              :key="stat.label"
+              class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/45 transition-all duration-300"
+            >
+              <dt class="text-xs font-mono text-slate-500 uppercase tracking-widest truncate">
+                {{ stat.label }}
+              </dt>
+              <dd class="mt-2 text-3xl font-extrabold text-slate-100 font-mono">
+                {{ stat.value }}
+              </dd>
             </div>
           </div>
 
           <!-- Charts -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
-              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-4">Issues by Status</h3>
+              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-4">
+                Issues by Status
+              </h3>
               <div class="h-64">
-                <Doughnut v-if="statusChartData" :data="statusChartData" :options="doughnutOptions" />
+                <Doughnut
+                  v-if="statusChartData"
+                  :data="statusChartData"
+                  :options="doughnutOptions"
+                />
               </div>
             </div>
             <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
-              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-4">Monthly Trend</h3>
+              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-4">
+                Monthly Trend
+              </h3>
               <div class="h-64">
                 <Bar v-if="trendChartData" :data="trendChartData" :options="barOptions" />
               </div>
@@ -39,33 +59,45 @@
           <!-- Type Breakdown & Dept Breakdown -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
-              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-6">Issues by Type</h3>
+              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-6">
+                Issues by Type
+              </h3>
               <div v-if="Object.keys(typeBreakdown).length" class="space-y-4">
                 <div v-for="(count, type) in typeBreakdown" :key="type" class="flex items-center">
-                  <span class="text-sm text-slate-300 w-40 truncate font-mono text-xs">{{ type }}</span>
+                  <span class="text-sm text-slate-300 w-40 truncate font-mono text-xs">{{
+                    type
+                  }}</span>
                   <div class="flex-1 mx-3 bg-base-300 rounded-full h-3 overflow-hidden">
                     <div
                       class="bg-indigo-500 h-3 rounded-full"
-                      :style="{ width: (count / maxTypeCount * 100) + '%' }"
+                      :style="{ width: (count / maxTypeCount) * 100 + '%' }"
                     ></div>
                   </div>
-                  <span class="text-sm font-bold text-slate-100 w-12 text-right font-mono">{{ count }}</span>
+                  <span class="text-sm font-bold text-slate-100 w-12 text-right font-mono">{{
+                    count
+                  }}</span>
                 </div>
               </div>
               <p v-else class="text-slate-500 text-sm font-mono">No data collected yet.</p>
             </div>
             <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
-              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-6">Issues by Department</h3>
+              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-6">
+                Issues by Department
+              </h3>
               <div v-if="Object.keys(deptBreakdown).length" class="space-y-4">
                 <div v-for="(count, dept) in deptBreakdown" :key="dept" class="flex items-center">
-                  <span class="text-sm text-slate-300 w-40 truncate font-mono text-xs">{{ dept }}</span>
+                  <span class="text-sm text-slate-300 w-40 truncate font-mono text-xs">{{
+                    dept
+                  }}</span>
                   <div class="flex-1 mx-3 bg-base-300 rounded-full h-3 overflow-hidden">
                     <div
                       class="bg-emerald-500 h-3 rounded-full"
-                      :style="{ width: (count / maxDeptCount * 100) + '%' }"
+                      :style="{ width: (count / maxDeptCount) * 100 + '%' }"
                     ></div>
                   </div>
-                  <span class="text-sm font-bold text-slate-100 w-12 text-right font-mono">{{ count }}</span>
+                  <span class="text-sm font-bold text-slate-100 w-12 text-right font-mono">{{
+                    count
+                  }}</span>
                 </div>
               </div>
               <p v-else class="text-slate-500 text-sm font-mono">No data collected yet.</p>
@@ -79,7 +111,15 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js'
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from 'chart.js'
 import { Doughnut, Bar } from 'vue-chartjs'
 import axios from '../api/client'
 
@@ -122,36 +162,40 @@ const statusChartData = computed(() => {
   if (!labels.length) return null
   return {
     labels,
-    datasets: [{
-      data: Object.values(statusBreakdown.value),
-      backgroundColor: labels.map(l => statusColors[l] || '#6b7280'),
-    }],
+    datasets: [
+      {
+        data: Object.values(statusBreakdown.value),
+        backgroundColor: labels.map((l) => statusColors[l] || '#6b7280'),
+      },
+    ],
   }
 })
 
 const trendChartData = computed(() => {
   if (!monthlyTrend.value.length) return null
   return {
-    labels: monthlyTrend.value.map(t => `${t.year}-${String(t.month).padStart(2, '0')}`),
-    datasets: [{
-      label: 'Issues',
-      data: monthlyTrend.value.map(t => t.count),
-      backgroundColor: '#3b82f6',
-    }],
+    labels: monthlyTrend.value.map((t) => `${t.year}-${String(t.month).padStart(2, '0')}`),
+    datasets: [
+      {
+        label: 'Issues',
+        data: monthlyTrend.value.map((t) => t.count),
+        backgroundColor: '#3b82f6',
+      },
+    ],
   }
 })
 
 const doughnutOptions = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins: { 
-    legend: { 
+  plugins: {
+    legend: {
       position: 'bottom',
       labels: {
         color: '#94a3b8',
-        font: { family: 'Fira Code', size: 10 }
-      }
-    } 
+        font: { family: 'Fira Code', size: 10 },
+      },
+    },
   },
 }
 
@@ -159,16 +203,16 @@ const barOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: { legend: { display: false } },
-  scales: { 
-    y: { 
-      beginAtZero: true, 
+  scales: {
+    y: {
+      beginAtZero: true,
       ticks: { stepSize: 1, color: '#94a3b8', font: { family: 'Fira Code', size: 10 } },
-      grid: { color: '#1e293b' }
+      grid: { color: '#1e293b' },
     },
     x: {
       ticks: { color: '#94a3b8', font: { family: 'Fira Code', size: 10 } },
-      grid: { color: '#1e293b' }
-    }
+      grid: { color: '#1e293b' },
+    },
   },
 }
 

@@ -1,79 +1,242 @@
 <template>
-  <nav class="navbar sticky top-0 z-50 glass-panel shadow-lg px-4 md:px-8 transition-all duration-300">
-    <div class="flex-1">
-      <router-link @click="closeDropdown"
-        :to="authStore.isAuthenticated ? (authStore.isAdmin ? '/admin-dashboard' : '/dashboard') : '/'"
-        class="btn btn-ghost text-2xl font-extrabold tracking-wider font-mono bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 bg-clip-text text-transparent hover:scale-105 transition-transform duration-200">
-        CityPulse<span class="text-xs text-primary font-sans font-medium px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 ml-2">SaaS</span>
+  <nav class="navbar sticky top-0 z-50 glass-strong px-4 md:px-6 transition-all duration-300">
+    <div class="navbar-start">
+      <router-link
+        @click="closeDropdown"
+        :to="
+          authStore.isAuthenticated ? (authStore.isAdmin ? '/admin-dashboard' : '/dashboard') : '/'
+        "
+        class="flex items-center gap-2.5 group"
+      >
+        <div
+          class="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-shadow"
+        >
+          <Zap class="w-4.5 h-4.5 text-white" :stroke-width="2.5" />
+        </div>
+        <span class="text-lg font-bold tracking-tight text-base-content"
+          >City<span class="text-primary">Pulse</span></span
+        >
       </router-link>
     </div>
-    <div class="flex gap-4">
-      <div v-if="authStore.isAuthenticated" class="dropdown dropdown-end" :class="{ 'dropdown-open': dropdownOpen }">
-        <div tabindex="0" role="button" id="user-menu-button" :aria-expanded="dropdownOpen"
-          class="btn btn-ghost btn-circle avatar ring-2 ring-primary/20 hover:ring-primary/60 transition-all duration-300" @click="toggleDropdown">
+
+    <div class="navbar-center hidden lg:flex">
+      <ul class="menu menu-horizontal gap-1">
+        <li>
+          <router-link
+            to="/"
+            class="text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300/50 rounded-lg px-3 py-2 transition-colors"
+          >
+            Home
+          </router-link>
+        </li>
+        <li v-if="authStore.isAuthenticated">
+          <router-link
+            :to="authStore.isAdmin ? '/admin-dashboard' : '/dashboard'"
+            class="text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300/50 rounded-lg px-3 py-2 transition-colors"
+          >
+            Dashboard
+          </router-link>
+        </li>
+        <li v-if="authStore.isAuthenticated">
+          <router-link
+            to="/issues"
+            class="text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300/50 rounded-lg px-3 py-2 transition-colors"
+          >
+            Issues
+          </router-link>
+        </li>
+      </ul>
+    </div>
+
+    <div class="navbar-end gap-2">
+      <div
+        v-if="authStore.isAuthenticated"
+        class="dropdown dropdown-end"
+        :class="{ 'dropdown-open': dropdownOpen }"
+      >
+        <div
+          tabindex="0"
+          role="button"
+          id="user-menu-button"
+          :aria-expanded="dropdownOpen"
+          class="btn btn-ghost btn-circle avatar ring-2 ring-base-300 hover:ring-primary/40 transition-all duration-300"
+          @click="toggleDropdown"
+        >
           <div class="w-9 rounded-full">
-            <img v-if="profilePictureUrl" :src="profilePictureUrl" alt="Profile" class="object-cover" />
-            <div v-else class="w-9 h-9 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-mono">
-              <span class="text-sm font-semibold">{{ userInitials }}</span>
+            <img
+              v-if="profilePictureUrl"
+              :src="profilePictureUrl"
+              alt="Profile"
+              class="object-cover"
+            />
+            <div
+              v-else
+              class="w-9 h-9 rounded-full flex items-center justify-center gradient-primary text-white text-sm font-semibold"
+            >
+              {{ userInitials }}
             </div>
           </div>
         </div>
-        <ul tabindex="0" id="user-dropdown"
-          class="menu menu-sm dropdown-content bg-base-200 border border-base-300 rounded-2xl z-[100] mt-4 w-56 p-2.5 shadow-2xl backdrop-blur-md">
-          <div class="px-3 py-2 border-b border-base-300 mb-2">
-            <p class="text-xs text-slate-400">Signed in as</p>
-            <p class="text-sm font-semibold text-slate-200 truncate">{{ user?.firstname }} {{ user?.lastname }}</p>
+        <ul
+          tabindex="0"
+          id="user-dropdown"
+          class="menu menu-sm dropdown-content bg-base-200 border border-base-300/60 rounded-xl z-[100] mt-3 w-52 p-2 shadow-2xl shadow-black/30"
+        >
+          <div class="px-3 py-2 border-b border-base-300/60 mb-1">
+            <p class="text-xs text-base-content/50 font-medium">Signed in as</p>
+            <p class="text-sm font-semibold text-base-content truncate">
+              {{ user?.firstname }} {{ user?.lastname }}
+            </p>
           </div>
           <li>
-            <router-link @click="closeDropdown" :to="authStore.isAdmin ? '/admin-dashboard' : '/dashboard'" class="py-2.5 rounded-xl hover:bg-base-300 transition-colors">
-              <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-              </svg>
+            <router-link
+              @click="closeDropdown"
+              :to="authStore.isAdmin ? '/admin-dashboard' : '/dashboard'"
+              class="py-2.5 rounded-lg gap-3"
+            >
+              <LayoutDashboard class="w-4 h-4 text-primary" :stroke-width="2" />
               {{ authStore.isAdmin ? 'Admin Dashboard' : 'Dashboard' }}
             </router-link>
           </li>
           <li>
-            <router-link @click="closeDropdown" to="/issues" class="py-2.5 rounded-xl hover:bg-base-300 transition-colors">
-              <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-              </svg>
+            <router-link @click="closeDropdown" to="/issues" class="py-2.5 rounded-lg gap-3">
+              <FileText class="w-4 h-4 text-secondary" :stroke-width="2" />
               Issues
             </router-link>
           </li>
           <li>
-            <router-link @click="closeDropdown" to="/profile" class="py-2.5 rounded-xl hover:bg-base-300 transition-colors">
-              <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+            <router-link @click="closeDropdown" to="/profile" class="py-2.5 rounded-lg gap-3">
+              <User class="w-4 h-4 text-accent" :stroke-width="2" />
               Profile
             </router-link>
           </li>
-          <li class="border-t border-base-300 mt-2 pt-2">
-            <button @click="handleLogout" class="py-2.5 rounded-xl text-error hover:bg-error/10 transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
+          <li class="border-t border-base-300/60 mt-1 pt-1">
+            <button @click="handleLogout" class="py-2.5 rounded-lg text-error gap-3">
+              <LogOut class="w-4 h-4" :stroke-width="2" />
               Log Out
             </button>
           </li>
         </ul>
       </div>
-      <div v-else>
-        <router-link to="/login" class="btn btn-outline btn-primary btn-sm rounded-xl px-4 flex items-center gap-1.5 transition-all duration-300">
-          <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          <span>Sign in</span>
+
+      <template v-else>
+        <router-link
+          to="/login"
+          class="btn btn-ghost btn-sm rounded-lg text-base-content/70 hover:text-base-content"
+        >
+          Sign in
         </router-link>
-      </div>
+        <router-link
+          to="/register"
+          class="btn btn-primary btn-sm rounded-lg shadow-lg shadow-primary/20"
+        >
+          Get Started
+        </router-link>
+      </template>
+
+      <button class="btn btn-ghost btn-circle lg:hidden" @click="mobileMenuOpen = !mobileMenuOpen">
+        <Menu class="w-5 h-5" :stroke-width="2" />
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile menu -->
+  <div v-if="mobileMenuOpen" class="fixed inset-0 z-40 lg:hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="mobileMenuOpen = false" />
+    <div
+      class="absolute right-0 top-0 h-full w-72 bg-base-200 border-l border-base-300/60 shadow-2xl p-6 pt-20 animate-slide-in"
+    >
+      <ul class="menu gap-1">
+        <li>
+          <router-link
+            to="/"
+            @click="mobileMenuOpen = false"
+            class="py-3 rounded-lg gap-3 text-base font-medium"
+          >
+            <Home class="w-5 h-5" :stroke-width="2" />
+            Home
+          </router-link>
+        </li>
+        <template v-if="authStore.isAuthenticated">
+          <li>
+            <router-link
+              :to="authStore.isAdmin ? '/admin-dashboard' : '/dashboard'"
+              @click="mobileMenuOpen = false"
+              class="py-3 rounded-lg gap-3 text-base font-medium"
+            >
+              <LayoutDashboard class="w-5 h-5" :stroke-width="2" />
+              Dashboard
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              to="/issues"
+              @click="mobileMenuOpen = false"
+              class="py-3 rounded-lg gap-3 text-base font-medium"
+            >
+              <FileText class="w-5 h-5" :stroke-width="2" />
+              Issues
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              to="/profile"
+              @click="mobileMenuOpen = false"
+              class="py-3 rounded-lg gap-3 text-base font-medium"
+            >
+              <User class="w-5 h-5" :stroke-width="2" />
+              Profile
+            </router-link>
+          </li>
+          <li class="border-t border-base-300/60 mt-2 pt-2">
+            <button @click="handleLogout" class="py-3 rounded-lg text-error gap-3">
+              <LogOut class="w-5 h-5" :stroke-width="2" />
+              Log Out
+            </button>
+          </li>
+        </template>
+        <template v-else>
+          <li>
+            <router-link
+              to="/login"
+              @click="mobileMenuOpen = false"
+              class="py-3 rounded-lg gap-3 text-base font-medium"
+            >
+              <LogIn class="w-5 h-5" :stroke-width="2" />
+              Sign in
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              to="/register"
+              @click="mobileMenuOpen = false"
+              class="py-3 rounded-lg gap-3 text-base font-medium"
+            >
+              <UserPlus class="w-5 h-5" :stroke-width="2" />
+              Get Started
+            </router-link>
+          </li>
+        </template>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
+import {
+  Zap,
+  Menu,
+  Home,
+  LayoutDashboard,
+  FileText,
+  User,
+  LogOut,
+  LogIn,
+  UserPlus,
+} from '@lucide/vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -92,7 +255,10 @@ const userInitials = computed(() => {
 
 const profilePictureUrl = computed(() => {
   if (!user.value) return null
-  return user.value.profile_picture || `https://api.dicebear.com/9.x/notionists-neutral/svg?seed=${user.value.firstname}${user.value.lastname}`
+  return (
+    user.value.profile_picture ||
+    `https://api.dicebear.com/9.x/notionists-neutral/svg?seed=${user.value.firstname}${user.value.lastname}`
+  )
 })
 
 const toggleDropdown = () => {
@@ -102,6 +268,7 @@ const toggleDropdown = () => {
 
 const closeDropdown = () => {
   dropdownOpen.value = false
+  mobileMenuOpen.value = false
 }
 
 const handleLogout = async () => {
@@ -111,21 +278,16 @@ const handleLogout = async () => {
 }
 
 const handleClickOutside = (event) => {
-  const mobileMenuButton = document.querySelector('[aria-controls="navbar-user"]')
   const userMenuButton = document.getElementById('user-menu-button')
   const userDropdown = document.getElementById('user-dropdown')
-  const mobileMenu = document.getElementById('navbar-user')
 
-  if (userMenuButton && userDropdown &&
+  if (
+    userMenuButton &&
+    userDropdown &&
     !userMenuButton.contains(event.target) &&
-    !userDropdown.contains(event.target)) {
+    !userDropdown.contains(event.target)
+  ) {
     dropdownOpen.value = false
-  }
-
-  if (window.innerWidth < 768 && mobileMenuButton && mobileMenu &&
-    !mobileMenuButton.contains(event.target) &&
-    !mobileMenu.contains(event.target)) {
-    mobileMenuOpen.value = false
   }
 }
 
@@ -137,7 +299,3 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
-
-<style scoped>
-/* no custom styles needed; DaisyUI handles dropdown/avatars */
-</style>
