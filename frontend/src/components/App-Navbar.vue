@@ -13,14 +13,19 @@
         >
           <Zap class="w-4.5 h-4.5 text-white" :stroke-width="2.5" />
         </div>
-        <span class="text-lg font-bold tracking-tight text-base-content"
-          >City<span class="text-primary">Pulse</span></span
-        >
+        <span class="text-lg font-bold tracking-tight text-base-content flex items-center gap-1.5"
+          >City<span class="text-primary">Pulse</span>
+          <span
+            v-if="authStore.isAuthenticated && authStore.isAdmin"
+            class="badge badge-secondary badge-sm font-mono text-2xs uppercase tracking-wider font-bold h-4.5"
+            >Admin</span
+          >
+        </span>
       </router-link>
     </div>
 
     <div class="navbar-center hidden lg:flex">
-      <ul class="menu menu-horizontal gap-1">
+      <ul class="menu menu-horizontal gap-1.5">
         <li>
           <router-link
             to="/"
@@ -29,6 +34,8 @@
             Home
           </router-link>
         </li>
+
+        <!-- Authenticated Common / Dashboard -->
         <li v-if="authStore.isAuthenticated">
           <router-link
             :to="authStore.isAdmin ? '/admin-dashboard' : '/dashboard'"
@@ -37,14 +44,88 @@
             Dashboard
           </router-link>
         </li>
-        <li v-if="authStore.isAuthenticated">
-          <router-link
-            to="/issues"
-            class="text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300/50 rounded-lg px-3 py-2 transition-colors"
-          >
-            Issues
-          </router-link>
-        </li>
+
+        <!-- Standard User navigation items -->
+        <template v-if="authStore.isAuthenticated && !authStore.isAdmin">
+          <li>
+            <router-link
+              to="/issues"
+              class="text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300/50 rounded-lg px-3 py-2 transition-colors"
+            >
+              My Reports
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              to="/issues/create"
+              class="text-sm font-semibold text-primary hover:bg-primary/10 rounded-lg px-3 py-2 transition-colors flex items-center gap-1.5"
+            >
+              <PlusCircle class="w-4 h-4" />
+              Report Issue
+            </router-link>
+          </li>
+        </template>
+
+        <!-- Admin navigation items -->
+        <template v-if="authStore.isAuthenticated && authStore.isAdmin">
+          <li>
+            <router-link
+              to="/admin/analytics"
+              class="text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300/50 rounded-lg px-3 py-2 transition-colors flex items-center gap-1.5"
+            >
+              <BarChart3 class="w-4 h-4 text-accent" />
+              Analytics
+            </router-link>
+          </li>
+
+          <!-- System Management Dropdown -->
+          <li class="dropdown dropdown-hover">
+            <div
+              tabindex="0"
+              role="button"
+              class="text-sm font-medium text-base-content/70 hover:text-base-content hover:bg-base-300/50 rounded-lg px-3 py-2 transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Shield class="w-4 h-4 text-secondary" />
+              Manage
+              <ChevronDown class="w-3.5 h-3.5 opacity-55" />
+            </div>
+            <ul
+              tabindex="0"
+              class="dropdown-content menu bg-base-200 border border-base-300/60 rounded-xl z-[100] mt-1 w-52 p-2 shadow-2xl shadow-black/30 animate-fade-in"
+            >
+              <li>
+                <router-link to="/admin/departments" class="py-2.5 rounded-lg gap-2.5">
+                  <Building2 class="w-4 h-4 text-primary" />
+                  Departments
+                </router-link>
+              </li>
+              <li>
+                <router-link to="/admin/geofence" class="py-2.5 rounded-lg gap-2.5">
+                  <Layers class="w-4 h-4 text-secondary" />
+                  Geofencing
+                </router-link>
+              </li>
+              <li>
+                <router-link to="/admin/sla" class="py-2.5 rounded-lg gap-2.5">
+                  <Clock class="w-4 h-4 text-accent" />
+                  SLA Config
+                </router-link>
+              </li>
+              <li>
+                <router-link to="/admin/audit-log" class="py-2.5 rounded-lg gap-2.5">
+                  <History class="w-4 h-4 text-neutral" />
+                  Audit Logs
+                </router-link>
+              </li>
+              <li>
+                <router-link to="/admin/export" class="py-2.5 rounded-lg gap-2.5">
+                  <Download class="w-4 h-4 text-info" />
+                  Export Data
+                </router-link>
+              </li>
+            </ul>
+          </li>
+        </template>
       </ul>
     </div>
 
@@ -92,8 +173,17 @@
           id="user-dropdown"
           class="menu menu-sm dropdown-content bg-base-200 border border-base-300/60 rounded-xl z-[100] mt-3 w-52 p-2 shadow-2xl shadow-black/30"
         >
-          <div class="px-3 py-2 border-b border-base-300/60 mb-1">
-            <p class="text-xs text-base-content/50 font-medium">Signed in as</p>
+          <div class="px-3 py-2 border-b border-base-300/60 mb-1 flex flex-col gap-0.5">
+            <span class="flex items-center justify-between">
+              <span class="text-2xs text-base-content/50 font-medium uppercase tracking-wider"
+                >Signed in as</span
+              >
+              <span
+                v-if="authStore.isAdmin"
+                class="badge badge-secondary badge-xs font-mono font-bold uppercase tracking-wider h-3.5"
+                >Admin</span
+              >
+            </span>
             <p class="text-sm font-semibold text-base-content truncate">
               {{ user?.firstname }} {{ user?.lastname }}
             </p>
@@ -108,14 +198,18 @@
               {{ authStore.isAdmin ? 'Admin Dashboard' : 'Dashboard' }}
             </router-link>
           </li>
-          <li>
-            <router-link @click="closeDropdown" to="/issues" class="py-2.5 rounded-lg gap-3">
-              <FileText class="w-4 h-4 text-secondary" :stroke-width="2" />
-              Issues
+          <li v-if="!authStore.isAdmin">
+            <router-link @click="closeDropdown" to="/issues/create" class="py-2.5 rounded-lg gap-3">
+              <PlusCircle class="w-4 h-4 text-success" :stroke-width="2" />
+              Report Issue
             </router-link>
           </li>
           <li>
-            <router-link @click="closeDropdown" to="/profile" class="py-2.5 rounded-lg gap-3">
+            <router-link
+              @click="closeDropdown"
+              :to="authStore.isAdmin ? '/admin-profile' : '/profile'"
+              class="py-2.5 rounded-lg gap-3"
+            >
               <User class="w-4 h-4 text-accent" :stroke-width="2" />
               Profile
             </router-link>
@@ -167,37 +261,141 @@
             Home
           </router-link>
         </li>
+
+        <!-- Authenticated Role-based Mobile Menu -->
         <template v-if="authStore.isAuthenticated">
-          <li>
-            <router-link
-              :to="authStore.isAdmin ? '/admin-dashboard' : '/dashboard'"
-              @click="mobileMenuOpen = false"
-              class="py-3 rounded-lg gap-3 text-base font-medium"
-            >
-              <LayoutDashboard class="w-5 h-5" :stroke-width="2" />
-              Dashboard
-            </router-link>
-          </li>
-          <li>
-            <router-link
-              to="/issues"
-              @click="mobileMenuOpen = false"
-              class="py-3 rounded-lg gap-3 text-base font-medium"
-            >
-              <FileText class="w-5 h-5" :stroke-width="2" />
-              Issues
-            </router-link>
-          </li>
-          <li>
-            <router-link
-              to="/profile"
-              @click="mobileMenuOpen = false"
-              class="py-3 rounded-lg gap-3 text-base font-medium"
-            >
-              <User class="w-5 h-5" :stroke-width="2" />
-              Profile
-            </router-link>
-          </li>
+          <!-- Admin Mobile Links -->
+          <template v-if="authStore.isAdmin">
+            <li>
+              <router-link
+                to="/admin-dashboard"
+                @click="mobileMenuOpen = false"
+                class="py-3 rounded-lg gap-3 text-base font-medium"
+              >
+                <LayoutDashboard class="w-5 h-5 text-primary" :stroke-width="2" />
+                Admin Dashboard
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/admin/analytics"
+                @click="mobileMenuOpen = false"
+                class="py-3 rounded-lg gap-3 text-base font-medium"
+              >
+                <BarChart3 class="w-5 h-5 text-accent" :stroke-width="2" />
+                Analytics
+              </router-link>
+            </li>
+            <div class="divider font-mono text-2xs uppercase tracking-widest text-base-content/40 my-1">
+              System Management
+            </div>
+            <li>
+              <router-link
+                to="/admin/departments"
+                @click="mobileMenuOpen = false"
+                class="py-2.5 rounded-lg gap-3 text-sm font-medium pl-6"
+              >
+                <Building2 class="w-4 h-4 text-primary" :stroke-width="2" />
+                Departments
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/admin/geofence"
+                @click="mobileMenuOpen = false"
+                class="py-2.5 rounded-lg gap-3 text-sm font-medium pl-6"
+              >
+                <Layers class="w-4 h-4 text-secondary" :stroke-width="2" />
+                Geofencing
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/admin/sla"
+                @click="mobileMenuOpen = false"
+                class="py-2.5 rounded-lg gap-3 text-sm font-medium pl-6"
+              >
+                <Clock class="w-4 h-4 text-accent" :stroke-width="2" />
+                SLA Config
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/admin/audit-log"
+                @click="mobileMenuOpen = false"
+                class="py-2.5 rounded-lg gap-3 text-sm font-medium pl-6"
+              >
+                <History class="w-4 h-4 text-neutral" :stroke-width="2" />
+                Audit Logs
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/admin/export"
+                @click="mobileMenuOpen = false"
+                class="py-2.5 rounded-lg gap-3 text-sm font-medium pl-6"
+              >
+                <Download class="w-4 h-4 text-info" :stroke-width="2" />
+                Export Data
+              </router-link>
+            </li>
+            <div class="divider my-1"></div>
+            <li>
+              <router-link
+                to="/admin-profile"
+                @click="mobileMenuOpen = false"
+                class="py-3 rounded-lg gap-3 text-base font-medium"
+              >
+                <User class="w-5 h-5 text-accent" :stroke-width="2" />
+                Profile
+              </router-link>
+            </li>
+          </template>
+
+          <!-- Standard User Mobile Links -->
+          <template v-else>
+            <li>
+              <router-link
+                to="/dashboard"
+                @click="mobileMenuOpen = false"
+                class="py-3 rounded-lg gap-3 text-base font-medium"
+              >
+                <LayoutDashboard class="w-5 h-5 text-primary" :stroke-width="2" />
+                Dashboard
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/issues"
+                @click="mobileMenuOpen = false"
+                class="py-3 rounded-lg gap-3 text-base font-medium"
+              >
+                <FileText class="w-5 h-5 text-secondary" :stroke-width="2" />
+                My Reports
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/issues/create"
+                @click="mobileMenuOpen = false"
+                class="py-3 rounded-lg gap-3 text-base font-semibold text-primary"
+              >
+                <PlusCircle class="w-5 h-5" :stroke-width="2" />
+                Report Issue
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/profile"
+                @click="mobileMenuOpen = false"
+                class="py-3 rounded-lg gap-3 text-base font-medium"
+              >
+                <User class="w-5 h-5 text-accent" :stroke-width="2" />
+                Profile
+              </router-link>
+            </li>
+          </template>
+
           <li class="border-t border-base-300/60 mt-2 pt-2">
             <button @click="handleLogout" class="py-3 rounded-lg text-error gap-3">
               <LogOut class="w-5 h-5" :stroke-width="2" />
@@ -205,6 +403,7 @@
             </button>
           </li>
         </template>
+
         <template v-else>
           <li>
             <router-link
@@ -248,6 +447,15 @@ import {
   UserPlus,
   Sun,
   Moon,
+  PlusCircle,
+  BarChart3,
+  Shield,
+  Building2,
+  Layers,
+  Clock,
+  History,
+  Download,
+  ChevronDown,
 } from '@lucide/vue'
 
 const currentTheme = ref(localStorage.getItem('theme') || 'light')
