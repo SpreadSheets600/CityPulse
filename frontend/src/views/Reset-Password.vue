@@ -99,10 +99,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+import router from '../router'
 import axios from '../api/client'
 
 const route = useRoute()
-const form = ref({ token: route.query.token || '', password: '' })
+const form = ref({ token: (route?.query?.token || router.currentRoute.value?.query?.token || ''), password: '' })
 const loading = ref(false)
 const error = ref('')
 const success = ref(false)

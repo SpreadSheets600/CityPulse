@@ -19,6 +19,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import routerInstance from '../router'
 import { useAuthStore } from '../stores/auth'
 
 const route = useRoute()
@@ -27,7 +28,7 @@ const authStore = useAuthStore()
 const error = ref('')
 
 onMounted(() => {
-  const token = route.query.token
+  const token = route?.query?.token || routerInstance.currentRoute.value?.query?.token
   if (token) {
     authStore.setToken(token)
     authStore

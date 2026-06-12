@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-base-100 p-6 relative overflow-hidden"
+    class="min-h-screen flex items-center justify-center bg-base-100 p-6 relative overflow-hidden isolate"
   >
     <!-- Background -->
     <div class="absolute inset-0 -z-20 gradient-mesh opacity-60" />

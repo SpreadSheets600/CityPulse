@@ -536,11 +536,13 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import router from '../router'
 import axios from '../api/client'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
 
 const route = useRoute()
+const routeParams = computed(() => route?.params || router.currentRoute.value?.params || {})
 const issue = ref(null)
 const loading = ref(false)
 const mapCenter = ref([0, 0])
@@ -577,7 +579,7 @@ const formatDate = (dateString) => {
 const fetchIssue = async () => {
   loading.value = true
   try {
-    const response = await axios.get(`/api/issues/${route.params.id}`)
+    const response = await axios.get(`/api/issues/${routeParams.value.id}`)
 
     if (response.status === 200) {
       issue.value = response.data.issue
@@ -596,7 +598,7 @@ const fetchIssue = async () => {
 
 const fetchUpdates = async () => {
   try {
-    const resp = await axios.get(`/api/issues/${route.params.id}/updates`)
+    const resp = await axios.get(`/api/issues/${routeParams.value.id}/updates`)
     updates.value = resp.data.updates || []
   } catch (e) {
     console.error('Failed to fetch updates', e)
@@ -611,7 +613,7 @@ const openImageModal = (url, images) => {
 
 const fetchComments = async () => {
   try {
-    const resp = await axios.get(`/api/issues/${route.params.id}/comments`)
+    const resp = await axios.get(`/api/issues/${routeParams.value.id}/comments`)
     comments.value = resp.data.comments || []
   } catch (e) {
     console.error('Failed to fetch comments', e)
@@ -620,9 +622,9 @@ const fetchComments = async () => {
 
 const fetchAIVerification = async () => {
   try {
-    const resp = await axios.get(`/api/issues/${route.params.id}/verify`)
+    const resp = await axios.get(`/api/issues/${routeParams.value.id}/verify`)
     aiVerification.value = resp.data.verification
-  } catch (e) {
+  } catch {
     // Silently ignore
   }
 }
@@ -630,7 +632,7 @@ const fetchAIVerification = async () => {
 const submitComment = async () => {
   if (!newComment.value.trim()) return
   try {
-    const resp = await axios.post(`/api/issues/${route.params.id}/comments`, {
+    const resp = await axios.post(`/api/issues/${routeParams.value.id}/comments`, {
       body: newComment.value.trim(),
     })
     comments.value.push(resp.data.comment)
@@ -658,7 +660,7 @@ const toggleUpvote = async () => {
 }
 
 onMounted(() => {
-  console.log('IssueDetail component mounted, route params:', route.params)
+  console.log('IssueDetail component mounted, route params:', routeParams.value)
   fetchIssue()
   fetchUpdates()
   fetchComments()

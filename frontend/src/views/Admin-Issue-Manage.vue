@@ -587,11 +587,13 @@
 <script setup>
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { useRoute } from 'vue-router'
+import router from '../router'
 import { ref, onMounted, computed } from 'vue'
 import axios from '../api/client'
 import 'leaflet/dist/leaflet.css'
 
 const route = useRoute()
+const routeParams = computed(() => route?.params || router.currentRoute.value?.params || {})
 
 const issue = ref(null)
 const loading = ref(false)
@@ -633,7 +635,7 @@ const getStatusClass = (status) => {
 const loadIssue = async () => {
   loading.value = true
   try {
-    const resp = await axios.get(`/api/issues/${route.params.id}`)
+    const resp = await axios.get(`/api/issues/${routeParams.value.id}`)
     issue.value = resp.data.issue
     status.value = issue.value.status
     if (issue.value?.department_id) {
@@ -660,7 +662,7 @@ const loadDepartments = async () => {
 
 const loadUpdates = async () => {
   try {
-    const resp = await axios.get(`/api/issues/${route.params.id}/updates`)
+    const resp = await axios.get(`/api/issues/${routeParams.value.id}/updates`)
     updates.value = resp.data.updates
   } catch (e) {
     console.error(e)
@@ -669,7 +671,7 @@ const loadUpdates = async () => {
 
 const saveStatus = async () => {
   try {
-    const resp = await axios.put(`/api/admin/issues/${route.params.id}/status`, {
+    const resp = await axios.put(`/api/admin/issues/${routeParams.value.id}/status`, {
       status: status.value,
     })
     issue.value = resp.data.issue
@@ -681,7 +683,7 @@ const saveStatus = async () => {
 const assignDepartment = async () => {
   if (!departmentId.value) return
   try {
-    const resp = await axios.put(`/api/admin/issues/${route.params.id}/department`, {
+    const resp = await axios.put(`/api/admin/issues/${routeParams.value.id}/department`, {
       department_id: departmentId.value,
     })
     issue.value = resp.data.issue
@@ -695,7 +697,7 @@ const runVerification = async () => {
   verification.value = null
   detections.value = []
   try {
-    const resp = await axios.post(`/api/admin/issues/${route.params.id}/verify`)
+    const resp = await axios.post(`/api/admin/issues/${routeParams.value.id}/verify`)
     verification.value = resp.data.verification
     detections.value = resp.data.detections || []
   } catch (e) {
@@ -718,7 +720,7 @@ const postUpdate = async () => {
   })
 
   try {
-    await axios.post(`/api/admin/issues/${route.params.id}/updates`, formData, {
+    await axios.post(`/api/admin/issues/${routeParams.value.id}/updates`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -744,7 +746,7 @@ const openImageModal = (url) => {
 }
 
 onMounted(() => {
-  console.log('IssueDetail component mounted, route params:', route.params)
+  console.log('IssueDetail component mounted, route params:', routeParams.value)
   loadIssue()
   Promise.all([loadDepartments(), loadUpdates()])
 })

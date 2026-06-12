@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <AppNavbar v-if="authStore.isAuthenticated && !isAuthRoute" />
+    <AppNavbar v-if="!isAuthRoute" />
     <ErrorBoundary>
       <router-view />
     </ErrorBoundary>
@@ -11,16 +11,17 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAuthStore } from './stores/auth'
+import router from './router'
 import AppNavbar from './components/App-Navbar.vue'
 import ErrorBoundary from './components/Error-Boundary.vue'
 import Chatbot from './components/Chatbot.vue'
 
 const route = useRoute()
-const authStore = useAuthStore()
+
+const routeName = computed(() => route?.name || router.currentRoute.value?.name)
 
 const isAuthRoute = computed(() => {
-  return route.name === 'Login' || route.name === 'Register'
+  return routeName.value === 'Login' || routeName.value === 'Register'
 })
 </script>
 

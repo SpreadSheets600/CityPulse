@@ -1,144 +1,73 @@
 <template>
   <div class="min-h-screen bg-base-100 text-base-content antialiased">
     <!-- Hero Section -->
-    <section class="relative min-h-[100dvh] flex items-center overflow-hidden">
-      <!-- Background -->
+    <section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden isolate">
+      <!-- Full Cover Background Image -->
       <div class="absolute inset-0 -z-20">
-        <div
-          class="absolute inset-0 bg-cover bg-center opacity-30"
-          :style="{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1600&auto=format&fit=crop)',
-          }"
+        <img
+          :src="bgImage"
+          alt="City background"
+          class="w-full h-full object-cover filter brightness-[0.35] dark:brightness-[0.20]"
         />
         <div
-          class="absolute inset-0 bg-gradient-to-b from-base-100/60 via-base-100/90 to-base-100"
+          class="absolute inset-0 bg-gradient-to-b from-black/40 via-base-100/40 to-base-100"
         />
       </div>
 
-      <!-- Gradient mesh -->
-      <div aria-hidden="true" class="absolute inset-0 -z-10 gradient-mesh opacity-60" />
+      <!-- Gradient mesh background animation overlay -->
+      <div aria-hidden="true" class="absolute inset-0 -z-10 gradient-mesh opacity-50" />
 
-      <!-- Decorative orbs -->
-      <div
-        aria-hidden="true"
-        class="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full blur-3xl opacity-30 animate-pulse-subtle"
-        style="background: oklch(55% 0.24 255 / 0.15)"
-      />
-      <div
-        aria-hidden="true"
-        class="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full blur-3xl opacity-25 animate-pulse-subtle"
-        style="background: oklch(55% 0.22 285 / 0.12); animation-delay: 1.5s"
-      />
+      <!-- Hero Content (Simple text with buttons) -->
+      <div class="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-32 w-full flex flex-col items-center text-center motion-safe:animate-fade-up">
 
-      <!-- Content -->
-      <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 w-full">
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <!-- Left: Copy -->
-          <div class="motion-safe:animate-fade-up">
-            <div
-              class="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3.5 py-1.5 mb-8"
-            >
-              <span class="h-2 w-2 rounded-full bg-accent animate-pulse-subtle" />
-              <span class="text-xs font-mono font-medium text-primary tracking-wide uppercase"
-                >Live in your neighborhood</span
-              >
+        <h1
+          class="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] text-white"
+        >
+          Your city's pulse
+          <br />
+          <span class="text-gradient">starts here.</span>
+        </h1>
+
+        <p class="mt-6 text-base sm:text-lg text-white/85 max-w-lg mx-auto leading-relaxed font-normal">
+          Report local issues, coordinate responders, and track civic action in real time.
+        </p>
+
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto">
+          <router-link
+            to="/register"
+            class="btn btn-primary btn-lg rounded-2xl shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 gap-2 px-8"
+          >
+            <ShieldCheck class="w-5.5 h-5.5" :stroke-width="2.5" />
+            Report an Issue
+          </router-link>
+          <a
+            href="#reports"
+            class="btn btn-outline border-white/30 text-white hover:bg-white/10 hover:border-white/50 btn-lg rounded-2xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 gap-2 px-8"
+          >
+            <MapPin class="w-5.5 h-5.5 text-accent" :stroke-width="2" />
+            See Nearby Reports
+          </a>
+        </div>
+
+        <!-- Stats strip -->
+        <div class="mt-16 pt-8 border-t border-white/10 flex flex-wrap items-center justify-center gap-12 text-white">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-success/25 flex items-center justify-center shadow-inner">
+              <CircleCheckBig class="w-6 h-6 text-success" :stroke-width="2.2" />
             </div>
-
-            <h1
-              class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08]"
-            >
-              Your city's pulse
-              <br />
-              <span class="text-gradient">starts here.</span>
-            </h1>
-
-            <p class="mt-6 text-lg text-base-content/60 max-w-lg leading-relaxed">
-              Report issues, mobilize responders, and track real-time action. CityPulse connects
-              communities with verified civic action.
-            </p>
-
-            <div class="mt-10 flex flex-col sm:flex-row gap-3">
-              <router-link
-                to="/register"
-                class="btn btn-primary btn-lg rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all gap-2"
-              >
-                <ShieldCheck class="w-5 h-5" :stroke-width="2" />
-                Report an Issue
-              </router-link>
-              <a
-                href="#reports"
-                class="btn btn-ghost btn-lg rounded-xl border border-base-300/60 hover:border-base-300 gap-2"
-              >
-                <MapPin class="w-5 h-5" :stroke-width="2" />
-                See Nearby Reports
-              </a>
-            </div>
-
-            <!-- Stats strip -->
-            <div class="mt-14 flex flex-wrap items-center gap-8">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center">
-                  <CircleCheckBig class="w-5 h-5 text-success" :stroke-width="2" />
-                </div>
-                <div>
-                  <p class="text-lg font-bold text-base-content">{{ totalIssuesText }}</p>
-                  <p class="text-xs text-base-content/50 font-medium">Issues resolved</p>
-                </div>
-              </div>
-              <div class="w-px h-10 bg-base-300/60" />
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Users class="w-5 h-5 text-primary" :stroke-width="2" />
-                </div>
-                <div>
-                  <p class="text-lg font-bold text-base-content">{{ volunteersText }}</p>
-                  <p class="text-xs text-base-content/50 font-medium">Active responders</p>
-                </div>
-              </div>
+            <div class="text-left">
+              <p class="text-2xl font-black tracking-tight text-white">{{ totalIssuesText }}</p>
+              <p class="text-xs text-white/60 font-bold uppercase tracking-wider">Issues resolved</p>
             </div>
           </div>
-
-          <!-- Right: Hero visual -->
-          <div class="hidden lg:block relative">
-            <div
-              class="relative rounded-2xl overflow-hidden border border-base-300/40 shadow-2xl shadow-black/40"
-            >
-              <img
-                src="https://picsum.photos/seed/citypulse-hero/800/600"
-                alt="City infrastructure"
-                class="w-full h-auto object-cover aspect-[4/3]"
-              />
-              <div
-                class="absolute inset-0 bg-gradient-to-t from-base-100/80 via-transparent to-transparent"
-              />
-              <div class="absolute bottom-4 left-4 right-4 glass rounded-xl p-4">
-                <div class="flex items-center gap-3">
-                  <div
-                    class="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center"
-                  >
-                    <CircleCheckBig class="w-5 h-5 text-success" :stroke-width="2" />
-                  </div>
-                  <div>
-                    <p class="text-sm font-semibold text-base-content">
-                      Pothole on Main St. resolved
-                    </p>
-                    <p class="text-xs text-base-content/50">2 hours ago by verified responder</p>
-                  </div>
-                </div>
-              </div>
+          <div class="hidden sm:block w-px h-12 bg-white/20" />
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-primary/25 flex items-center justify-center shadow-inner">
+              <Users class="w-6 h-6 text-primary-content text-white" :stroke-width="2.2" />
             </div>
-            <!-- Floating stat card -->
-            <div class="absolute -top-4 -right-4 glass rounded-xl p-3.5 shadow-xl animate-float">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-                  <Activity class="w-4 h-4 text-primary" :stroke-width="2" />
-                </div>
-                <div>
-                  <p class="text-xs font-bold text-base-content">Live Feed</p>
-                  <p class="text-[10px] text-base-content/50">12 reports today</p>
-                </div>
-              </div>
+            <div class="text-left">
+              <p class="text-2xl font-black tracking-tight text-white">{{ volunteersText }}</p>
+              <p class="text-xs text-white/60 font-bold uppercase tracking-wider">Active responders</p>
             </div>
           </div>
         </div>
@@ -147,65 +76,64 @@
 
     <main>
       <!-- Features Section -->
-      <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        <div class="text-center max-w-2xl mx-auto mb-16">
-          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Built for civic action</h2>
-          <p class="mt-4 text-base-content/50 text-lg">
-            Everything you need to report, track, and resolve community issues.
+      <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-28 relative">
+        <!-- Feature section header -->
+        <div class="text-center max-w-3xl mx-auto mb-20">
+          <span class="text-xs font-mono font-bold tracking-widest text-primary uppercase bg-primary/8 px-3 py-1.5 rounded-full">Why CityPulse?</span>
+          <h2 class="text-4xl sm:text-5xl font-black tracking-tight mt-4">Built for civic action</h2>
+          <p class="mt-4 text-base-content/60 text-lg leading-relaxed">
+            Empowering residents and admins with intelligent, fast, and transparent tools for issue resolution.
           </p>
         </div>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Feature 1 -->
           <div
-            class="card bg-base-200/60 border border-base-300/40 hover:border-primary/30 transition-all duration-300 group"
+            class="card bg-base-200/50 glass-strong border-gradient hover:shadow-xl transition-all duration-300 group rounded-3xl"
           >
-            <div class="card-body p-7">
+            <div class="card-body p-8">
               <div
-                class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors"
+                class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-all duration-300 shadow-sm"
               >
-                <Zap class="w-6 h-6 text-primary" :stroke-width="2" />
+                <Zap class="w-6 h-6 text-primary group-hover:scale-110 transition-transform" :stroke-width="2" />
               </div>
-              <h3 class="card-title text-lg">Quick Report</h3>
-              <p class="text-base-content/50 text-sm leading-relaxed">
-                File reports in under 30 seconds with photos, voice notes, or videos and instant
-                location capture.
+              <h3 class="card-title text-xl font-bold">Quick Reporting</h3>
+              <p class="text-base-content/55 text-sm leading-relaxed mt-2">
+                File detailed reports in under 30 seconds. Attach photos, record voice notes, or record videos with automated geo-tagging.
               </p>
             </div>
           </div>
 
           <!-- Feature 2 -->
           <div
-            class="card bg-base-200/60 border border-base-300/40 hover:border-secondary/30 transition-all duration-300 group"
+            class="card bg-base-200/50 glass-strong border-gradient hover:shadow-xl transition-all duration-300 group rounded-3xl"
           >
-            <div class="card-body p-7">
+            <div class="card-body p-8">
               <div
-                class="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors"
+                class="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:bg-secondary/20 transition-all duration-300 shadow-sm"
               >
-                <Map class="w-6 h-6 text-secondary" :stroke-width="2" />
+                <Map class="w-6 h-6 text-secondary group-hover:scale-110 transition-transform" :stroke-width="2" />
               </div>
-              <h3 class="card-title text-lg">Interactive Maps</h3>
-              <p class="text-base-content/50 text-sm leading-relaxed">
-                Visualize verified issues in your area with real-time geofencing and live
-                clustering.
+              <h3 class="card-title text-xl font-bold">Interactive Maps</h3>
+              <p class="text-base-content/55 text-sm leading-relaxed mt-2">
+                View verified issues in your neighborhood. Live maps show status updates, and geofencing helps identify issue hotspots.
               </p>
             </div>
           </div>
 
           <!-- Feature 3 -->
           <div
-            class="card bg-base-200/60 border border-base-300/40 hover:border-accent/30 transition-all duration-300 group"
+            class="card bg-base-200/50 glass-strong border-gradient hover:shadow-xl transition-all duration-300 group rounded-3xl"
           >
-            <div class="card-body p-7">
+            <div class="card-body p-8">
               <div
-                class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors"
+                class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-all duration-300 shadow-sm"
               >
-                <ShieldCheck class="w-6 h-6 text-accent" :stroke-width="2" />
+                <ShieldCheck class="w-6 h-6 text-accent group-hover:scale-110 transition-transform" :stroke-width="2" />
               </div>
-              <h3 class="card-title text-lg">AI Verification</h3>
-              <p class="text-base-content/50 text-sm leading-relaxed">
-                Multi-modal AI analyzes and categorizes reports instantly, filtering false entries
-                automatically.
+              <h3 class="card-title text-xl font-bold">AI Image Verification</h3>
+              <p class="text-base-content/55 text-sm leading-relaxed mt-2">
+                Advanced multi-modal computer vision verifies reports immediately upon upload to filter out false or misleading submissions.
               </p>
             </div>
           </div>
@@ -213,150 +141,150 @@
       </section>
 
       <!-- Live Reports Section -->
-      <section id="reports" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
-          <!-- Feed -->
-          <div class="lg:col-span-2">
-            <div class="flex items-center justify-between mb-8">
-              <div>
-                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                  Live Nearby Reports
-                </h2>
-                <p class="text-sm text-base-content/50 mt-1">Real-time reports from residents</p>
-              </div>
-              <router-link to="/login" class="btn btn-ghost btn-sm gap-1 text-primary">
-                View all
-                <ChevronRight class="w-4 h-4" :stroke-width="2" />
-              </router-link>
-            </div>
+      <section id="reports" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 border-t border-base-300/40">
+        <div class="flex items-center justify-between mb-10">
+          <div>
+            <span class="text-xs font-mono font-bold tracking-widest text-secondary uppercase bg-secondary/8 px-3 py-1 rounded-full">Real-time Feed</span>
+            <h2 class="text-3xl font-black tracking-tight mt-3">
+              Live Nearby Reports
+            </h2>
+          </div>
+          <router-link to="/login" class="btn btn-ghost btn-sm text-primary hover:bg-primary/8 gap-1 font-bold">
+            View all reports
+            <ChevronRight class="w-4 h-4" :stroke-width="2.5" />
+          </router-link>
+        </div>
 
-            <div class="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 -mx-1 px-1">
-              <article
+        <!-- Horizontal Scroll Cards -->
+        <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-6 -mx-2 px-2 scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
+          <article
+            v-for="issue in issues"
+            :key="issue.id"
+            class="snap-start min-w-[310px] w-[310px] card bg-base-100 border border-base-300 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden group"
+          >
+            <!-- Image Figure -->
+            <figure class="relative h-44 overflow-hidden shrink-0">
+              <img
+                v-if="issue.image_urls && issue.image_urls.length > 0"
+                :src="issue.image_urls[0]"
+                :alt="issue.title"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div v-else class="w-full h-full bg-base-200 flex items-center justify-center">
+                <ImageIcon class="w-10 h-10 text-base-content/25" :stroke-width="1.5" />
+              </div>
+              <span
+                class="badge badge-sm absolute top-3.5 right-3.5 uppercase font-bold tracking-wider py-2 px-2.5 shadow-sm"
+                :class="{
+                  'badge-warning text-warning-content': issue.status === 'pending',
+                  'badge-info text-info-content': issue.status === 'in_progress',
+                  'badge-success text-success-content': issue.status === 'resolved' || issue.status === 'verified',
+                  'badge-error text-error-content': issue.status === 'rejected',
+                }"
+              >
+                {{ issue.status }}
+              </span>
+            </figure>
+
+            <!-- Card Body -->
+            <div class="card-body p-5">
+              <h3 class="font-bold text-base text-base-content line-clamp-1 group-hover:text-primary transition-colors">{{ issue.title }}</h3>
+              <p class="text-xs text-base-content/60 line-clamp-2 leading-relaxed mt-1.5 h-8">
+                {{ issue.description }}
+              </p>
+              <div
+                class="flex items-center justify-between text-xs text-base-content/40 mt-4 pt-3.5 border-t border-base-200"
+              >
+                <span class="inline-flex items-center gap-1 font-semibold">
+                  <MapPin class="w-3.5 h-3.5 text-primary" :stroke-width="2.5" />
+                  {{ issue.address ? (issue.address.split(',')[0] || 'Nearby') : 'Nearby' }}
+                </span>
+                <span class="font-medium">{{ timeAgo(issue.created_at) }}</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Live Map Coverage Section -->
+      <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 border-t border-base-300/40">
+        <div class="card bg-base-200/50 glass-strong border border-base-300 p-6 shadow-xl rounded-3xl">
+          <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-2.5 h-2.5 rounded-full bg-accent animate-ping" />
+              <h3 class="font-black text-lg uppercase tracking-wider text-base-content/90">Interactive City Map</h3>
+            </div>
+            <p class="text-xs text-base-content/50 leading-relaxed max-w-md">
+              Aggregated visualization of active local reports. Click pin markers to inspect specific reported problems.
+            </p>
+          </div>
+          <div class="relative h-[400px] rounded-2xl overflow-hidden border border-base-300 shadow-inner">
+            <l-map
+              v-model:zoom="zoom"
+              :center="center"
+              :use-global-leaflet="false"
+              style="height: 100%"
+            >
+              <l-tile-layer
+                 :url="mapTileUrl" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              />
+              <l-marker
                 v-for="issue in issues"
                 :key="issue.id"
-                class="snap-start min-w-[280px] w-[280px] card bg-base-200/60 border border-base-300/40 hover:border-primary/30 transition-all duration-300"
+                :lat-lng="[issue.latitude, issue.longitude]"
               >
-                <!-- Thumbnail -->
-                <figure class="relative h-36">
-                  <img
-                    v-if="issue.image_urls && issue.image_urls.length > 0"
-                    :src="issue.image_urls[0]"
-                    :alt="issue.title"
-                    class="w-full h-full object-cover"
-                  />
-                  <div v-else class="w-full h-full bg-base-300/40 flex items-center justify-center">
-                    <ImageIcon class="w-8 h-8 text-base-content/20" :stroke-width="1.5" />
+                <l-popup>
+                  <div class="w-52 text-base-content/95 p-1">
+                    <div class="space-y-1.5 text-xs">
+                      <p class="font-black border-b border-base-300 pb-1.5 mb-1.5 text-base-content text-sm">
+                        {{ issue.title }}
+                      </p>
+                      <p><strong>Type:</strong> {{ issue.issue_type }}</p>
+                      <p class="truncate"><strong>Loc:</strong> {{ issue.address }}</p>
+                      <p>
+                        <strong>Status:</strong>
+                        <span class="capitalize font-bold text-primary">{{ issue.status }}</span>
+                      </p>
+                    </div>
                   </div>
-                  <span
-                    class="badge badge-sm absolute top-2.5 right-2.5"
-                    :class="{
-                      'badge-warning': issue.status === 'pending',
-                      'badge-info': issue.status === 'in_progress',
-                      'badge-success': issue.status === 'resolved' || issue.status === 'verified',
-                      'badge-error': issue.status === 'rejected',
-                    }"
-                  >
-                    {{ issue.status }}
-                  </span>
-                </figure>
-
-                <div class="card-body p-4">
-                  <h3 class="card-title text-sm leading-snug">{{ issue.title }}</h3>
-                  <p class="text-xs text-base-content/50 line-clamp-2 leading-relaxed">
-                    {{ issue.description }}
-                  </p>
-                  <div
-                    class="flex items-center justify-between text-xs text-base-content/40 mt-2 pt-3 border-t border-base-300/40"
-                  >
-                    <span class="inline-flex items-center gap-1">
-                      <MapPin class="w-3 h-3" :stroke-width="2" />
-                      {{ Math.round(Math.random() * 2 + 0.5) }} km
-                    </span>
-                    <span>{{ timeAgo(issue.created_at) }}</span>
-                  </div>
-                </div>
-              </article>
-            </div>
+                </l-popup>
+              </l-marker>
+            </l-map>
           </div>
-
-          <!-- Map Sidebar -->
-          <aside class="lg:col-span-1">
-            <div class="card bg-base-200/60 border border-base-300/40 p-5">
-              <div class="flex items-center gap-2 mb-4">
-                <div class="w-2 h-2 rounded-full bg-accent animate-pulse-subtle" />
-                <h3 class="font-semibold text-sm">Interactive Map</h3>
-              </div>
-              <div class="relative h-72 rounded-xl overflow-hidden border border-base-300/40">
-                <l-map
-                  v-model:zoom="zoom"
-                  :center="center"
-                  :use-global-leaflet="false"
-                  style="height: 100%"
-                >
-                  <l-tile-layer
-                     :url="mapTileUrl" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                  />
-                  <l-marker
-                    v-for="issue in issues"
-                    :key="issue.id"
-                    :lat-lng="[issue.latitude, issue.longitude]"
-                  >
-                    <l-popup>
-                      <div class="w-48 text-base-content/90">
-                        <div class="space-y-1.5 text-xs">
-                          <p class="font-bold border-b border-slate-700 pb-1 mb-1 text-base-content">
-                            {{ issue.title }}
-                          </p>
-                          <p><strong>Type:</strong> {{ issue.issue_type }}</p>
-                          <p class="truncate"><strong>Loc:</strong> {{ issue.address }}</p>
-                          <p>
-                            <strong>Status:</strong>
-                            <span class="capitalize text-blue-400">{{ issue.status }}</span>
-                          </p>
-                        </div>
-                      </div>
-                    </l-popup>
-                  </l-marker>
-                </l-map>
-              </div>
-              <p class="mt-3 text-xs text-base-content/40 leading-relaxed">
-                Centered on active reports. Live clustering dynamically counts reports to prevent
-                noise.
-              </p>
-            </div>
-          </aside>
         </div>
       </section>
 
       <!-- CTA Section -->
       <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        <div class="relative rounded-2xl overflow-hidden gradient-primary p-12 sm:p-16 text-center">
+        <div class="relative rounded-3xl overflow-hidden gradient-primary p-12 sm:p-20 text-center shadow-3xl">
+          <!-- Glow effects -->
+          <div aria-hidden="true" class="absolute -top-32 -left-32 h-80 w-80 rounded-full bg-white/10 blur-3xl pointer-events-none"></div>
+          <div aria-hidden="true" class="absolute -bottom-32 -right-32 h-80 w-80 rounded-full bg-accent/20 blur-3xl pointer-events-none"></div>
           <div
-            class="absolute inset-0 opacity-10"
+            class="absolute inset-0 opacity-[0.07] pointer-events-none"
             style="
               background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.4&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
             "
           />
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight relative z-10">
+          <h2 class="text-4xl sm:text-5xl font-black text-white tracking-tight relative z-10">
             Make your city better
           </h2>
-          <p class="mt-4 text-white/70 max-w-lg mx-auto text-lg relative z-10">
-            Join thousands of citizens actively improving their neighborhoods through verified civic
-            action.
+          <p class="mt-5 text-white/80 max-w-xl mx-auto text-lg sm:text-xl leading-relaxed relative z-10 font-normal">
+            Join thousands of active residents who are making their neighborhoods cleaner, safer, and better through verified reporting.
           </p>
-          <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+          <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center relative z-10">
             <router-link
               to="/register"
-              class="btn bg-white text-primary border-none btn-lg rounded-xl hover:bg-white/90 shadow-xl gap-2"
+              class="btn bg-white text-primary border-none btn-lg rounded-2xl hover:bg-white/95 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 shadow-xl gap-2.5 px-8"
             >
-              <Rocket class="w-5 h-5" :stroke-width="2" />
+              <Rocket class="w-5.5 h-5.5 text-primary" :stroke-width="2.5" />
               Get Started Free
             </router-link>
             <a
               href="#reports"
-              class="btn btn-outline border-white/30 text-white hover:bg-white/10 btn-lg rounded-xl gap-2"
+              class="btn btn-outline border-white/30 text-white hover:bg-white/10 hover:border-white/50 btn-lg rounded-2xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 gap-2.5 px-8"
             >
-              <Play class="w-5 h-5" :stroke-width="2" />
+              <Play class="w-5.5 h-5.5" :stroke-width="2.5" />
               See it in action
             </a>
           </div>
@@ -364,86 +292,87 @@
       </section>
 
       <!-- Footer -->
-      <footer class="border-t border-base-300/40">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <footer class="border-t border-base-300/40 bg-base-100">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-10">
             <!-- Brand -->
-            <div class="lg:col-span-1">
-              <div class="flex items-center gap-2.5 mb-4">
-                <div class="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-                  <Zap class="w-4.5 h-4.5 text-white" :stroke-width="2.5" />
+            <div class="col-span-2">
+              <div class="flex items-center gap-2.5 mb-5">
+                <div class="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-md">
+                  <Zap class="w-5 h-5 text-white" :stroke-width="2.5" />
                 </div>
-                <span class="text-lg font-bold tracking-tight"
+                <span class="text-xl font-black tracking-tight"
                   >City<span class="text-primary">Pulse</span></span
                 >
               </div>
               <p class="text-sm text-base-content/50 leading-relaxed max-w-xs">
-                Empowering communities with real-time civic action and verified issue resolution.
+                Empowering municipal teams and neighborhoods with real-time civic analytics and verified issue resolution.
               </p>
             </div>
 
             <!-- Product -->
-            <nav>
-              <h4 class="font-semibold text-sm mb-4">Product</h4>
-              <ul class="space-y-2.5 text-sm text-base-content/50">
+            <nav class="col-span-1">
+              <h4 class="font-bold text-xs uppercase tracking-widest text-base-content/80 mb-5">Product</h4>
+              <ul class="space-y-3.5 text-sm text-base-content/50">
                 <li>
-                  <a href="#reports" class="hover:text-base-content transition-colors"
+                  <a href="#reports" class="hover:text-primary transition-colors"
                     >Live Reports</a
                   >
                 </li>
                 <li>
-                  <a href="#" class="hover:text-base-content transition-colors">Interactive Maps</a>
+                  <a href="#" class="hover:text-primary transition-colors">Interactive Maps</a>
                 </li>
                 <li>
-                  <a href="#" class="hover:text-base-content transition-colors">AI Verification</a>
+                  <a href="#" class="hover:text-primary transition-colors">AI Verification</a>
                 </li>
-                <li><a href="#" class="hover:text-base-content transition-colors">API</a></li>
+                <li><a href="#" class="hover:text-primary transition-colors">API Portal</a></li>
               </ul>
             </nav>
 
             <!-- Company -->
-            <nav>
-              <h4 class="font-semibold text-sm mb-4">Company</h4>
-              <ul class="space-y-2.5 text-sm text-base-content/50">
-                <li><a href="#" class="hover:text-base-content transition-colors">About</a></li>
-                <li><a href="#" class="hover:text-base-content transition-colors">Blog</a></li>
-                <li><a href="#" class="hover:text-base-content transition-colors">Careers</a></li>
-                <li><a href="#" class="hover:text-base-content transition-colors">Contact</a></li>
+            <nav class="col-span-1">
+              <h4 class="font-bold text-xs uppercase tracking-widest text-base-content/80 mb-5">Company</h4>
+              <ul class="space-y-3.5 text-sm text-base-content/50">
+                <li><a href="#" class="hover:text-primary transition-colors">About Us</a></li>
+                <li><a href="#" class="hover:text-primary transition-colors">Community Blog</a></li>
+                <li><a href="#" class="hover:text-primary transition-colors">Careers</a></li>
+                <li><a href="#" class="hover:text-primary transition-colors">Contact</a></li>
               </ul>
             </nav>
 
             <!-- Legal -->
-            <nav>
-              <h4 class="font-semibold text-sm mb-4">Legal</h4>
-              <ul class="space-y-2.5 text-sm text-base-content/50">
+            <nav class="col-span-1">
+              <h4 class="font-bold text-xs uppercase tracking-widest text-base-content/80 mb-5">Legal</h4>
+              <ul class="space-y-3.5 text-sm text-base-content/50">
                 <li>
-                  <a href="#" class="hover:text-base-content transition-colors">Privacy Policy</a>
+                  <a href="#" class="hover:text-primary transition-colors">Privacy Policy</a>
                 </li>
                 <li>
-                  <a href="#" class="hover:text-base-content transition-colors">Terms of Service</a>
+                  <a href="#" class="hover:text-primary transition-colors">Terms of Service</a>
                 </li>
                 <li>
-                  <a href="#" class="hover:text-base-content transition-colors">Cookie Policy</a>
+                  <a href="#" class="hover:text-primary transition-colors">Cookie Policy</a>
                 </li>
               </ul>
             </nav>
           </div>
 
+          <!-- Footer bottom -->
           <div
-            class="mt-12 pt-8 border-t border-base-300/40 flex flex-col sm:flex-row items-center justify-between gap-4"
+            class="mt-16 pt-8 border-t border-base-300/40 flex flex-col sm:flex-row items-center justify-between gap-6"
           >
             <p class="text-xs text-base-content/40">
               &copy; {{ new Date().getFullYear() }} CityPulse. All rights reserved.
             </p>
-            <div class="flex items-center gap-4">
-              <a href="#" class="text-base-content/40 hover:text-base-content transition-colors">
-                <Globe class="w-4 h-4" :stroke-width="2" />
+            <div class="flex items-center gap-5">
+              <a href="#" class="text-base-content/40 hover:text-primary transition-colors">
+                <Globe class="w-4.5 h-4.5" :stroke-width="2" />
               </a>
-              <a href="#" class="text-base-content/40 hover:text-base-content transition-colors">
-                <MessageCircle class="w-4 h-4" :stroke-width="2" />
+              <a href="#" class="text-base-content/40 hover:text-primary transition-colors">
+                <MessageCircle class="w-4.5 h-4.5" :stroke-width="2" />
               </a>
-              <a href="#" class="text-base-content/40 hover:text-base-content transition-colors">
-                <Briefcase class="w-4 h-4" :stroke-width="2" />
+              <a href="#" class="text-base-content/40 hover:text-primary transition-colors">
+                <Briefcase class="w-4.5 h-4.5" :stroke-width="2" />
               </a>
             </div>
           </div>
@@ -455,6 +384,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import bgImage from '@/assets/bg-image.jpg'
 import axios from '../api/client'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -469,7 +399,6 @@ import {
   ImageIcon,
   Rocket,
   Play,
-  Activity,
   Globe,
   MessageCircle,
   Briefcase,

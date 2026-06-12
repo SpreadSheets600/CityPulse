@@ -14,7 +14,9 @@ class Config:
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
     if not SECRET_KEY or not JWT_SECRET_KEY:
-        raise ValueError("SECRET_KEY and JWT_SECRET_KEY must be set in environment variables")
+        raise ValueError(
+            "SECRET_KEY and JWT_SECRET_KEY must be set in environment variables"
+        )
 
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///citypulse.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False

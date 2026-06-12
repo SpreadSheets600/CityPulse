@@ -218,6 +218,75 @@ class ReportIssue(Resource):
         from ..utils.reputation import award_points
         award_points(user_id, "issue_reported", db)
 
+        # AI Image Verification on Upload
+        if img_cls_enabled and files:
+            try:
+                from ..utils.image_verifier import verify_image_from_bytes, should_flag_user
+                from api.models import VerificationStatus, VerificationState
+                from datetime import datetime
+
+                all_verifications = []
+                overall_valid = True
+                overall_confidence = 0.0
+                all_mismatch_flags = []
+                user_should_be_flagged = False
+
+                for idx, file in enumerate(files):
+                    try:
+                        file.seek(0)
+                        img_bytes = file.read()
+                        
+                        result = verify_image_from_bytes(
+                            image_bytes=img_bytes,
+                            filename=file.filename or f"image_{idx}.jpg",
+                            issue_title=issue.title,
+                            issue_description=issue.description,
+                            issue_type=issue.issue_type,
+                        )
+                        
+                        all_verifications.append(result)
+                        if not result["is_valid"]:
+                            overall_valid = False
+                        overall_confidence = max(overall_confidence, result["confidence"])
+                        all_mismatch_flags.extend(result["mismatch_flags"])
+                        if should_flag_user(result):
+                            user_should_be_flagged = True
+                    except Exception as ex:
+                        print(f"------ [ WARN ] ------ Verification for image {idx} failed: {ex}")
+
+                if overall_valid and overall_confidence > 0.3:
+                    state = VerificationState.verified
+                    verification_message = "AI verification passed. Images match the reported issue."
+                elif not overall_valid and overall_confidence > 0.7:
+                    state = VerificationState.rejected
+                    verification_message = "AI verification failed. Images do not match the reported issue."
+                else:
+                    state = VerificationState.pending
+                    verification_message = "AI verification inconclusive. Manual review recommended."
+
+                v = VerificationStatus(
+                    issue_id=issue.id,
+                    status=state,
+                    verified_by=None,
+                    verified_at=datetime.utcnow(),
+                    ai_confidence=overall_confidence,
+                    ai_reasoning=verification_message,
+                    notes=verification_message,
+                    is_consistent=overall_valid,
+                    detected_objects=all_verifications[0].get("detected_objects", []) if all_verifications else [],
+                    mismatch_flags=all_mismatch_flags,
+                )
+                db.session.add(v)
+                db.session.commit()
+
+                if user_should_be_flagged:
+                    from ..utils.reputation import flag_user
+                    citizen = User.query.get(user_id)
+                    if citizen:
+                        flag_user(citizen, "AI detected image mismatch", db)
+            except Exception as e:
+                print(f"------ [ WARN ] ------ Overall image verification during upload failed: {e}")
+
         response = {
             "message": "Issue Reported Successfully",
             "issue": issue.to_dict(),
@@ -237,6 +306,14 @@ class ReportIssue(Resource):
                 "category": image_classification["category"],
                 "confidence": image_classification["confidence"],
                 "detections": image_classification["detections"],
+            }
+
+        if 'state' in locals():
+            from datetime import datetime
+            response["verification"] = {
+                "status": state.value,
+                "notes": verification_message,
+                "verified_at": datetime.utcnow().isoformat()
             }
 
         if duplicates:
