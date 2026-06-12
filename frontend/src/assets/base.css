@@ -22,6 +22,14 @@
   --color-base-200: #0f172a; /* Main card/section background */
   --color-base-300: #1e293b; /* Borders/Muted panels */
   --color-base-content: #f8fafc; /* High contrast body text */
+  --color-info: #38bdf8;
+  --color-info-content: #002b3d;
+  --color-success: #34d399;
+  --color-success-content: #003320;
+  --color-warning: #fbbf24;
+  --color-warning-content: #381e00;
+  --color-error: #f87171;
+  --color-error-content: #4c0505;
 }
 
 @theme {
@@ -97,6 +105,14 @@
   
   ::-webkit-scrollbar-thumb:hover {
     background: var(--color-primary);
+  }
+
+  /* Clean Focus States (Fixes double/weird outlines globally) */
+  input:focus,
+  select:focus,
+  textarea:focus,
+  button:focus {
+    outline: none !important;
   }
 }
 
