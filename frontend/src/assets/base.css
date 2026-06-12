@@ -178,3 +178,8 @@
 .border-gradient:hover::before {
   opacity: 1;
 }
+
+/* Global Leaflet z-index fix to prevent overlapping sticky navbar and modals */
+.leaflet-container {
+  z-index: 1 !important;
+}

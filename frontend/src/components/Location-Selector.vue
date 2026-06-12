@@ -441,13 +441,6 @@ onUnmounted(() => {
   font-family: inherit;
 }
 
-/* Lower Leaflet z-index so app modals clearly overlay */
-:deep(.leaflet-pane),
-:deep(.leaflet-top),
-:deep(.leaflet-bottom) {
-  z-index: 100 !important;
-}
-
 /* Custom styles for leaflet dark map popup override */
 :deep(.leaflet-popup-content-wrapper) {
   background-color: var(--color-base-200) !important;
