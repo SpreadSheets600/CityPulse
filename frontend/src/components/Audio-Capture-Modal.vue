@@ -26,7 +26,7 @@
           <div class="text-center py-8">
             <div class="mb-6">
               <svg
-                class="mx-auto h-16 w-16 text-gray-400"
+                class="mx-auto h-16 w-16 text-base-content/40"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -44,7 +44,7 @@
             <div v-if="isRecording" class="mb-6">
               <div class="flex items-center justify-center mb-4">
                 <div class="w-4 h-4 bg-red-500 rounded-full animate-pulse mr-3"></div>
-                <span class="text-lg font-medium text-gray-900"
+                <span class="text-lg font-medium text-base-content"
                   >Recording... {{ recordingTime }}</span
                 >
               </div>

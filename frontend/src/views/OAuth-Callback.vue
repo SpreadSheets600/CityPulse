@@ -10,7 +10,7 @@
       </div>
       <div v-else>
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
-        <p class="mt-4 text-gray-600">Completing authentication...</p>
+        <p class="mt-4 text-base-content/60">Completing authentication...</p>
       </div>
     </div>
   </div>

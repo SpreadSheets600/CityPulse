@@ -21,8 +21,8 @@
           >
             CityPulse
           </router-link>
-          <h2 class="text-xl font-bold text-slate-100 font-sans">Reset Your Password</h2>
-          <p class="text-xs text-slate-400 mt-1.5 font-mono">REQUEST SECURE RESET TOKEN</p>
+          <h2 class="text-xl font-bold text-base-content font-sans">Reset Your Password</h2>
+          <p class="text-xs text-base-content/60 mt-1.5 font-mono">REQUEST SECURE RESET TOKEN</p>
         </div>
 
         <div
@@ -35,7 +35,7 @@
         <form v-else class="space-y-6" @submit.prevent="handleForgotPassword">
           <div>
             <label for="email" class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >Email Address</span
               ></label
             >

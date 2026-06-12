@@ -6,10 +6,10 @@
           class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4"
         >
           <div>
-            <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+            <h2 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
               Geofencing
             </h2>
-            <p class="mt-1 text-sm text-slate-400 font-sans">
+            <p class="mt-1 text-sm text-base-content/60 font-sans">
               Map geographic boundary coordinates to specific departments for auto-dispatching.
             </p>
           </div>
@@ -26,13 +26,13 @@
           v-if="showForm"
           class="bg-base-200 border border-base-300 rounded-3xl p-6 md:p-8 shadow-xl mb-8"
         >
-          <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest mb-6">
+          <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-widest mb-6">
             New Boundary Rules
           </h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Boundary Name</span
                 ></label
               >
@@ -44,7 +44,7 @@
             </div>
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Assigned Department</span
                 ></label
               >
@@ -58,7 +58,7 @@
             </div>
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Min Latitude</span
                 ></label
               >
@@ -71,7 +71,7 @@
             </div>
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Max Latitude</span
                 ></label
               >
@@ -84,7 +84,7 @@
             </div>
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Min Longitude</span
                 ></label
               >
@@ -97,7 +97,7 @@
             </div>
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Max Longitude</span
                 ></label
               >
@@ -132,7 +132,7 @@
           <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-base-300 bg-base-200">
               <thead
-                class="bg-base-300/60 font-mono text-2xs uppercase tracking-wider text-slate-400"
+                class="bg-base-300/60 font-mono text-2xs uppercase tracking-wider text-base-content/60"
               >
                 <tr>
                   <th class="px-6 py-4 text-left font-bold">Name</th>
@@ -142,18 +142,18 @@
                   <th class="px-6 py-4"></th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-base-300/40 text-slate-200">
+              <tbody class="divide-y divide-base-300/40 text-base-content/90">
                 <tr
                   v-for="f in geofences"
                   :key="f.id"
                   class="hover:bg-base-300/10 transition-colors"
                 >
-                  <td class="px-6 py-4 text-sm font-bold text-slate-100">{{ f.name }}</td>
-                  <td class="px-6 py-4 text-sm text-slate-300">{{ f.department_name }}</td>
-                  <td class="px-6 py-4 text-sm font-mono text-xs text-slate-400">
+                  <td class="px-6 py-4 text-sm font-bold text-base-content">{{ f.name }}</td>
+                  <td class="px-6 py-4 text-sm text-base-content/80">{{ f.department_name }}</td>
+                  <td class="px-6 py-4 text-sm font-mono text-xs text-base-content/60">
                     {{ f.min_lat }} — {{ f.max_lat }}
                   </td>
-                  <td class="px-6 py-4 text-sm font-mono text-xs text-slate-400">
+                  <td class="px-6 py-4 text-sm font-mono text-xs text-base-content/60">
                     {{ f.min_lng }} — {{ f.max_lng }}
                   </td>
                   <td class="px-6 py-4 text-right">
@@ -171,7 +171,7 @@
         </div>
         <div
           v-else
-          class="text-center py-16 border border-dashed border-base-300 rounded-3xl bg-base-200/40 text-slate-500 font-mono text-sm"
+          class="text-center py-16 border border-dashed border-base-300 rounded-3xl bg-base-200/40 text-base-content/40 font-mono text-sm"
         >
           No geofences configured yet.
         </div>

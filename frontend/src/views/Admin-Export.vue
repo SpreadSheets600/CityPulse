@@ -3,10 +3,10 @@
     <main class="max-w-7xl mx-auto">
       <div>
         <div class="mb-8">
-          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+          <h2 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
             Export Reports
           </h2>
-          <p class="mt-1 text-sm text-slate-400 font-sans">
+          <p class="mt-1 text-sm text-base-content/60 font-sans">
             Download aggregated issue database snapshots as CSV for external analytics.
           </p>
         </div>
@@ -15,7 +15,7 @@
           <div class="space-y-5">
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Filter by Status</span
                 ></label
               >
@@ -34,7 +34,7 @@
 
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Filter by Type</span
                 ></label
               >

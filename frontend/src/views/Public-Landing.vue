@@ -294,8 +294,7 @@
                   style="height: 100%"
                 >
                   <l-tile-layer
-                    url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                     :url="mapTileUrl" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
                   />
                   <l-marker
                     v-for="issue in issues"
@@ -303,9 +302,9 @@
                     :lat-lng="[issue.latitude, issue.longitude]"
                   >
                     <l-popup>
-                      <div class="w-48 text-slate-200">
+                      <div class="w-48 text-base-content/90">
                         <div class="space-y-1.5 text-xs">
-                          <p class="font-bold border-b border-slate-700 pb-1 mb-1 text-slate-100">
+                          <p class="font-bold border-b border-slate-700 pb-1 mb-1 text-base-content">
                             {{ issue.title }}
                           </p>
                           <p><strong>Type:</strong> {{ issue.issue_type }}</p>
@@ -512,6 +511,29 @@ const timeAgo = (dateString) => {
 onMounted(() => {
   fetchPublicIssues()
 })
+
+// Dynamic theme-aware map logic
+const currentTheme = ref(localStorage.getItem('theme') || 'citypulse')
+const isDark = computed(() => ['citypulse-dark', 'dark', 'sunset', 'dim'].includes(currentTheme.value))
+
+const mapTileUrl = computed(() => {
+  return isDark.value
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+})
+
+const handleThemeChange = (event) => {
+  currentTheme.value = event.detail
+}
+
+onMounted(() => {
+  window.addEventListener('theme-changed', handleThemeChange)
+})
+
+import { onUnmounted } from 'vue'
+onUnmounted(() => {
+  window.removeEventListener('theme-changed', handleThemeChange)
+})
 </script>
 
 <style scoped>
@@ -524,19 +546,20 @@ onMounted(() => {
 }
 
 ::v-deep(.leaflet-popup-content-wrapper) {
-  background-color: oklch(98% 0.005 260) !important;
-  color: oklch(20% 0.03 260) !important;
-  border: 1px solid oklch(92% 0.012 260);
+  background-color: var(--color-base-200) !important;
+  color: var(--color-base-content) !important;
+  border: 1px solid var(--color-base-300) !important;
   border-radius: 12px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 ::v-deep(.leaflet-popup-tip) {
-  background-color: oklch(98% 0.005 260) !important;
-  border: 1px solid oklch(92% 0.012 260);
+  background-color: var(--color-base-200) !important;
+  border: 1px solid var(--color-base-300) !important;
 }
 
 ::v-deep(.leaflet-container a.leaflet-popup-close-button) {
-  color: oklch(40% 0.02 260) !important;
+  color: var(--color-base-content) !important;
+  opacity: 0.6;
 }
 </style>

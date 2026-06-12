@@ -7,10 +7,10 @@
           class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4"
         >
           <div>
-            <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+            <h2 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
               My Reported Issues
             </h2>
-            <p class="text-sm text-slate-400 mt-1">
+            <p class="text-sm text-base-content/60 mt-1">
               Track updates and SLA responses for your submissions
             </p>
           </div>
@@ -51,13 +51,13 @@
                 <!-- Header -->
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
                   <div>
-                    <p class="text-lg font-bold text-slate-100">{{ issue.title }}</p>
-                    <p class="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed font-sans">
+                    <p class="text-lg font-bold text-base-content">{{ issue.title }}</p>
+                    <p class="text-xs text-base-content/60 mt-1 line-clamp-2 leading-relaxed font-sans">
                       {{ issue.description }}
                     </p>
                   </div>
                   <div
-                    class="flex items-center text-xs font-mono text-slate-500 mt-1 sm:mt-0 gap-3"
+                    class="flex items-center text-xs font-mono text-base-content/40 mt-1 sm:mt-0 gap-3"
                   >
                     <span
                       :class="getStatusClass(issue.status)"
@@ -86,7 +86,7 @@
 
                 <!-- Details Row -->
                 <div
-                  class="flex flex-wrap items-center gap-3 text-xs font-mono text-slate-500 pt-1"
+                  class="flex flex-wrap items-center gap-3 text-xs font-mono text-base-content/40 pt-1"
                 >
                   <span
                     v-if="issue.issue_type && issue.issue_type !== 'Unspecified'"
@@ -130,7 +130,7 @@
                         d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                       />
                     </svg>
-                    Dept: <span class="text-slate-300 ml-1">{{ issue.department.name }}</span>
+                    Dept: <span class="text-base-content/80 ml-1">{{ issue.department.name }}</span>
                   </span>
                 </div>
 
@@ -139,7 +139,7 @@
                   v-if="
                     issue.image_urls?.length > 0 || issue.video_note_url || issue.voice_note_url
                   "
-                  class="flex items-center gap-3 text-xs font-mono text-slate-500 mt-2"
+                  class="flex items-center gap-3 text-xs font-mono text-base-content/40 mt-2"
                 >
                   <span
                     v-if="issue.image_urls && issue.image_urls.length > 0"
@@ -199,7 +199,7 @@
                 <!-- Footer updates -->
                 <div
                   v-if="issue.updated_at !== issue.created_at"
-                  class="flex items-center text-xs font-mono text-slate-500 mt-2.5 pt-2.5 border-t border-base-300/30"
+                  class="flex items-center text-xs font-mono text-base-content/40 mt-2.5 pt-2.5 border-t border-base-300/30"
                 >
                   <svg
                     class="w-3.5 h-3.5 mr-1.5"
@@ -239,8 +239,8 @@
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          <h3 class="text-lg font-bold text-slate-300">No issues reported</h3>
-          <p class="mt-1.5 text-sm text-slate-500">
+          <h3 class="text-lg font-bold text-base-content/80">No issues reported</h3>
+          <p class="mt-1.5 text-sm text-base-content/40">
             Get started by reporting your first neighborhood issue.
           </p>
           <div class="mt-6">
@@ -272,7 +272,7 @@ const getStatusClass = (status) => {
     rejected: 'bg-red-500/10 text-red-400 border border-red-500/20',
     verified: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
   }
-  return classes[status] || 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
+  return classes[status] || 'bg-slate-500/10 text-base-content/60 border border-slate-500/20'
 }
 
 const formatDate = (dateString) => {

@@ -2,7 +2,7 @@
   <div class="location-selector font-sans text-base-content">
     <div class="mb-4">
       <label class="label"
-        ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+        ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
           >Report Location *</span
         ></label
       >
@@ -79,7 +79,7 @@
       <!-- Address/Pincode Input -->
       <div class="mb-4 relative">
         <label for="address" class="label">
-          <span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+          <span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
             >Or search address / landmark</span
           >
         </label>
@@ -100,7 +100,7 @@
             v-for="suggestion in addressSuggestions"
             :key="suggestion.place_id"
             @click="selectAddress(suggestion)"
-            class="px-4 py-3 hover:bg-base-300 cursor-pointer border-b border-base-300 last:border-b-0 text-slate-200 text-xs font-mono"
+            class="px-4 py-3 hover:bg-base-300 cursor-pointer border-b border-base-300 last:border-b-0 text-base-content/90 text-xs font-mono"
           >
             {{ suggestion.display_name }}
           </div>
@@ -112,21 +112,21 @@
         <div class="h-64 sm:h-80 border border-base-300 rounded-2xl overflow-hidden shadow-inner">
           <div ref="mapContainer" class="h-full w-full"></div>
         </div>
-        <p class="text-xs font-mono text-slate-400 mt-2">
+        <p class="text-xs font-mono text-base-content/60 mt-2">
           Click on map to position the flag marker, or drag it to refine.
         </p>
       </div>
 
       <!-- Selected Location Display -->
       <div v-if="selectedLocation" class="bg-base-300/30 border border-base-300/80 p-4 rounded-2xl">
-        <h4 class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">
+        <h4 class="text-xs font-mono font-bold text-base-content/60 uppercase tracking-wider mb-2">
           Selected Location Meta:
         </h4>
-        <p class="text-xs font-mono text-slate-300">
+        <p class="text-xs font-mono text-base-content/80">
           <strong>GPS Coordinates:</strong> {{ selectedLocation.lat.toFixed(6) }},
           {{ selectedLocation.lng.toFixed(6) }}
         </p>
-        <p v-if="address" class="text-xs font-sans text-slate-300 mt-1 leading-relaxed">
+        <p v-if="address" class="text-xs font-sans text-base-content/80 mt-1 leading-relaxed">
           <strong>Physical Address:</strong> {{ address }}
         </p>
       </div>
@@ -143,7 +143,7 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted, watch, nextTick } from 'vue'
+import { ref, onUnmounted, watch, nextTick, onMounted } from 'vue'
 import L from 'leaflet'
 import axios from '../api/client'
 
@@ -275,8 +275,13 @@ const initializeMap = () => {
     selectedLocation.value ? 15 : 5,
   )
 
-  // Add CartoDB Dark Matter tile layer for dark styling
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  // Add CartoDB tile layer dynamically styled based on theme
+  const isDark = ['citypulse-dark', 'dark', 'sunset', 'dim'].includes(localStorage.getItem('theme') || 'citypulse')
+  const initialUrl = isDark
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+
+  mapTileLayer.value = L.tileLayer(initialUrl, {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     maxZoom: 19,
@@ -400,10 +405,30 @@ onUnmounted(() => {
   }
 })
 
+const mapTileLayer = ref(null)
+
+const handleThemeChange = (event) => {
+  if (mapTileLayer.value) {
+    const isDark = ['citypulse-dark', 'dark', 'sunset', 'dim'].includes(event.detail)
+    const newUrl = isDark
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+    mapTileLayer.value.setUrl(newUrl)
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('theme-changed', handleThemeChange)
+})
+
 // Auto-locate if requested
 if (props.autoLocate) {
   useCurrentLocation()
 }
+
+onUnmounted(() => {
+  window.removeEventListener('theme-changed', handleThemeChange)
+})
 </script>
 
 <style scoped>
@@ -425,14 +450,14 @@ if (props.autoLocate) {
 
 /* Custom styles for leaflet dark map popup override */
 :deep(.leaflet-popup-content-wrapper) {
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
-  border: 1px solid #334155;
+  background-color: var(--color-base-200) !important;
+  color: var(--color-base-content) !important;
+  border: 1px solid var(--color-base-300) !important;
   border-radius: 12px;
 }
 
 :deep(.leaflet-popup-tip) {
-  background-color: #0f172a !important;
-  border: 1px solid #334155;
+  background-color: var(--color-base-200) !important;
+  border: 1px solid var(--color-base-300) !important;
 }
 </style>

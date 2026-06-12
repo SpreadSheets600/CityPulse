@@ -3,10 +3,10 @@
     <main class="max-w-7xl mx-auto">
       <div>
         <div class="mb-8">
-          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+          <h2 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
             Analytics Dashboard
           </h2>
-          <p class="mt-1 text-sm text-slate-400 font-sans">
+          <p class="mt-1 text-sm text-base-content/60 font-sans">
             Overview of municipal response indicators and neighborhood reporting metrics.
           </p>
         </div>
@@ -23,10 +23,10 @@
               :key="stat.label"
               class="bg-base-200 border border-base-300 overflow-hidden shadow-lg rounded-2xl p-5 hover:border-primary/45 transition-all duration-300"
             >
-              <dt class="text-xs font-mono text-slate-500 uppercase tracking-widest truncate">
+              <dt class="text-xs font-mono text-base-content/40 uppercase tracking-widest truncate">
                 {{ stat.label }}
               </dt>
-              <dd class="mt-2 text-3xl font-extrabold text-slate-100 font-mono">
+              <dd class="mt-2 text-3xl font-extrabold text-base-content font-mono">
                 {{ stat.value }}
               </dd>
             </div>
@@ -35,7 +35,7 @@
           <!-- Charts -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
-              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-4">
+              <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-wider mb-4">
                 Issues by Status
               </h3>
               <div class="h-64">
@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
-              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-4">
+              <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-wider mb-4">
                 Monthly Trend
               </h3>
               <div class="h-64">
@@ -59,12 +59,12 @@
           <!-- Type Breakdown & Dept Breakdown -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
-              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-6">
+              <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-wider mb-6">
                 Issues by Type
               </h3>
               <div v-if="Object.keys(typeBreakdown).length" class="space-y-4">
                 <div v-for="(count, type) in typeBreakdown" :key="type" class="flex items-center">
-                  <span class="text-sm text-slate-300 w-40 truncate font-mono text-xs">{{
+                  <span class="text-sm text-base-content/80 w-40 truncate font-mono text-xs">{{
                     type
                   }}</span>
                   <div class="flex-1 mx-3 bg-base-300 rounded-full h-3 overflow-hidden">
@@ -73,20 +73,20 @@
                       :style="{ width: (count / maxTypeCount) * 100 + '%' }"
                     ></div>
                   </div>
-                  <span class="text-sm font-bold text-slate-100 w-12 text-right font-mono">{{
+                  <span class="text-sm font-bold text-base-content w-12 text-right font-mono">{{
                     count
                   }}</span>
                 </div>
               </div>
-              <p v-else class="text-slate-500 text-sm font-mono">No data collected yet.</p>
+              <p v-else class="text-base-content/40 text-sm font-mono">No data collected yet.</p>
             </div>
             <div class="bg-base-200 border border-base-300 rounded-3xl p-6 shadow-xl">
-              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-6">
+              <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-wider mb-6">
                 Issues by Department
               </h3>
               <div v-if="Object.keys(deptBreakdown).length" class="space-y-4">
                 <div v-for="(count, dept) in deptBreakdown" :key="dept" class="flex items-center">
-                  <span class="text-sm text-slate-300 w-40 truncate font-mono text-xs">{{
+                  <span class="text-sm text-base-content/80 w-40 truncate font-mono text-xs">{{
                     dept
                   }}</span>
                   <div class="flex-1 mx-3 bg-base-300 rounded-full h-3 overflow-hidden">
@@ -95,12 +95,12 @@
                       :style="{ width: (count / maxDeptCount) * 100 + '%' }"
                     ></div>
                   </div>
-                  <span class="text-sm font-bold text-slate-100 w-12 text-right font-mono">{{
+                  <span class="text-sm font-bold text-base-content w-12 text-right font-mono">{{
                     count
                   }}</span>
                 </div>
               </div>
-              <p v-else class="text-slate-500 text-sm font-mono">No data collected yet.</p>
+              <p v-else class="text-base-content/40 text-sm font-mono">No data collected yet.</p>
             </div>
           </div>
         </template>

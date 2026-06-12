@@ -2,10 +2,10 @@
   <div class="min-h-screen bg-base-100 text-base-content antialiased p-6">
     <div class="max-w-7xl mx-auto">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        <h1 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+        <h1 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
           Admin Dashboard
         </h1>
-        <div class="text-xs font-mono text-slate-500">
+        <div class="text-xs font-mono text-base-content/40">
           SYSTEM STATUS: <span class="text-emerald-400 font-bold">ONLINE</span>
         </div>
       </div>
@@ -132,7 +132,7 @@
       <!-- Loading and Error States -->
       <div v-if="loading" class="text-center py-16">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-        <p class="mt-4 text-slate-400 font-mono text-xs">PULLING ADMINISTRATIVE DATA...</p>
+        <p class="mt-4 text-base-content/60 font-mono text-xs">PULLING ADMINISTRATIVE DATA...</p>
       </div>
 
       <div
@@ -173,8 +173,8 @@
             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           />
         </svg>
-        <h3 class="text-lg font-bold text-slate-300">No reported issues found</h3>
-        <p class="mt-1.5 text-sm text-slate-500">
+        <h3 class="text-lg font-bold text-base-content/80">No reported issues found</h3>
+        <p class="mt-1.5 text-sm text-base-content/40">
           Wait for users in neighborhood geofences to submit reports.
         </p>
       </div>
@@ -190,7 +190,7 @@
               class="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center"
             >
               <svg
-                class="h-5 w-5 text-slate-400"
+                class="h-5 w-5 text-base-content/60"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -204,8 +204,8 @@
               </svg>
             </div>
             <div class="ml-4 flex-1">
-              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Total Reports</p>
-              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+              <p class="text-xs font-mono text-base-content/60 uppercase tracking-wider">Total Reports</p>
+              <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                 {{ issues.length }}
               </p>
             </div>
@@ -233,8 +233,8 @@
               </svg>
             </div>
             <div class="ml-4 flex-1">
-              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Pending</p>
-              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+              <p class="text-xs font-mono text-base-content/60 uppercase tracking-wider">Pending</p>
+              <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                 {{ getStatusCount('pending') }}
               </p>
             </div>
@@ -262,8 +262,8 @@
               </svg>
             </div>
             <div class="ml-4 flex-1">
-              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">In Progress</p>
-              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+              <p class="text-xs font-mono text-base-content/60 uppercase tracking-wider">In Progress</p>
+              <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                 {{ getStatusCount('in_progress') }}
               </p>
             </div>
@@ -291,8 +291,8 @@
               </svg>
             </div>
             <div class="ml-4 flex-1">
-              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Resolved</p>
-              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+              <p class="text-xs font-mono text-base-content/60 uppercase tracking-wider">Resolved</p>
+              <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                 {{ getStatusCount('resolved') }}
               </p>
             </div>
@@ -303,7 +303,7 @@
         <div class="bg-base-200 border border-base-300 shadow-lg rounded-3xl p-6 mb-8">
           <div class="flex items-center gap-2 mb-4">
             <div class="h-2 w-2 rounded-full bg-primary animate-pulse" />
-            <h3 class="font-bold text-slate-100 font-mono text-sm tracking-wider uppercase">
+            <h3 class="font-bold text-base-content font-mono text-sm tracking-wider uppercase">
               Live Incident Map Preview
             </h3>
           </div>
@@ -318,8 +318,7 @@
             >
               <!-- Dark map tiles -->
               <l-tile-layer
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                 :url="mapTileUrl" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
               ></l-tile-layer>
               <l-marker
                 v-for="issue in issues.filter((i) => i.status !== 'rejected')"
@@ -327,9 +326,9 @@
                 :lat-lng="[issue.latitude, issue.longitude]"
               >
                 <l-popup>
-                  <div class="w-48 text-slate-200">
+                  <div class="w-48 text-base-content/90">
                     <div class="space-y-1.5 text-xs">
-                      <p class="font-bold border-b border-slate-700 pb-1 mb-1 text-slate-100">
+                      <p class="font-bold border-b border-slate-700 pb-1 mb-1 text-base-content">
                         {{ issue.title }}
                       </p>
                       <p><strong>Type:</strong> {{ issue.issue_type }}</p>
@@ -354,8 +353,8 @@
         <div class="bg-base-200 border border-base-300 shadow-lg rounded-3xl p-6">
           <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
             <div>
-              <h3 class="text-xl font-bold text-slate-100">All Reported Incidents</h3>
-              <p class="text-xs text-slate-400 mt-0.5">Filter and process client files</p>
+              <h3 class="text-xl font-bold text-base-content">All Reported Incidents</h3>
+              <p class="text-xs text-base-content/60 mt-0.5">Filter and process client files</p>
             </div>
 
             <!-- Technical Status Tabs -->
@@ -365,7 +364,7 @@
                 :class="[
                   selectedStatus === 'all'
                     ? 'bg-primary text-white border-primary'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -376,7 +375,7 @@
                 :class="[
                   selectedStatus === 'pending'
                     ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -387,7 +386,7 @@
                 :class="[
                   selectedStatus === 'in_progress'
                     ? 'bg-blue-500/20 text-blue-400 border-blue-500/30'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -398,7 +397,7 @@
                 :class="[
                   selectedStatus === 'resolved'
                     ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -409,7 +408,7 @@
                 :class="[
                   selectedStatus === 'rejected'
                     ? 'bg-red-500/20 text-red-400 border-red-500/30'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -420,7 +419,7 @@
                 :class="[
                   selectedStatus === 'verified'
                     ? 'bg-purple-500/20 text-purple-400 border-purple-500/30'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -433,7 +432,7 @@
             v-if="filteredIssues.length === 0"
             class="text-center py-12 border border-dashed border-base-300 rounded-2xl bg-base-100/30"
           >
-            <p class="text-slate-500 text-sm">No issues found matching this filter group.</p>
+            <p class="text-base-content/40 text-sm">No issues found matching this filter group.</p>
           </div>
 
           <div v-else class="space-y-4">
@@ -449,13 +448,13 @@
                 <!-- Header -->
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
                   <div>
-                    <p class="text-lg font-bold text-slate-100">{{ issue.title }}</p>
-                    <p class="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                    <p class="text-lg font-bold text-base-content">{{ issue.title }}</p>
+                    <p class="text-xs text-base-content/60 mt-1 line-clamp-2 leading-relaxed">
                       {{ issue.description }}
                     </p>
                   </div>
                   <div
-                    class="flex items-center text-xs font-mono text-slate-500 mt-1 sm:mt-0 gap-3"
+                    class="flex items-center text-xs font-mono text-base-content/40 mt-1 sm:mt-0 gap-3"
                   >
                     <span
                       :class="getStatusColor(issue.status)"
@@ -484,7 +483,7 @@
 
                 <!-- Info Row -->
                 <div
-                  class="flex flex-wrap items-center gap-3 text-xs font-mono text-slate-500 border-b border-base-300/50 pb-3.5 mb-3.5"
+                  class="flex flex-wrap items-center gap-3 text-xs font-mono text-base-content/40 border-b border-base-300/50 pb-3.5 mb-3.5"
                 >
                   <span
                     v-if="issue.issue_type && issue.issue_type !== 'Unspecified'"
@@ -522,7 +521,7 @@
 
                 <!-- Footer -->
                 <div
-                  class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-slate-500 font-mono"
+                  class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-base-content/40 font-mono"
                 >
                   <div class="flex items-center mb-1 sm:mb-0">
                     <svg
@@ -539,7 +538,7 @@
                       />
                     </svg>
                     Reported by:
-                    <span class="text-slate-300 ml-1"
+                    <span class="text-base-content/80 ml-1"
                       >{{ issue.user?.firstname }} {{ issue.user?.lastname }}</span
                     >
                   </div>
@@ -627,11 +626,34 @@ const getStatusColor = (status) => {
     rejected: 'bg-red-500/10 text-red-400 border border-red-500/20',
     verified: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
   }
-  return colors[status] || 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
+  return colors[status] || 'bg-slate-500/10 text-base-content/60 border border-slate-500/20'
 }
 
 onMounted(() => {
   fetchIssues()
+})
+
+// Dynamic theme-aware map logic
+const currentTheme = ref(localStorage.getItem('theme') || 'citypulse')
+const isDark = computed(() => ['citypulse-dark', 'dark', 'sunset', 'dim'].includes(currentTheme.value))
+
+const mapTileUrl = computed(() => {
+  return isDark.value
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+})
+
+const handleThemeChange = (event) => {
+  currentTheme.value = event.detail
+}
+
+onMounted(() => {
+  window.addEventListener('theme-changed', handleThemeChange)
+})
+
+import { onUnmounted } from 'vue'
+onUnmounted(() => {
+  window.removeEventListener('theme-changed', handleThemeChange)
 })
 </script>
 
@@ -646,19 +668,20 @@ onMounted(() => {
 
 /* Fix popup styling inside dark leaflet map */
 ::v-deep(.leaflet-popup-content-wrapper) {
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
-  border: 1px solid #334155;
+  background-color: var(--color-base-200) !important;
+  color: var(--color-base-content) !important;
+  border: 1px solid var(--color-base-300) !important;
   border-radius: 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
 }
 
 ::v-deep(.leaflet-popup-tip) {
-  background-color: #0f172a !important;
-  border: 1px solid #334155;
+  background-color: var(--color-base-200) !important;
+  border: 1px solid var(--color-base-300) !important;
 }
 
 ::v-deep(.leaflet-container a.leaflet-popup-close-button) {
-  color: #94a3b8 !important;
+  color: var(--color-base-content) !important;
+  opacity: 0.6;
 }
 </style>

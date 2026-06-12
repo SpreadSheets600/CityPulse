@@ -3,10 +3,10 @@
     <div class="max-w-5xl mx-auto">
       <div class="mb-8 flex items-center justify-between gap-4">
         <div>
-          <h1 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+          <h1 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
             Manage Issue
           </h1>
-          <p class="text-xs text-slate-400 mt-1">
+          <p class="text-xs text-base-content/60 mt-1">
             Update dispatch status and run AI verification diagnostics
           </p>
         </div>
@@ -20,7 +20,7 @@
 
       <div v-if="loading" class="text-center py-16">
         <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto"></div>
-        <p class="mt-4 text-slate-400 font-mono text-xs">PULLING RECORD DETAILS...</p>
+        <p class="mt-4 text-base-content/60 font-mono text-xs">PULLING RECORD DETAILS...</p>
       </div>
       <div
         v-else-if="error"
@@ -34,8 +34,8 @@
         <div class="bg-base-200 border border-base-300 shadow-xl rounded-3xl p-6 md:p-8">
           <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
             <div class="flex-1">
-              <h2 class="text-2xl font-bold text-slate-100 mb-3">{{ issue.title }}</h2>
-              <p class="text-sm text-slate-300 leading-relaxed font-sans">
+              <h2 class="text-2xl font-bold text-base-content mb-3">{{ issue.title }}</h2>
+              <p class="text-sm text-base-content/80 leading-relaxed font-sans">
                 {{ issue.description }}
               </p>
             </div>
@@ -48,7 +48,7 @@
           </div>
 
           <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-xs font-mono text-slate-400 border-t border-base-300/50 pt-5 mb-5"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-xs font-mono text-base-content/60 border-t border-base-300/50 pt-5 mb-5"
           >
             <div class="flex items-center">
               <svg
@@ -65,7 +65,7 @@
                 />
               </svg>
               <span
-                >Type : <strong class="text-slate-200 ml-1">{{ issue.issue_type }}</strong></span
+                >Type : <strong class="text-base-content/90 ml-1">{{ issue.issue_type }}</strong></span
               >
             </div>
             <div class="flex items-center">
@@ -84,7 +84,7 @@
               </svg>
               <span
                 >Created :
-                <strong class="text-slate-200 ml-1">{{
+                <strong class="text-base-content/90 ml-1">{{
                   new Date(issue.created_at).toLocaleDateString()
                 }}</strong></span
               >
@@ -105,7 +105,7 @@
               </svg>
               <span
                 >Updated :
-                <strong class="text-slate-200 ml-1">{{
+                <strong class="text-base-content/90 ml-1">{{
                   new Date(issue.updated_at).toLocaleDateString()
                 }}</strong></span
               >
@@ -126,14 +126,14 @@
               </svg>
               <span
                 >Reporter :
-                <strong class="text-slate-200 ml-1"
+                <strong class="text-base-content/90 ml-1"
                   >{{ issue.user?.firstname }} {{ issue.user?.lastname }}</strong
                 ></span
               >
             </div>
           </div>
 
-          <div class="flex items-center text-xs font-mono text-slate-400 mb-6">
+          <div class="flex items-center text-xs font-mono text-base-content/60 mb-6">
             <svg
               class="w-4 h-4 mr-2 text-primary"
               fill="none"
@@ -153,13 +153,13 @@
               />
             </svg>
             <span
-              >Address : <strong class="text-slate-200 ml-1">{{ issue.address }}</strong></span
+              >Address : <strong class="text-base-content/90 ml-1">{{ issue.address }}</strong></span
             >
           </div>
 
           <!-- Location Map -->
           <div v-if="issue.latitude && issue.longitude" class="pt-4 border-t border-base-300/40">
-            <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+            <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-base-content/60 mb-3">
               Geographic Location
             </h3>
             <div class="h-64 w-full rounded-2xl overflow-hidden border border-base-300">
@@ -170,13 +170,12 @@
                 style="height: 100%"
               >
                 <l-tile-layer
-                  url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                   :url="mapTileUrl" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                 ></l-tile-layer>
                 <l-marker :lat-lng="mapCenter">
                   <l-popup>
-                    <div class="text-xs text-slate-200">
-                      <p class="font-bold mb-1 text-slate-100">{{ issue.title }}</p>
+                    <div class="text-xs text-base-content/90">
+                      <p class="font-bold mb-1 text-base-content">{{ issue.title }}</p>
                       <p class="truncate">{{ issue.address }}</p>
                     </div>
                   </l-popup>
@@ -190,13 +189,13 @@
             v-if="issue.image_urls?.length > 0 || issue.video_note_url || issue.voice_note_url"
             class="pt-6 mt-6 border-t border-base-300/40"
           >
-            <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+            <h3 class="font-mono text-xs font-bold uppercase tracking-wider text-base-content/60 mb-4">
               Media Evidence
             </h3>
             <div class="space-y-6">
               <div v-if="issue.image_urls && issue.image_urls.length > 0">
                 <h4
-                  class="text-xs font-mono font-bold text-slate-500 mb-3 flex items-center uppercase tracking-wider"
+                  class="text-xs font-mono font-bold text-base-content/40 mb-3 flex items-center uppercase tracking-wider"
                 >
                   <svg
                     class="w-4 h-4 mr-2"
@@ -226,7 +225,7 @@
               </div>
               <div v-if="issue.voice_note_url">
                 <h4
-                  class="text-xs font-mono font-bold text-slate-500 mb-3 flex items-center uppercase tracking-wider"
+                  class="text-xs font-mono font-bold text-base-content/40 mb-3 flex items-center uppercase tracking-wider"
                 >
                   <svg
                     class="w-4 h-4 mr-2"
@@ -247,7 +246,7 @@
               </div>
               <div v-if="issue.video_note_url">
                 <h4
-                  class="text-xs font-mono font-bold text-slate-500 mb-3 flex items-center uppercase tracking-wider"
+                  class="text-xs font-mono font-bold text-base-content/40 mb-3 flex items-center uppercase tracking-wider"
                 >
                   <svg
                     class="w-4 h-4 mr-2"
@@ -277,7 +276,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Update status -->
           <div class="bg-base-200 border border-base-300 shadow-xl rounded-3xl p-6 md:p-8">
-            <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest mb-4">
+            <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-widest mb-4">
               Update Status
             </h3>
             <select
@@ -300,12 +299,12 @@
 
           <!-- Assign department -->
           <div class="bg-base-200 border border-base-300 shadow-xl rounded-3xl p-6 md:p-8">
-            <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest mb-4">
+            <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-widest mb-4">
               Assign Department
             </h3>
-            <p v-if="issue.department" class="mb-3 text-xs font-mono text-slate-400">
+            <p v-if="issue.department" class="mb-3 text-xs font-mono text-base-content/60">
               Current Department:
-              <span class="font-bold text-slate-200">{{ issue.department.name }}</span>
+              <span class="font-bold text-base-content/90">{{ issue.department.name }}</span>
             </p>
             <select
               v-model="departmentId"
@@ -327,7 +326,7 @@
         <div class="bg-base-200 border border-base-300 shadow-xl rounded-3xl p-6 md:p-8">
           <div class="flex items-center justify-between mb-4 gap-2">
             <h3
-              class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest flex items-center gap-2"
+              class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-widest flex items-center gap-2"
             >
               <svg
                 class="w-4.5 h-4.5 text-primary"
@@ -354,7 +353,7 @@
             </button>
           </div>
 
-          <div v-if="!verification && !verifying" class="text-xs font-mono text-slate-500 py-4">
+          <div v-if="!verification && !verifying" class="text-xs font-mono text-base-content/40 py-4">
             Trigger visual inspection. Locally hosted AI models will parse the coordinates and match
             objects inside the attachment payload.
           </div>
@@ -418,8 +417,8 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="font-bold text-slate-100">{{ verification.message }}</p>
-                  <div class="mt-2 flex flex-wrap gap-4 text-slate-400">
+                  <p class="font-bold text-base-content">{{ verification.message }}</p>
+                  <div class="mt-2 flex flex-wrap gap-4 text-base-content/60">
                     <span
                       >REPORTED_TYPE: <strong>{{ verification.reported_type }}</strong></span
                     >
@@ -437,7 +436,7 @@
 
             <!-- Per-image detections -->
             <div v-if="detections.length > 0">
-              <h4 class="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider mb-3">
+              <h4 class="text-xs font-mono font-bold text-base-content/40 uppercase tracking-wider mb-3">
                 Visual Inspection Details
               </h4>
               <div class="space-y-3">
@@ -447,7 +446,7 @@
                   class="bg-base-100/40 border border-base-300 rounded-2xl p-4 text-xs font-mono"
                 >
                   <div class="flex items-center justify-between mb-2">
-                    <span class="font-bold text-slate-300"
+                    <span class="font-bold text-base-content/80"
                       >File Object {{ det.image_index + 1 }}</span
                     >
                     <span
@@ -465,7 +464,7 @@
                     <span
                       v-for="(d, i) in det.detections"
                       :key="i"
-                      class="inline-flex items-center px-2 py-1 rounded bg-base-300 border border-base-300/40 text-slate-300 text-2xs"
+                      class="inline-flex items-center px-2 py-1 rounded bg-base-300 border border-base-300/40 text-base-content/80 text-2xs"
                     >
                       {{ d.label }} ({{ (d.confidence * 100).toFixed(0) }}%)
                     </span>
@@ -479,7 +478,7 @@
 
         <!-- Post update -->
         <div class="bg-base-200 border border-base-300 shadow-xl rounded-3xl p-6 md:p-8">
-          <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest mb-4">
+          <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-widest mb-4">
             Post SLA Milestone Update
           </h3>
           <input
@@ -496,7 +495,7 @@
           ></textarea>
 
           <div class="my-4">
-            <label class="block text-xs font-mono text-slate-400 uppercase tracking-wider mb-2"
+            <label class="block text-xs font-mono text-base-content/60 uppercase tracking-wider mb-2"
               >SLA Task Progress : {{ progress }}%</label
             >
             <input
@@ -525,10 +524,10 @@
 
         <!-- Existing updates -->
         <div class="bg-base-200 border border-base-300 shadow-xl rounded-3xl p-6 md:p-8">
-          <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest mb-4">
+          <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-widest mb-4">
             Past Milestones
           </h3>
-          <div v-if="updates.length === 0" class="text-sm font-mono text-slate-500 py-4">
+          <div v-if="updates.length === 0" class="text-sm font-mono text-base-content/40 py-4">
             No update files posted.
           </div>
           <div v-else class="space-y-4">
@@ -538,15 +537,15 @@
               class="bg-base-100/50 border border-base-300 rounded-2xl p-5 shadow-inner"
             >
               <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
-                <h4 class="font-bold text-slate-100 text-base">{{ u.title }}</h4>
-                <span class="text-xs font-mono text-slate-500">{{
+                <h4 class="font-bold text-base-content text-base">{{ u.title }}</h4>
+                <span class="text-xs font-mono text-base-content/40">{{
                   new Date(u.created_at).toLocaleString()
                 }}</span>
               </div>
-              <p class="text-sm text-slate-300 mb-3 font-sans leading-relaxed">{{ u.body }}</p>
+              <p class="text-sm text-base-content/80 mb-3 font-sans leading-relaxed">{{ u.body }}</p>
 
               <div class="mb-3">
-                <div class="flex justify-between text-xs font-mono text-slate-400 mb-1">
+                <div class="flex justify-between text-xs font-mono text-base-content/60 mb-1">
                   <span>Task Completion Progress</span>
                   <span>{{ u.progress }}%</span>
                 </div>
@@ -588,7 +587,7 @@
 <script setup>
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { useRoute } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from '../api/client'
 import 'leaflet/dist/leaflet.css'
 
@@ -628,7 +627,7 @@ const getStatusClass = (status) => {
     rejected: 'bg-red-500/10 text-red-400 border border-red-500/20',
     verified: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
   }
-  return classes[status] || 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
+  return classes[status] || 'bg-slate-500/10 text-base-content/60 border border-slate-500/20'
 }
 
 const loadIssue = async () => {
@@ -749,6 +748,29 @@ onMounted(() => {
   loadIssue()
   Promise.all([loadDepartments(), loadUpdates()])
 })
+
+// Dynamic theme-aware map logic
+const currentTheme = ref(localStorage.getItem('theme') || 'citypulse')
+const isDark = computed(() => ['citypulse-dark', 'dark', 'sunset', 'dim'].includes(currentTheme.value))
+
+const mapTileUrl = computed(() => {
+  return isDark.value
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+})
+
+const handleThemeChange = (event) => {
+  currentTheme.value = event.detail
+}
+
+onMounted(() => {
+  window.addEventListener('theme-changed', handleThemeChange)
+})
+
+import { onUnmounted } from 'vue'
+onUnmounted(() => {
+  window.removeEventListener('theme-changed', handleThemeChange)
+})
 </script>
 
 <style scoped>
@@ -762,19 +784,20 @@ onMounted(() => {
 
 /* Fix popup styling inside dark leaflet map */
 ::v-deep(.leaflet-popup-content-wrapper) {
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
-  border: 1px solid #334155;
+  background-color: var(--color-base-200) !important;
+  color: var(--color-base-content) !important;
+  border: 1px solid var(--color-base-300) !important;
   border-radius: 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
 }
 
 ::v-deep(.leaflet-popup-tip) {
-  background-color: #0f172a !important;
-  border: 1px solid #334155;
+  background-color: var(--color-base-200) !important;
+  border: 1px solid var(--color-base-300) !important;
 }
 
 ::v-deep(.leaflet-container a.leaflet-popup-close-button) {
-  color: #94a3b8 !important;
+  color: var(--color-base-content) !important;
+  opacity: 0.6;
 }
 </style>

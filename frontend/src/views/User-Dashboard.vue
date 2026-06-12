@@ -5,10 +5,10 @@
       <div>
         <!-- Welcome Header -->
         <div class="mb-8">
-          <h2 class="text-3xl font-extrabold text-slate-100">
+          <h2 class="text-3xl font-extrabold text-base-content">
             Welcome Back, {{ user?.firstname }}!
           </h2>
-          <p class="mt-1.5 text-sm text-slate-400">
+          <p class="mt-1.5 text-sm text-base-content/60">
             Monitor active geofences and verify community reports in real time.
           </p>
         </div>
@@ -38,8 +38,8 @@
                 </svg>
               </div>
               <div class="ml-4 flex-1">
-                <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Reputation</p>
-                <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+                <p class="text-xs font-mono text-base-content/60 uppercase tracking-wider">Reputation</p>
+                <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                   {{ reputation.total_points || 0 }}
                 </p>
               </div>
@@ -60,7 +60,7 @@
               class="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center"
             >
               <svg
-                class="h-5 w-5 text-slate-400"
+                class="h-5 w-5 text-base-content/60"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
@@ -74,8 +74,8 @@
               </svg>
             </div>
             <div class="ml-4 flex-1">
-              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Total Issues</p>
-              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+              <p class="text-xs font-mono text-base-content/60 uppercase tracking-wider">Total Issues</p>
+              <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                 {{ stats.totalIssues }}
               </p>
             </div>
@@ -103,8 +103,8 @@
               </svg>
             </div>
             <div class="ml-4 flex-1">
-              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Pending</p>
-              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+              <p class="text-xs font-mono text-base-content/60 uppercase tracking-wider">Pending</p>
+              <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                 {{ stats.pendingIssues }}
               </p>
             </div>
@@ -132,8 +132,8 @@
               </svg>
             </div>
             <div class="ml-4 flex-1">
-              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">In Progress</p>
-              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+              <p class="text-xs font-mono text-base-content/60 uppercase tracking-wider">In Progress</p>
+              <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                 {{ stats.inProgressIssues }}
               </p>
             </div>
@@ -161,8 +161,8 @@
               </svg>
             </div>
             <div class="ml-4 flex-1">
-              <p class="text-xs font-mono text-slate-400 uppercase tracking-wider">Resolved</p>
-              <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+              <p class="text-xs font-mono text-base-content/60 uppercase tracking-wider">Resolved</p>
+              <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                 {{ stats.resolvedIssues }}
               </p>
             </div>
@@ -174,7 +174,7 @@
           <!-- Quick Actions -->
           <div class="bg-base-200 border border-base-300 shadow-lg rounded-3xl p-6 lg:col-span-1">
             <h3
-              class="text-lg font-bold text-slate-100 mb-4 font-mono uppercase tracking-wide text-xs"
+              class="text-lg font-bold text-base-content mb-4 font-mono uppercase tracking-wide text-xs"
             >
               Quick Actions
             </h3>
@@ -219,7 +219,7 @@
           <!-- Search & Filter -->
           <div class="bg-base-200 border border-base-300 shadow-lg rounded-3xl p-6 lg:col-span-2">
             <h3
-              class="text-lg font-bold text-slate-100 mb-4 font-mono uppercase tracking-wide text-xs"
+              class="text-lg font-bold text-base-content mb-4 font-mono uppercase tracking-wide text-xs"
             >
               Search & Filter
             </h3>
@@ -234,7 +234,7 @@
                 />
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <svg
-                    class="h-5 w-5 text-slate-500"
+                    class="h-5 w-5 text-base-content/40"
                     fill="none"
                     stroke="currentColor"
                     stroke-width="2"
@@ -283,8 +283,8 @@
         <div class="bg-base-200 border border-base-300 shadow-lg rounded-3xl p-6">
           <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
             <div>
-              <h3 class="text-xl font-bold text-slate-100">Recent Activity Feed</h3>
-              <p class="text-xs text-slate-400 mt-0.5">
+              <h3 class="text-xl font-bold text-base-content">Recent Activity Feed</h3>
+              <p class="text-xs text-base-content/60 mt-0.5">
                 Showing nearest reported incident notifications
               </p>
             </div>
@@ -296,7 +296,7 @@
                 :class="[
                   selectedStatus === 'all'
                     ? 'bg-primary text-white border-primary'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -307,7 +307,7 @@
                 :class="[
                   selectedStatus === 'pending'
                     ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -318,7 +318,7 @@
                 :class="[
                   selectedStatus === 'in_progress'
                     ? 'bg-blue-500/20 text-blue-400 border-blue-500/30'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -329,7 +329,7 @@
                 :class="[
                   selectedStatus === 'resolved'
                     ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                    : 'bg-base-100 text-slate-400 border-base-300 hover:text-slate-300',
+                    : 'bg-base-100 text-base-content/60 border-base-300 hover:text-base-content/80',
                   'px-3 py-1.5 text-xs font-mono border rounded-xl transition-all duration-200 cursor-pointer',
                 ]"
               >
@@ -355,7 +355,7 @@
                 d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <p class="text-slate-500 text-sm">
+            <p class="text-base-content/40 text-sm">
               No recent matching reports found in this neighborhood.
             </p>
           </div>
@@ -371,16 +371,16 @@
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
                   <div>
                     <p
-                      class="text-lg font-bold text-slate-100 transition-colors group-hover:text-primary"
+                      class="text-lg font-bold text-base-content transition-colors group-hover:text-primary"
                     >
                       {{ issue.title }}
                     </p>
-                    <p class="text-xs text-slate-400 mt-1 font-sans line-clamp-1">
+                    <p class="text-xs text-base-content/60 mt-1 font-sans line-clamp-1">
                       {{ issue.description }}
                     </p>
                   </div>
                   <div
-                    class="flex items-center text-xs font-mono text-slate-500 mt-1 sm:mt-0 gap-3"
+                    class="flex items-center text-xs font-mono text-base-content/40 mt-1 sm:mt-0 gap-3"
                   >
                     <span
                       :class="getStatusClass(issue.status)"
@@ -409,7 +409,7 @@
 
                 <!-- Details & Tags Row -->
                 <div
-                  class="flex flex-wrap items-center gap-3 text-xs font-mono text-slate-500 border-b border-base-300/50 pb-3.5 mb-3.5"
+                  class="flex flex-wrap items-center gap-3 text-xs font-mono text-base-content/40 border-b border-base-300/50 pb-3.5 mb-3.5"
                 >
                   <span
                     v-if="issue.issue_type && issue.issue_type !== 'Unspecified'"
@@ -428,7 +428,7 @@
 
                   <span v-if="issue.address" class="flex items-center">
                     <svg
-                      class="w-3 h-3 mr-1 text-slate-500"
+                      class="w-3 h-3 mr-1 text-base-content/40"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -452,7 +452,7 @@
 
                 <!-- Footer & User Info -->
                 <div
-                  class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-slate-500 font-mono"
+                  class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-base-content/40 font-mono"
                 >
                   <div class="flex items-center mb-1 sm:mb-0">
                     <svg
@@ -469,7 +469,7 @@
                       />
                     </svg>
                     Reported by:
-                    <span class="text-slate-300 ml-1"
+                    <span class="text-base-content/80 ml-1"
                       >{{ issue.user?.firstname }} {{ issue.user?.lastname }}</span
                     >
                   </div>
@@ -546,7 +546,7 @@ const getStatusClass = (status) => {
     rejected: 'bg-red-500/10 text-red-400 border border-red-500/20',
     verified: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
   }
-  return classes[status] || 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
+  return classes[status] || 'bg-slate-500/10 text-base-content/60 border border-slate-500/20'
 }
 
 const formatDate = (dateString) => {

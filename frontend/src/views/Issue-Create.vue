@@ -4,10 +4,10 @@
       <!-- Header -->
       <div class="flex justify-between items-center mb-8 gap-4">
         <div>
-          <h1 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+          <h1 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
             Report New Issue
           </h1>
-          <p class="text-xs text-slate-400 mt-1">
+          <p class="text-xs text-base-content/60 mt-1">
             Submit geolocated media evidence for verification
           </p>
         </div>
@@ -34,7 +34,7 @@
           <!-- Basic Information -->
           <div class="p-6 md:p-8">
             <h2
-              class="text-lg font-bold font-mono text-slate-200 mb-6 uppercase tracking-wider text-xs"
+              class="text-lg font-bold font-mono text-base-content/90 mb-6 uppercase tracking-wider text-xs"
             >
               1. Basic Information
             </h2>
@@ -43,7 +43,7 @@
               <div class="sm:col-span-2">
                 <label for="title" class="label"
                   ><span
-                    class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                    class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                     >Issue Title *</span
                   ></label
                 >
@@ -61,7 +61,7 @@
               <div class="sm:col-span-2 md:col-span-1">
                 <label for="issueType" class="label"
                   ><span
-                    class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                    class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                     >Issue Type</span
                   ></label
                 >
@@ -85,7 +85,7 @@
               <div class="sm:col-span-2">
                 <label for="description" class="label"
                   ><span
-                    class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                    class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                     >Description *</span
                   ></label
                 >
@@ -104,7 +104,7 @@
           <!-- Location -->
           <div class="p-6 md:p-8 bg-base-200/50">
             <h2
-              class="text-lg font-bold font-mono text-slate-200 mb-6 uppercase tracking-wider text-xs"
+              class="text-lg font-bold font-mono text-base-content/90 mb-6 uppercase tracking-wider text-xs"
             >
               2. Location Capture
             </h2>
@@ -114,7 +114,7 @@
           <!-- Media -->
           <div class="p-6 md:p-8">
             <h2
-              class="text-lg font-bold font-mono text-slate-200 mb-6 uppercase tracking-wider text-xs"
+              class="text-lg font-bold font-mono text-base-content/90 mb-6 uppercase tracking-wider text-xs"
             >
               3. Attach Media Evidence
             </h2>
@@ -122,7 +122,7 @@
             <!-- Images -->
             <div class="mb-8">
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Images (At least one required) *</span
                 ></label
               >
@@ -184,7 +184,7 @@
             <!-- Voice Note -->
             <div class="mb-8">
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Voice Note (optional)</span
                 ></label
               >
@@ -224,7 +224,7 @@
                 class="bg-base-100 border border-base-300 p-4 rounded-xl mt-2"
               >
                 <div class="flex items-center justify-between">
-                  <div class="flex items-center font-mono text-xs text-slate-300">
+                  <div class="flex items-center font-mono text-xs text-base-content/80">
                     <svg
                       class="w-5 h-5 text-secondary mr-2"
                       fill="none"
@@ -266,7 +266,7 @@
             <!-- Video Note -->
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Video Note (optional)</span
                 ></label
               >
@@ -306,7 +306,7 @@
                 class="bg-base-100 border border-base-300 p-4 rounded-xl mt-2"
               >
                 <div class="flex items-center justify-between">
-                  <div class="flex items-center font-mono text-xs text-slate-300">
+                  <div class="flex items-center font-mono text-xs text-base-content/80">
                     <svg
                       class="w-5 h-5 text-primary mr-2"
                       fill="none"

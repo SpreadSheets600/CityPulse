@@ -3,10 +3,10 @@
     <main class="max-w-7xl mx-auto">
       <div>
         <div class="mb-8">
-          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+          <h2 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
             Audit Log
           </h2>
-          <p class="mt-1 text-sm text-slate-400 font-sans">
+          <p class="mt-1 text-sm text-base-content/60 font-sans">
             Track all administrative system events and database updates.
           </p>
         </div>
@@ -27,8 +27,8 @@
             >
               <div class="flex items-center justify-between">
                 <div class="flex-1">
-                  <p class="text-sm font-sans text-slate-200">
-                    <span class="font-bold text-slate-100 font-mono mr-1.5"
+                  <p class="text-sm font-sans text-base-content/90">
+                    <span class="font-bold text-base-content font-mono mr-1.5"
                       >{{ log.admin?.firstname }} {{ log.admin?.lastname }}</span
                     >
                     {{ formatAction(log.action) }}
@@ -38,12 +38,12 @@
                   </p>
                   <p
                     v-if="log.details"
-                    class="text-xs text-slate-400 font-mono mt-1 bg-base-100/50 p-2.5 rounded-lg border border-base-300/50"
+                    class="text-xs text-base-content/60 font-mono mt-1 bg-base-100/50 p-2.5 rounded-lg border border-base-300/50"
                   >
                     {{ log.details }}
                   </p>
                 </div>
-                <span class="text-xs font-mono text-slate-500 whitespace-nowrap ml-4">{{
+                <span class="text-xs font-mono text-base-content/40 whitespace-nowrap ml-4">{{
                   formatDate(log.created_at)
                 }}</span>
               </div>
@@ -55,7 +55,7 @@
           v-else
           class="text-center py-16 border border-dashed border-base-300 rounded-3xl bg-base-200/40"
         >
-          <p class="text-slate-500 text-sm">No audit log entries captured yet.</p>
+          <p class="text-base-content/40 text-sm">No audit log entries captured yet.</p>
         </div>
       </div>
     </main>

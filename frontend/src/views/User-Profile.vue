@@ -3,10 +3,10 @@
     <main class="max-w-4xl mx-auto">
       <div>
         <div class="mb-8">
-          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+          <h2 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
             User Profile
           </h2>
-          <p class="mt-1 text-sm text-slate-400">
+          <p class="mt-1 text-sm text-base-content/60">
             Manage your credentials and neighborhood association profile.
           </p>
         </div>
@@ -32,10 +32,10 @@
                 </div>
               </div>
               <div class="ml-5">
-                <h3 class="text-xl font-bold text-slate-100">
+                <h3 class="text-xl font-bold text-base-content">
                   {{ user?.firstname }} {{ user?.lastname }}
                 </h3>
-                <p class="text-sm font-mono text-slate-400 mt-1">{{ user?.email }}</p>
+                <p class="text-sm font-mono text-base-content/60 mt-1">{{ user?.email }}</p>
               </div>
             </div>
 
@@ -54,7 +54,7 @@
             </div>
 
             <div class="flex justify-between items-center mb-6">
-              <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest">
+              <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-widest">
                 Personal Information
               </h3>
               <button
@@ -83,10 +83,10 @@
 
             <dl class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
               <div class="sm:col-span-1">
-                <dt class="text-2xs font-mono text-slate-500 uppercase tracking-widest">
+                <dt class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">
                   First Name
                 </dt>
-                <dd v-if="!editing" class="mt-1 text-sm text-slate-200">{{ user?.firstname }}</dd>
+                <dd v-if="!editing" class="mt-1 text-sm text-base-content/90">{{ user?.firstname }}</dd>
                 <input
                   v-else
                   v-model="form.firstname"
@@ -95,10 +95,10 @@
                 />
               </div>
               <div class="sm:col-span-1">
-                <dt class="text-2xs font-mono text-slate-500 uppercase tracking-widest">
+                <dt class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">
                   Last Name
                 </dt>
-                <dd v-if="!editing" class="mt-1 text-sm text-slate-200">{{ user?.lastname }}</dd>
+                <dd v-if="!editing" class="mt-1 text-sm text-base-content/90">{{ user?.lastname }}</dd>
                 <input
                   v-else
                   v-model="form.lastname"
@@ -107,12 +107,12 @@
                 />
               </div>
               <div class="sm:col-span-1">
-                <dt class="text-2xs font-mono text-slate-500 uppercase tracking-widest">Email</dt>
-                <dd class="mt-1.5 text-sm text-slate-200 font-mono">{{ user?.email }}</dd>
+                <dt class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">Email</dt>
+                <dd class="mt-1.5 text-sm text-base-content/90 font-mono">{{ user?.email }}</dd>
               </div>
               <div class="sm:col-span-1">
-                <dt class="text-2xs font-mono text-slate-500 uppercase tracking-widest">Phone</dt>
-                <dd v-if="!editing" class="mt-1 text-sm text-slate-200 font-mono">
+                <dt class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">Phone</dt>
+                <dd v-if="!editing" class="mt-1 text-sm text-base-content/90 font-mono">
                   {{ user?.phone }}
                 </dd>
                 <input
@@ -123,8 +123,8 @@
                 />
               </div>
               <div class="sm:col-span-2">
-                <dt class="text-2xs font-mono text-slate-500 uppercase tracking-widest">Address</dt>
-                <dd v-if="!editing" class="mt-1 text-sm text-slate-200">{{ user?.address }}</dd>
+                <dt class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">Address</dt>
+                <dd v-if="!editing" class="mt-1 text-sm text-base-content/90">{{ user?.address }}</dd>
                 <input
                   v-else
                   v-model="form.address"
@@ -133,14 +133,14 @@
                 />
               </div>
               <div class="sm:col-span-1">
-                <dt class="text-2xs font-mono text-slate-500 uppercase tracking-widest">Role</dt>
-                <dd class="mt-1.5 text-sm text-slate-200 capitalize font-mono">{{ user?.role }}</dd>
+                <dt class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">Role</dt>
+                <dd class="mt-1.5 text-sm text-base-content/90 capitalize font-mono">{{ user?.role }}</dd>
               </div>
               <div class="sm:col-span-1">
-                <dt class="text-2xs font-mono text-slate-500 uppercase tracking-widest">
+                <dt class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">
                   Member Since
                 </dt>
-                <dd class="mt-1.5 text-sm text-slate-200 font-mono">
+                <dd class="mt-1.5 text-sm text-base-content/90 font-mono">
                   {{ formatDate(user?.created_at) }}
                 </dd>
               </div>

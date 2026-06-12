@@ -26,7 +26,7 @@
           <div v-if="!stream" class="text-center py-8">
             <div class="mb-4">
               <svg
-                class="mx-auto h-12 w-12 text-gray-400"
+                class="mx-auto h-12 w-12 text-base-content/40"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -85,7 +85,7 @@
 
             <!-- Recording Status -->
             <div v-if="isRecording" class="text-center">
-              <p class="text-sm text-gray-600">Recording... Click stop when finished</p>
+              <p class="text-sm text-base-content/60">Recording... Click stop when finished</p>
             </div>
 
             <!-- Controls -->

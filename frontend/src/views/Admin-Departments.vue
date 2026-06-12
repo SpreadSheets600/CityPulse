@@ -6,10 +6,10 @@
           class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4"
         >
           <div>
-            <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+            <h2 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
               Departments
             </h2>
-            <p class="mt-1 text-sm text-slate-400 font-sans">
+            <p class="mt-1 text-sm text-base-content/60 font-sans">
               Manage city department contact details and SLA parameters.
             </p>
           </div>
@@ -26,13 +26,13 @@
           v-if="showForm"
           class="bg-base-200 border border-base-300 rounded-3xl p-6 md:p-8 shadow-xl mb-8"
         >
-          <h3 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest mb-6">
+          <h3 class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-widest mb-6">
             New Department Profile
           </h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Name *</span
                 ></label
               >
@@ -44,7 +44,7 @@
             </div>
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Description</span
                 ></label
               >
@@ -56,7 +56,7 @@
             </div>
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Contact Email *</span
                 ></label
               >
@@ -69,7 +69,7 @@
             </div>
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >Contact Phone *</span
                 ></label
               >
@@ -82,7 +82,7 @@
             </div>
             <div>
               <label class="label"
-                ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+                ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                   >SLA Hours (Resolution limit)</span
                 ></label
               >
@@ -118,7 +118,7 @@
           <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-base-300 bg-base-200">
               <thead
-                class="bg-base-300/60 font-mono text-2xs uppercase tracking-wider text-slate-400"
+                class="bg-base-300/60 font-mono text-2xs uppercase tracking-wider text-base-content/60"
               >
                 <tr>
                   <th class="px-6 py-4 text-left font-bold">Name</th>
@@ -129,26 +129,26 @@
                   <th class="px-6 py-4 text-left font-bold">Issues</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-base-300/40 text-slate-200">
+              <tbody class="divide-y divide-base-300/40 text-base-content/90">
                 <tr
                   v-for="dept in departments"
                   :key="dept.id"
                   class="hover:bg-base-300/10 transition-colors"
                 >
-                  <td class="px-6 py-4 text-sm font-bold text-slate-100">{{ dept.name }}</td>
-                  <td class="px-6 py-4 text-sm text-slate-400 max-w-xs truncate">
+                  <td class="px-6 py-4 text-sm font-bold text-base-content">{{ dept.name }}</td>
+                  <td class="px-6 py-4 text-sm text-base-content/60 max-w-xs truncate">
                     {{ dept.description || '-' }}
                   </td>
-                  <td class="px-6 py-4 text-sm font-mono text-slate-300 text-xs">
+                  <td class="px-6 py-4 text-sm font-mono text-base-content/80 text-xs">
                     {{ dept.contact_email }}
                   </td>
-                  <td class="px-6 py-4 text-sm font-mono text-slate-300 text-xs">
+                  <td class="px-6 py-4 text-sm font-mono text-base-content/80 text-xs">
                     {{ dept.contact_phone }}
                   </td>
-                  <td class="px-6 py-4 text-sm font-mono text-slate-300">
+                  <td class="px-6 py-4 text-sm font-mono text-base-content/80">
                     {{ dept.sla_hours || 72 }}
                   </td>
-                  <td class="px-6 py-4 text-sm font-mono text-slate-300">
+                  <td class="px-6 py-4 text-sm font-mono text-base-content/80">
                     {{ dept.issue_count || 0 }}
                   </td>
                 </tr>
@@ -174,8 +174,8 @@
               d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
             />
           </svg>
-          <h3 class="text-lg font-bold text-slate-300">No departments cataloged yet</h3>
-          <p class="mt-1.5 text-sm text-slate-500">
+          <h3 class="text-lg font-bold text-base-content/80">No departments cataloged yet</h3>
+          <p class="mt-1.5 text-sm text-base-content/40">
             Create your first department to start assigning issues.
           </p>
         </div>

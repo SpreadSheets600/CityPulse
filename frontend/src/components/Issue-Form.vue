@@ -17,12 +17,12 @@
       <div
         class="flex items-center justify-between p-4 md:p-5 border-b border-base-300 sticky top-0 bg-base-200 rounded-t-2xl sm:rounded-t"
       >
-        <h3 class="text-lg font-bold text-slate-100 font-mono tracking-wider uppercase">
+        <h3 class="text-lg font-bold text-base-content font-mono tracking-wider uppercase">
           Report New Issue
         </h3>
         <button
           type="button"
-          class="text-slate-400 bg-transparent hover:bg-base-300 hover:text-slate-100 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center cursor-pointer"
+          class="text-base-content/60 bg-transparent hover:bg-base-300 hover:text-base-content rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center cursor-pointer"
           @click="closeModal"
         >
           <svg
@@ -50,7 +50,7 @@
           <!-- Title (full width) -->
           <div class="col-span-2">
             <label for="title" class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >Issue Title *</span
               ></label
             >
@@ -67,7 +67,7 @@
           <!-- Issue Type -->
           <div class="col-span-2">
             <label for="issueType" class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >Issue Type</span
               ></label
             >
@@ -90,7 +90,7 @@
           <!-- Location selector (full width) -->
           <div class="col-span-2">
             <label class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >Location</span
               ></label
             >
@@ -100,7 +100,7 @@
           <!-- Description (full) -->
           <div class="col-span-2">
             <label for="description" class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >Description *</span
               ></label
             >
@@ -117,7 +117,7 @@
           <!-- Images (full) -->
           <div class="col-span-2">
             <label for="images" class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >Images * (at least one required)</span
               ></label
             >
@@ -172,7 +172,7 @@
           <!-- Voice Note -->
           <div class="col-span-2 sm:col-span-1">
             <label for="voiceNote" class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >Voice Note (optional)</span
               ></label
             >
@@ -216,7 +216,7 @@
               v-if="formData.voiceNote"
               class="mt-2 p-3 bg-base-100 border border-base-300 rounded-xl"
             >
-              <div class="flex items-center gap-2 text-xs font-mono text-slate-300">
+              <div class="flex items-center gap-2 text-xs font-mono text-base-content/80">
                 <svg
                   class="w-5 h-5 text-secondary"
                   fill="none"
@@ -253,7 +253,7 @@
           <!-- Video Note -->
           <div class="col-span-2 sm:col-span-1">
             <label for="videoNote" class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >Video Note (optional)</span
               ></label
             >
@@ -297,7 +297,7 @@
               v-if="formData.videoNote"
               class="mt-2 p-3 bg-base-100 border border-base-300 rounded-xl"
             >
-              <div class="flex items-center gap-2 text-xs font-mono text-slate-300">
+              <div class="flex items-center gap-2 text-xs font-mono text-base-content/80">
                 <svg
                   class="w-5 h-5 text-primary"
                   fill="none"

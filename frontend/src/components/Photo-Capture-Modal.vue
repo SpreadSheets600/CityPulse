@@ -26,7 +26,7 @@
           <div v-if="!stream" class="text-center py-8">
             <div class="mb-4">
               <svg
-                class="mx-auto h-12 w-12 text-gray-400"
+                class="mx-auto h-12 w-12 text-base-content/40"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -65,7 +65,7 @@
               <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2">
                 <button @click="capturePhoto" :disabled="capturing" class="btn btn-circle">
                   <svg
-                    class="w-8 h-8 text-gray-700"
+                    class="w-8 h-8 text-base-content/80"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

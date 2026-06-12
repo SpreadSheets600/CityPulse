@@ -3,10 +3,10 @@
     <main class="max-w-7xl mx-auto">
       <div>
         <div class="mb-8">
-          <h2 class="text-3xl font-extrabold text-slate-100 font-mono tracking-wider uppercase">
+          <h2 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
             SLA Tracking
           </h2>
-          <p class="mt-1 text-sm text-slate-400 font-sans">
+          <p class="mt-1 text-sm text-base-content/60 font-sans">
             Compare municipal resolution performance times against SLA response targets.
           </p>
         </div>
@@ -26,7 +26,7 @@
                 class="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center"
               >
                 <svg
-                  class="h-5 w-5 text-slate-400"
+                  class="h-5 w-5 text-base-content/60"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -40,7 +40,7 @@
                 </svg>
               </div>
               <div class="ml-4 flex-1">
-                <p class="text-xs font-mono text-slate-400 uppercase tracking-widest">
+                <p class="text-xs font-mono text-base-content/60 uppercase tracking-widest">
                   Overall Compliance
                 </p>
                 <p
@@ -66,7 +66,7 @@
                 class="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center"
               >
                 <svg
-                  class="h-5 w-5 text-slate-400"
+                  class="h-5 w-5 text-base-content/60"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -80,10 +80,10 @@
                 </svg>
               </div>
               <div class="ml-4 flex-1">
-                <p class="text-xs font-mono text-slate-400 uppercase tracking-widest">
+                <p class="text-xs font-mono text-base-content/60 uppercase tracking-widest">
                   Avg Resolution Time
                 </p>
-                <p class="text-2xl font-extrabold text-slate-100 font-mono mt-0.5">
+                <p class="text-2xl font-extrabold text-base-content font-mono mt-0.5">
                   {{ overall.avg_resolution_hours }}h
                 </p>
               </div>
@@ -97,7 +97,7 @@
                 class="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center"
               >
                 <svg
-                  class="h-5 w-5 text-slate-400"
+                  class="h-5 w-5 text-base-content/60"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
@@ -111,7 +111,7 @@
                 </svg>
               </div>
               <div class="ml-4 flex-1">
-                <p class="text-xs font-mono text-slate-400 uppercase tracking-widest">
+                <p class="text-xs font-mono text-base-content/60 uppercase tracking-widest">
                   Issues Breached
                 </p>
                 <p
@@ -119,7 +119,7 @@
                   :class="overall.breached_sla > 0 ? 'text-error' : 'text-emerald-400'"
                 >
                   {{ overall.breached_sla }}
-                  <span class="text-sm font-normal text-slate-500"
+                  <span class="text-sm font-normal text-base-content/40"
                     >/ {{ overall.total_resolved }}</span
                   >
                 </p>
@@ -132,7 +132,7 @@
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-base-300 bg-base-200">
                 <thead
-                  class="bg-base-300/60 font-mono text-2xs uppercase tracking-wider text-slate-400"
+                  class="bg-base-300/60 font-mono text-2xs uppercase tracking-wider text-base-content/60"
                 >
                   <tr>
                     <th class="px-6 py-4 text-left font-bold">Department</th>
@@ -143,27 +143,27 @@
                     <th class="px-6 py-4 text-left font-bold">Avg Time</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-base-300/40 text-slate-200">
+                <tbody class="divide-y divide-base-300/40 text-base-content/90">
                   <tr
                     v-for="row in departments"
                     :key="row.department"
                     class="hover:bg-base-300/10 transition-colors"
                   >
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-100">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-base-content">
                       {{ row.department }}
                     </td>
                     <td
-                      class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-300 text-xs"
+                      class="px-6 py-4 whitespace-nowrap text-sm font-mono text-base-content/80 text-xs"
                     >
                       {{ row.sla_hours }}h
                     </td>
                     <td
-                      class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-300 text-xs"
+                      class="px-6 py-4 whitespace-nowrap text-sm font-mono text-base-content/80 text-xs"
                     >
                       {{ row.total_resolved }}
                     </td>
                     <td
-                      class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-300 text-xs"
+                      class="px-6 py-4 whitespace-nowrap text-sm font-mono text-base-content/80 text-xs"
                     >
                       {{ row.met_sla }}
                     </td>
@@ -181,14 +181,14 @@
                         {{ row.compliance_rate }}%
                       </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-300">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-base-content/80">
                       {{ row.avg_resolution_hours }}h
                     </td>
                   </tr>
                   <tr v-if="!departments.length">
                     <td
                       colspan="6"
-                      class="px-6 py-8 text-center text-sm font-mono text-slate-500 bg-base-200"
+                      class="px-6 py-8 text-center text-sm font-mono text-base-content/40 bg-base-200"
                     >
                       No department SLA records compiled yet.
                     </td>

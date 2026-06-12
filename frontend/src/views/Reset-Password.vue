@@ -21,8 +21,8 @@
           >
             CityPulse
           </router-link>
-          <h2 class="text-xl font-bold text-slate-100 font-sans">Set New Password</h2>
-          <p class="text-xs text-slate-400 mt-1.5 font-mono">FINALIZE ACCOUNT RESTORATION</p>
+          <h2 class="text-xl font-bold text-base-content font-sans">Set New Password</h2>
+          <p class="text-xs text-base-content/60 mt-1.5 font-mono">FINALIZE ACCOUNT RESTORATION</p>
         </div>
 
         <div
@@ -38,7 +38,7 @@
         <form v-else class="space-y-5" @submit.prevent="handleResetPassword">
           <div>
             <label for="token" class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >Reset Token</span
               ></label
             >
@@ -53,7 +53,7 @@
           </div>
           <div>
             <label for="password" class="label"
-              ><span class="label-text font-mono text-xs text-slate-400 uppercase tracking-wider"
+              ><span class="label-text font-mono text-xs text-base-content/60 uppercase tracking-wider"
                 >New Password</span
               ></label
             >
