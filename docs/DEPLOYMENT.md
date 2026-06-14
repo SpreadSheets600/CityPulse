@@ -78,6 +78,7 @@ chmod +x devserver.sh
 | `GITHUB_CLIENT_SECRET` | No | - | GitHub OAuth secret |
 
 **Example `.env`:**
+
 ```env
 SECRET_KEY=your-super-secret-key-here
 SQLALCHEMY_DATABASE_URI=postgresql://postgres:password@localhost:5432/citypulse

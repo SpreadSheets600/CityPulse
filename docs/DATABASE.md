@@ -97,6 +97,7 @@ erDiagram
 | `created_at` | DateTime | Default: `utcnow` | Account creation time |
 
 **Relationships:**
+
 - `issues` → One-to-many with `Issue` (via `citizen_id`)
 
 ---
@@ -124,6 +125,7 @@ erDiagram
 | `updated_at` | DateTime | On update: `utcnow` | Last update time |
 
 **Status Enum Values:**
+
 - `pending` — New issue, awaiting review
 - `in_progress` — Being worked on
 - `resolved` — Issue fixed
@@ -131,9 +133,11 @@ erDiagram
 - `verified` — Resolution verified
 
 **Issue Type Values:**
+
 - `Pothole`, `Street Light`, `Water Supply`, `Sewage`, `Garbage`, `Traffic`, `Other`, `Unspecified` (default)
 
 **Relationships:**
+
 - `citizen` → Many-to-one with `User`
 - `department` → Many-to-one with `Department`
 - `verification` → One-to-one with `VerificationStatus`
@@ -203,15 +207,16 @@ erDiagram
 
 | Department | Contact |
 |------------|---------|
-| Electricity | electricity@citypulse.com |
-| Water Supply | water@citypulse.com |
-| Waste Management | waste@citypulse.com |
-| Public Transportation | publictransport@citypulse.com |
-| Road Maintenance | roads@citypulse.com |
+| Electricity | <electricity@citypulse.com> |
+| Water Supply | <water@citypulse.com> |
+| Waste Management | <waste@citypulse.com> |
+| Public Transportation | <publictransport@citypulse.com> |
+| Road Maintenance | <roads@citypulse.com> |
 
 ## Configuration
 
 **Database URL (from `config.py`):**
+
 ```python
 # PostgreSQL (production)
 SQLALCHEMY_DATABASE_URI = "postgresql://postgres:password@localhost:5432/mydatabase"
@@ -221,6 +226,7 @@ SQLALCHEMY_DATABASE_URI = "sqlite:///citypulse.db"
 ```
 
 **Production Settings:**
+
 ```python
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ENGINE_OPTIONS = {

@@ -47,6 +47,7 @@ sequenceDiagram
 Register a new user account.
 
 **Request Body:**
+
 ```json
 {
   "firstname": "John",
@@ -59,6 +60,7 @@ Register a new user account.
 ```
 
 **Response (201):**
+
 ```json
 {
   "message": "User registered successfully",
@@ -85,6 +87,7 @@ Register a new user account.
 Login with email or phone number.
 
 **Request Body:**
+
 ```json
 { "email": "john@example.com", "password": "securepassword" }
 // or
@@ -92,6 +95,7 @@ Login with email or phone number.
 ```
 
 **Response (200):**
+
 ```json
 {
   "message": "Login successful",
@@ -125,6 +129,7 @@ Login with email or phone number.
 **Headers:** `Authorization: Bearer <token>`
 
 **Response (200):**
+
 ```json
 {
   "id": 1,
@@ -164,6 +169,7 @@ Report a new issue (multipart/form-data).
 | `video_note` | file | No | Video file |
 
 **Response (201):**
+
 ```json
 {
   "message": "Issue reported successfully",
@@ -196,6 +202,7 @@ Get all issues (authenticated).
 **Headers:** `Authorization: Bearer <token>`
 
 **Response (200):**
+
 ```json
 {
   "issues": [
@@ -224,6 +231,7 @@ Get all issues (authenticated).
 Public issues (no auth required). Limited fields — no user data, no media URLs beyond images.
 
 **Response (200):**
+
 ```json
 {
   "issues": [
@@ -257,6 +265,7 @@ Get single issue detail.
 **Headers:** `Authorization: Bearer <token>`
 
 **Response (200):**
+
 ```json
 {
   "id": 1,
@@ -305,6 +314,7 @@ Add images to existing issue (multipart/form-data).
 Get updates for an issue.
 
 **Response (200):**
+
 ```json
 {
   "updates": [
@@ -334,6 +344,7 @@ Geocode an address to coordinates.
 | `q` | string | Yes | Address to geocode |
 
 **Response (200):**
+
 ```json
 {
   "suggestions": [
@@ -368,6 +379,7 @@ All admin endpoints require `Authorization: Bearer <admin_token>` with `role: "a
 ### `GET /api/admin/users`
 
 List all users.
+
 ```json
 { "users": [{ "id": 1, "firstname": "John", "lastname": "Doe", "email": "...", "phone": "...", "role": "citizen", "created_at": "..." }] }
 ```
@@ -393,6 +405,7 @@ List all departments.
 ### `POST /api/admin/departments`
 
 **Request Body:**
+
 ```json
 { "name": "Public Works", "description": "Roads and infrastructure", "contact_email": "works@city.gov", "contact_phone": "555-0100" }
 ```

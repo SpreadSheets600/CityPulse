@@ -86,22 +86,26 @@ mindmap
 ### Immediate (Before Production)
 
 1. **Move all secrets to environment variables**
+
    ```python
    S3_ACCESS_KEY = os.environ.get("S3_ACCESS_KEY")
    S3_SECRET_KEY = os.environ.get("S3_SECRET_KEY")
    ```
 
 2. **Restrict CORS**
+
    ```python
    CORS(app, origins=["https://your-domain.com"])
    ```
 
 3. **Disable debug mode**
+
    ```python
    app.run(debug=os.environ.get("FLASK_ENV") != "production")
    ```
 
 4. **Add rate limiting**
+
    ```python
    from flask_limiter import Limiter
    limiter = Limiter(app, default_limits=["200 per day", "50 per hour"])
@@ -109,19 +113,19 @@ mindmap
 
 ### Short-Term (First Month)
 
-5. Add security headers (flask-talisman)
-6. Implement CSRF protection
-7. Add request logging
-8. Set up database backups
-9. Add input validation/sanitization
+1. Add security headers (flask-talisman)
+2. Implement CSRF protection
+3. Add request logging
+4. Set up database backups
+5. Add input validation/sanitization
 
 ### Long-Term (Ongoing)
 
-10. Regular dependency updates (`pip-audit`, `npm audit`)
-11. Penetration testing
-12. Security audit of S3 bucket policies
-13. Monitor for suspicious activity
-14. Implement account lockout after failed attempts
+1. Regular dependency updates (`pip-audit`, `npm audit`)
+2. Penetration testing
+3. Security audit of S3 bucket policies
+4. Monitor for suspicious activity
+5. Implement account lockout after failed attempts
 
 ---
 
@@ -136,6 +140,7 @@ mindmap
 | Processing | Image compression to WEBP before storage |
 
 **Recommendations:**
+
 - Validate file MIME types (not just extensions)
 - Scan uploads for malware (ClamAV)
 - Use S3 bucket policies to restrict access
@@ -154,6 +159,7 @@ mindmap
 | Claims | user_id, role | Add token version for revocation |
 
 **Token Revocation:** Currently no way to revoke tokens before expiry. Consider:
+
 - Token blacklist (Redis)
 - Token versioning in database
 - Short-lived access + long-lived refresh tokens

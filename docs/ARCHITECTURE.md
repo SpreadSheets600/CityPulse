@@ -182,6 +182,7 @@ sequenceDiagram
 | `admin` | All citizen permissions + manage users, update issue status, assign departments, post updates |
 
 **Admin Route Protection:**
+
 - Backend: Each admin endpoint checks `user.role != UserRole.admin` → returns 403
 - Frontend: Router guard checks `authStore.user?.role !== 'admin'` → redirects to `/dashboard`
 
