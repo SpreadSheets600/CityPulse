@@ -72,10 +72,7 @@ chmod +x devserver.sh
 | `CORS_ORIGINS` | No | `*` | Comma-separated allowed origins |
 | `MAIL_SERVER` | No | `localhost` | SMTP server |
 | `MAIL_PORT` | No | `25` | SMTP port |
-| `GOOGLE_CLIENT_ID` | No | - | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | No | - | Google OAuth secret |
-| `GITHUB_CLIENT_ID` | No | - | GitHub OAuth client ID |
-| `GITHUB_CLIENT_SECRET` | No | - | GitHub OAuth secret |
+
 
 **Example `.env`:**
 

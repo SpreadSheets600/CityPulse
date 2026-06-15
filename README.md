@@ -43,10 +43,10 @@ A civic issue reporting and management platform that empowers citizens to report
 |-------|-----------|
 | **Frontend** | Vue 3, Vite 7, Tailwind CSS 4, DaisyUI 5, Pinia, Leaflet, Chart.js |
 | **Backend** | Python 3.13, Flask 3.1, Flask-RESTful, SQLAlchemy, Flask-JWT-Extended |
-| **Database** | PostgreSQL (SQLite for development) |
+| **Database** | SQLite |
 | **Storage** | Synology C2 S3 (image/audio/video storage) |
 | **Geocoding** | Nominatim (OpenStreetMap) |
-| **Auth** | JWT + OAuth2 (Google, GitHub via Authlib) |
+| **Auth** | JWT (Flask-JWT-Extended) |
 | **Notifications** | Flask-Mail (email), Twilio (SMS) |
 | **Testing** | pytest (backend), Vitest (frontend) |
 | **DevOps** | Docker, Docker Compose, GitHub Actions CI/CD |
@@ -59,7 +59,6 @@ A civic issue reporting and management platform that empowers citizens to report
 
 - Python 3.13+
 - Node.js 18+
-- PostgreSQL 14+ (or use SQLite for dev)
 - [uv](https://docs.astral.sh/uv/) (Python package manager)
 
 ### Installation
@@ -126,11 +125,11 @@ The frontend dev server proxies `/api` requests to the backend automatically.
 ## Testing
 
 ```bash
-# Backend tests (47 tests)
+# Backend tests
 cd backend
 PYTHONPATH=. uv run pytest tests/ -v
 
-# Frontend tests (6 tests)
+# Frontend tests
 cd frontend
 npx vitest run
 ```
@@ -143,11 +142,10 @@ npx vitest run
 CityPulse/
 ├── backend/                    # Flask REST API
 │   ├── api/
-│   │   ├── models/            # SQLAlchemy ORM models (10 models)
+│   │   ├── models/            # SQLAlchemy ORM models
 │   │   ├── routes/            # API endpoint resources
 │   │   ├── utils/             # S3, email, SMS, AI classification
 │   │   └── data/              # Seed data (departments)
-│   ├── tests/                 # pytest test suite (47 tests)
 │   ├── app.py                 # Flask app factory
 │   ├── config.py              # Configuration
 │   ├── Dockerfile             # Python 3.13 + gunicorn
@@ -159,7 +157,7 @@ CityPulse/
 │   │   ├── router/            # Vue Router
 │   │   ├── stores/            # Pinia state management
 │   │   ├── api/               # Axios HTTP client
-│   │   └── __tests__/         # Vitest test suite (6 tests)
+│   │   └── __tests__/         # Vitest test suite
 │   ├── Dockerfile             # Multi-stage Node + nginx
 │   ├── nginx.conf             # Reverse proxy config
 │   └── package.json
@@ -183,8 +181,6 @@ CityPulse/
 | PUT | `/api/auth/profile` | Update profile |
 | POST | `/api/auth/forgot-password` | Request password reset |
 | POST | `/api/auth/reset-password` | Reset password with token |
-| GET | `/api/auth/oauth/google` | Google OAuth login |
-| GET | `/api/auth/oauth/github` | GitHub OAuth login |
 
 ### Issues
 

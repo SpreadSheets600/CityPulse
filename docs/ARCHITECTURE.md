@@ -62,7 +62,6 @@ CityPulse/
 │   │   │   ├── auth.py         # Authentication endpoints
 │   │   │   ├── issues.py       # Issue CRUD + geocoding + AI
 │   │   │   ├── admin.py        # Admin management endpoints
-│   │   │   ├── oauth.py        # Google/GitHub OAuth2
 │   │   │   └── chatbot.py      # AI chatbot endpoint
 │   │   ├── data/
 │   │   │   └── departments.json # Default department seed data
@@ -75,7 +74,7 @@ CityPulse/
 │   │       └── priority_scorer.py   # Priority scoring
 │   ├── tests/                  # pytest test suite
 │   ├── app.py                  # Flask app factory + route registration
-│   ├── config.py               # Configuration (DB, JWT, S3, OAuth)
+│   ├── config.py               # Configuration (DB, JWT, S3)
 │   ├── Dockerfile              # Python 3.13 + gunicorn
 │   ├── pyproject.toml          # Python dependencies (uv)
 │   └── .env.example            # Environment variable template
@@ -229,7 +228,7 @@ flowchart TD
 | **DiceBear** | Profile picture generation | External URL |
 | **Twilio** | SMS notifications | twilio Python client |
 | **Flask-Mail** | Email notifications | SMTP integration |
-| **Authlib** | OAuth2 (Google/GitHub) | OAuth2 client |
+| **Flask-JWT-Extended** | JWT authentication | Token management |
 | **Vite** | Frontend dev/build | Dev server + API proxy |
 
 ## Security Considerations
@@ -243,4 +242,4 @@ flowchart TD
 | Input Validation | Server-side via Flask-RESTful |
 | SQL Injection | Prevented by SQLAlchemy ORM |
 | Rate Limiting | Flask-Limiter on auth endpoints |
-| OAuth2 | Authlib for Google/GitHub SSO |
+| JWT Auth | Flask-JWT-Extended |

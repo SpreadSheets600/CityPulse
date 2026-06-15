@@ -9,7 +9,7 @@ mindmap
       bcrypt Password Hashing
       JWT Tokens 7-day expiry
       Role-Based Access
-      OAuth2 SSO
+      Role-Based Access Control
     Data Protection
       SQLAlchemy ORM
       Vue Template Auto-Escaping
@@ -19,9 +19,9 @@ mindmap
       Presigned S3 URLs
       Rate Limiting
       Connection Pooling
-    OAuth2
-      Google Login
-      GitHub Login
+    Rate Limiting
+      Flask-Limiter
+      Per-endpoint limits
 ```
 
 ### Authentication
