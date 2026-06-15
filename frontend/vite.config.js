@@ -15,8 +15,8 @@ export default defineConfig({
     allowedHosts: ['.ngrok-free.app'],
   },
   plugins: [
-    vue(),
     tailwindcss(),
+    vue(),
     vueDevTools(),
     VueRouter({
       logs: true,

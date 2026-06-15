@@ -12,9 +12,9 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import router from './router'
-import AppNavbar from './components/App-Navbar.vue'
-import ErrorBoundary from './components/Error-Boundary.vue'
-import Chatbot from './components/Chatbot.vue'
+import AppNavbar from './components/layout/App-Navbar.vue'
+import ErrorBoundary from './components/common/Error-Boundary.vue'
+import Chatbot from './components/layout/Chatbot.vue'
 
 const route = useRoute()
 
@@ -25,6 +25,3 @@ const isAuthRoute = computed(() => {
 })
 </script>
 
-<style>
-/* Global styles */
-</style>

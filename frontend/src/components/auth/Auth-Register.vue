@@ -206,7 +206,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
+import { useAuthStore } from '../../stores/auth'
 import { Zap, Mail, Phone, MapPin, Lock, UserPlus, CircleAlert } from '@lucide/vue'
 
 const router = useRouter()

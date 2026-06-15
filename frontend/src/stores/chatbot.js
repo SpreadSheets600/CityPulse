@@ -34,7 +34,7 @@ export const useChatbotStore = defineStore('chatbot', () => {
     error.value = null
 
     try {
-      const res = await api.post('/api/chatbot', { message: text })
+      const res = await api.post('/chatbot', { message: text })
       messages.value.push({
         id: Date.now() + 1,
         role: 'assistant',

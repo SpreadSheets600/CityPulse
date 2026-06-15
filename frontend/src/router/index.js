@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
-import Login from '../components/Auth-Login.vue'
-import Register from '../components/Auth-Register.vue'
+import Login from '../components/auth/Auth-Login.vue'
+import Register from '../components/auth/Auth-Register.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,12 +26,6 @@ const router = createRouter({
       path: '/reset-password/:token',
       name: 'ResetPassword',
       component: () => import('../views/Reset-Password.vue'),
-      meta: { guest: true },
-    },
-    {
-      path: '/auth/callback',
-      name: 'OAuthCallback',
-      component: () => import('../views/OAuth-Callback.vue'),
       meta: { guest: true },
     },
     {
@@ -68,12 +62,6 @@ const router = createRouter({
       name: 'Profile',
       component: () => import('../views/User-Profile.vue'),
       meta: { requiresAuth: true },
-    },
-    {
-      path: '/admin-profile',
-      name: 'AdminProfile',
-      component: () => import('../views/User-Profile.vue'),
-      meta: { requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/admin-dashboard',
@@ -124,6 +112,18 @@ const router = createRouter({
       meta: { requiresAuth: true, requiresAdmin: true },
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+      }
+    }
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0, behavior: 'smooth' }
+  },
 })
 
 // Navigation Gaurd

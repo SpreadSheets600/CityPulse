@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post('/api/auth/login', credentials)
+      const response = await axios.post('/auth/login', credentials)
       const { access_token, user: userData } = response.data
 
       setToken(access_token)
@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post('/api/auth/register', userData)
+      const response = await axios.post('/auth/register', userData)
       const { access_token, user: userData_res } = response.data
       if (access_token) {
         setToken(access_token)
@@ -53,7 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const logout = async () => {
     try {
-      await axios.post('/api/auth/logout')
+      await axios.post('/auth/logout')
     } catch (error) {
       console.error('Logout Error :', error)
     } finally {
@@ -65,7 +65,7 @@ export const useAuthStore = defineStore('auth', () => {
   const initializeAuth = async () => {
     if (token.value) {
       try {
-        const response = await axios.get('/api/auth/me')
+        const response = await axios.get('/auth/me')
         setUser(response.data.user)
       } catch (error) {
         console.error('Failed to fetch user data:', error)
@@ -77,7 +77,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const updateProfile = async (profileData) => {
     try {
-      const response = await axios.put('/api/auth/profile', profileData)
+      const response = await axios.put('/auth/profile', profileData)
       setUser(response.data.user)
       return { success: true }
     } catch (error) {

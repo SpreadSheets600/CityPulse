@@ -131,7 +131,7 @@
  
 import { ref, nextTick, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useChatbotStore } from '../stores/chatbot'
+import { useChatbotStore } from '../../stores/chatbot'
 
 const chatbotStore = useChatbotStore()
 const { messages, loading, isOpen } = storeToRefs(chatbotStore)
@@ -158,6 +158,3 @@ watch(
 )
 </script>
 
-<style scoped>
-/* No custom styling required since standard DaisyUI & Tailwind utility classes are fully leveraged */
-</style>

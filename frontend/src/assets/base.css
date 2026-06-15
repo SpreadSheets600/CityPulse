@@ -7,69 +7,49 @@
 @theme {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   --animate-fade-in: fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-slide-in: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-pulse-subtle: pulse-subtle 3s ease-in-out infinite;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-scale-in: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-shimmer: shimmer 2s linear infinite;
 
   @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes fade-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes slide-in {
-    from {
-      opacity: 0;
-      transform: translateX(-12px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateX(-12px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
   @keyframes pulse-subtle {
-
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0.7;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
   }
 
   @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
 
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
 
-    50% {
-      transform: translateY(-8px);
-    }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
 }
 
@@ -179,7 +159,87 @@
   opacity: 1;
 }
 
+/* Staggered animation delays for children */
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+
+/* Noise texture overlay */
+.noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Glass morphism card */
+.glass-card {
+  background: color-mix(in srgb, var(--color-base-100) 60%, transparent);
+  backdrop-filter: blur(20px) saturate(1.3);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  border: 1px solid color-mix(in srgb, var(--color-base-content) 8%, transparent);
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.08), 0 0 0 1px color-mix(in srgb, var(--color-base-content) 4%, transparent);
+}
+
+/* Glow effect */
+.glow-primary {
+  box-shadow: 0 0 40px -8px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* Gradient text variations */
+.text-gradient-brand {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.15);
+}
+
 /* Global Leaflet z-index fix to prevent overlapping sticky navbar and modals */
 .leaflet-container {
   z-index: 1 !important;
+}
+
+/* Leaflet Popup & Control Overrides */
+.leaflet-control-container,
+.leaflet-popup-content-wrapper {
+  font-family: inherit !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: var(--color-base-200) !important;
+  color: var(--color-base-content) !important;
+  border: 1px solid var(--color-base-300) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.leaflet-popup-tip {
+  background-color: var(--color-base-200) !important;
+  border: 1px solid var(--color-base-300) !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--color-base-content) !important;
+  opacity: 0.6;
 }

@@ -8,7 +8,7 @@ import { createApp } from 'vue'
 import router from './router'
 import App from './App.vue'
 
-import ImageLightbox from './components/ImageLightbox.vue'
+import ImageLightbox from './components/common/ImageLightbox.vue'
 
 const app = createApp(App)
 const pinia = createPinia()
