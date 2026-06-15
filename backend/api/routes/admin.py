@@ -644,7 +644,7 @@ class AutoAssignByGeofence(Resource):
 class VerifyIssue(Resource):
     @jwt_required()
     def post(self, issue_id):
-        """Run AI image verification on an issue's images."""
+        """Re-run the full unified AI pipeline on an existing issue."""
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
         if not user or user.role != UserRole.admin:
@@ -654,124 +654,68 @@ class VerifyIssue(Resource):
         if not issue:
             return {"error": "Issue Not Found"}, 404
 
-        if not issue.image_urls:
-            return {"error": "No images to verify"}, 400
-
-        import os
-        img_cls_enabled = os.getenv("IMAGE_CLASSIFICATION_ENABLED", "false").lower() in ("true", "1", "yes")
-        if not img_cls_enabled:
-            return {"error": "Image classification is disabled"}, 501
-
         try:
-            from ..utils.image_verifier import verify_image_from_bytes, should_flag_user
-            import requests as http_requests
+            from ..utils.ai_pipeline import run_pipeline
             from datetime import datetime
 
-            all_verifications = []
-            overall_valid = True
-            overall_confidence = 0.0
-            all_mismatch_flags = []
-            user_should_be_flagged = False
+            old_type = issue.issue_type
+            old_dept = issue.department_id
 
-            for idx, url in enumerate(issue.image_urls):
-                try:
-                    resp = http_requests.get(url, timeout=30)
-                    resp.raise_for_status()
+            ai_result = run_pipeline(issue, image_files=None, db_session=db.session)
 
-                    result = verify_image_from_bytes(
-                        image_bytes=resp.content,
-                        filename=f"image_{idx}.jpg",
-                        issue_title=issue.title,
-                        issue_description=issue.description,
-                        issue_type=issue.issue_type,
+            verification = ai_result.get("verification", {})
+            if verification.get("status") and verification["status"] not in ("skipped", "no_images", "error"):
+                status_map = {
+                    "verified": VerificationState.verified,
+                    "rejected": VerificationState.rejected,
+                    "pending": VerificationState.pending,
+                }
+                v_status = status_map.get(verification["status"], VerificationState.pending)
+
+                existing_v = VerificationStatus.query.filter_by(issue_id=issue_id).first()
+                if existing_v:
+                    existing_v.status = v_status
+                    existing_v.verified_by = user_id
+                    existing_v.verified_at = datetime.utcnow()
+                    existing_v.ai_confidence = verification.get("confidence", 0.0)
+                    existing_v.ai_reasoning = verification.get("reasoning", "")
+                    existing_v.is_consistent = verification.get("is_consistent", True)
+                    existing_v.mismatch_flags = verification.get("mismatch_flags", [])
+                else:
+                    v = VerificationStatus(
+                        issue_id=issue_id,
+                        status=v_status,
+                        verified_by=user_id,
+                        verified_at=datetime.utcnow(),
+                        ai_confidence=verification.get("confidence", 0.0),
+                        ai_reasoning=verification.get("reasoning", ""),
+                        is_consistent=verification.get("is_consistent", True),
+                        mismatch_flags=verification.get("mismatch_flags", []),
                     )
-
-                    all_verifications.append({
-                        "image_index": idx,
-                        "url": url,
-                        "is_valid": result["is_valid"],
-                        "confidence": result["confidence"],
-                        "reasoning": result["reasoning"],
-                        "detected_objects": result["detected_objects"],
-                        "mismatch_flags": result["mismatch_flags"],
-                    })
-
-                    if not result["is_valid"]:
-                        overall_valid = False
-                    overall_confidence = max(overall_confidence, result["confidence"])
-                    all_mismatch_flags.extend(result["mismatch_flags"])
-
-                    if should_flag_user(result):
-                        user_should_be_flagged = True
-
-                except Exception as e:
-                    all_verifications.append({
-                        "image_index": idx,
-                        "url": url,
-                        "is_valid": True,
-                        "confidence": 0.0,
-                        "reasoning": f"Error: {str(e)}",
-                        "detected_objects": [],
-                        "mismatch_flags": [],
-                    })
-
-            if overall_valid and overall_confidence > 0.3:
-                state = VerificationState.verified
-                verification_message = "AI verification passed. Images match the reported issue."
-            elif not overall_valid and overall_confidence > 0.7:
-                state = VerificationState.rejected
-                verification_message = "AI verification failed. Images do not match the reported issue."
-            else:
-                state = VerificationState.pending
-                verification_message = "AI verification inconclusive. Manual review recommended."
-
-            existing_v = VerificationStatus.query.filter_by(issue_id=issue_id).first()
-            if existing_v:
-                existing_v.status = state
-                existing_v.verified_by = user_id
-                existing_v.verified_at = datetime.utcnow()
-                existing_v.ai_confidence = overall_confidence
-                existing_v.ai_reasoning = verification_message
-                existing_v.is_consistent = overall_valid
-                existing_v.detected_objects = all_verifications[0].get("detected_objects", []) if all_verifications else []
-                existing_v.mismatch_flags = all_mismatch_flags
-            else:
-                v = VerificationStatus(
-                    issue_id=issue_id,
-                    status=state,
-                    verified_by=user_id,
-                    verified_at=datetime.utcnow(),
-                    ai_confidence=overall_confidence,
-                    ai_reasoning=verification_message,
-                    is_consistent=overall_valid,
-                    detected_objects=all_verifications[0].get("detected_objects", []) if all_verifications else [],
-                    mismatch_flags=all_mismatch_flags,
-                )
-                db.session.add(v)
+                    db.session.add(v)
 
             db.session.commit()
 
-            user_flagged = False
-            if user_should_be_flagged:
-                from ..utils.reputation import flag_user
-                citizen = User.query.get(issue.citizen_id)
-                if citizen:
-                    user_flagged = flag_user(citizen, "AI detected image mismatch", db)
+            changes = []
+            if issue.issue_type != old_type:
+                changes.append(f"type: {old_type} -> {issue.issue_type}")
+            if issue.department_id != old_dept:
+                changes.append(f"department: {old_dept} -> {issue.department_id}")
+
+            log_admin_action(
+                user_id, "rerun_ai_pipeline", "issue", issue_id,
+                details=f"Changes: {'; '.join(changes) if changes else 'no changes'}"
+            )
 
             return {
-                "verification": {
-                    "status": state.value,
-                    "message": verification_message,
-                    "ai_confidence": overall_confidence,
-                    "is_consistent": overall_valid,
-                    "mismatch_flags": all_mismatch_flags,
-                },
-                "detections": all_verifications,
-                "user_flagged": user_flagged,
+                "message": "AI pipeline re-run complete",
+                "issue": issue.to_dict(),
+                "ai_analysis": ai_result,
+                "changes": changes,
             }, 200
 
         except Exception as e:
-            return {"error": f"Verification failed: {str(e)}"}, 500
+            return {"error": f"AI pipeline failed: {str(e)}"}, 500
 
 
 class GetFlaggedUsers(Resource):

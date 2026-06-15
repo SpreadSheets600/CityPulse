@@ -14,9 +14,6 @@ import json
 from api.models import db, User, Issue, IssueUpdate, UserRole, Upvote, Comment
 from sqlalchemy import or_
 from ..utils.s3 import upload_file_to_s3, compress_image
-from ..utils.classifier import classify_issue, get_priority_level
-from ..utils.duplicate_detector import find_duplicate_candidates, is_likely_duplicate
-from ..utils.priority_scorer import calculate_priority_score
 
 
 def apply_issue_filters(query):
@@ -58,7 +55,6 @@ class ReportIssue(Resource):
 
         title = data.get("title", "").strip()
         description = data.get("description", "").strip()
-        issue_type = data.get("issue_type", "Unspecified")
         latitude = data.get("latitude")
         longitude = data.get("longitude")
         address = data.get("address", "").strip()
@@ -127,84 +123,11 @@ class ReportIssue(Resource):
             except Exception as e:
                 return {"error": f"Failed To Upload Video Note : {str(e)}"}, 500
 
-        # ── AI Image Classification (LocateAnything-3B) ─────────────
-        image_classification = None
-        img_cls_enabled = os.getenv("IMAGE_CLASSIFICATION_ENABLED", "false").lower() in ("true", "1", "yes")
-        if img_cls_enabled and files:
-            try:
-                from ..utils.image_classifier import classify_image_from_bytes
-                # Classify the first image
-                files[0].seek(0)
-                image_classification = classify_image_from_bytes(
-                    files[0].read(), files[0].filename
-                )
-                # Use image classification to enhance issue_type if still unspecified
-                if (issue_type == "Unspecified" or not issue_type) and image_classification["confidence"] > 0.3:
-                    issue_type = image_classification["category"]
-            except Exception as e:
-                print(f"------ [ WARN ] ------ Image classification failed: {e}")
-
-        # ── AI Text Classification (Ollama) ─────────────────────────
-        ai_text_enabled = os.getenv("AI_TEXT_ENABLED", "false").lower() in ("true", "1", "yes")
-        if ai_text_enabled and (issue_type == "Unspecified" or not issue_type):
-            try:
-                from ..utils.ai_client import classify_issue_text
-                ai_result = classify_issue_text(title, description)
-                if ai_result["confidence"] > 0.3 and ai_result["category"]:
-                    issue_type = ai_result["category"]
-            except Exception as e:
-                print(f"------ [ WARN ] ------ Ollama classification failed: {e}")
-
-        # Fallback: keyword-based classification
-        if issue_type == "Unspecified" or not issue_type:
-            category, confidence, suggested_dept = classify_issue(title, description)
-            if confidence > 0.3:
-                issue_type = category
-
-        # Duplicate Detection
-        duplicates = find_duplicate_candidates(
-            db.session,
-            Issue,
-            title,
-            description,
-            latitude,
-            longitude,
-            threshold=0.4,
-            max_results=3
-        )
-
-        # ── Priority Scoring ────────────────────────────────────────
-        priority_level = "medium"
-        priority_score = 50
-        priority_breakdown = {}
-
-        if ai_text_enabled:
-            try:
-                from ..utils.ai_client import assess_priority
-                ai_priority = assess_priority(title, description, issue_type, upvote_count=0)
-                priority_level = ai_priority["level"]
-                priority_score = ai_priority["score"]
-                priority_breakdown = {"ai_reasoning": ai_priority["reasoning"]}
-            except Exception as e:
-                print(f"------ [ WARN ] ------ Ollama priority failed, using heuristic: {e}")
-
-        if not priority_breakdown:
-            priority_level, priority_score, priority_breakdown = calculate_priority_score(
-                issue_type=issue_type,
-                title=title,
-                description=description,
-                upvote_count=0,
-                comment_count=0,
-                created_at=None,
-                status="pending",
-                has_images=len(image_urls) > 0
-            )
-
         issue = Issue(
             citizen_id=user_id,
             title=title,
             description=description,
-            issue_type=issue_type,
+            issue_type="Unspecified",
             image_urls=image_urls,
             voice_note_url=voice_url,
             video_note_url=video_url,
@@ -215,111 +138,49 @@ class ReportIssue(Resource):
         db.session.add(issue)
         db.session.commit()
 
+        from ..utils.ai_pipeline import run_pipeline
+        ai_result = run_pipeline(issue, image_files=files, db_session=db.session)
+        db.session.commit()
+
         from ..utils.reputation import award_points
         award_points(user_id, "issue_reported", db)
 
-        # AI Image Verification on Upload
-        if img_cls_enabled and files:
-            try:
-                from ..utils.image_verifier import verify_image_from_bytes, should_flag_user
-                from api.models import VerificationStatus, VerificationState
-                from datetime import datetime
+        verification = ai_result.get("verification", {})
+        if verification.get("user_should_flag"):
+            from ..utils.reputation import flag_user
+            citizen = User.query.get(user_id)
+            if citizen:
+                flag_user(citizen, "AI detected image mismatch", db)
 
-                all_verifications = []
-                overall_valid = True
-                overall_confidence = 0.0
-                all_mismatch_flags = []
-                user_should_be_flagged = False
+        if verification.get("status") and verification["status"] != "skipped":
+            from api.models import VerificationStatus, VerificationState
+            from datetime import datetime
 
-                for idx, file in enumerate(files):
-                    try:
-                        file.seek(0)
-                        img_bytes = file.read()
-                        
-                        result = verify_image_from_bytes(
-                            image_bytes=img_bytes,
-                            filename=file.filename or f"image_{idx}.jpg",
-                            issue_title=issue.title,
-                            issue_description=issue.description,
-                            issue_type=issue.issue_type,
-                        )
-                        
-                        all_verifications.append(result)
-                        if not result["is_valid"]:
-                            overall_valid = False
-                        overall_confidence = max(overall_confidence, result["confidence"])
-                        all_mismatch_flags.extend(result["mismatch_flags"])
-                        if should_flag_user(result):
-                            user_should_be_flagged = True
-                    except Exception as ex:
-                        print(f"------ [ WARN ] ------ Verification for image {idx} failed: {ex}")
+            status_map = {
+                "verified": VerificationState.verified,
+                "rejected": VerificationState.rejected,
+                "pending": VerificationState.pending,
+            }
+            v_status = status_map.get(verification["status"], VerificationState.pending)
 
-                if overall_valid and overall_confidence > 0.3:
-                    state = VerificationState.verified
-                    verification_message = "AI verification passed. Images match the reported issue."
-                elif not overall_valid and overall_confidence > 0.7:
-                    state = VerificationState.rejected
-                    verification_message = "AI verification failed. Images do not match the reported issue."
-                else:
-                    state = VerificationState.pending
-                    verification_message = "AI verification inconclusive. Manual review recommended."
+            v = VerificationStatus(
+                issue_id=issue.id,
+                status=v_status,
+                verified_by=None,
+                verified_at=datetime.utcnow(),
+                ai_confidence=verification.get("confidence", 0.0),
+                ai_reasoning=verification.get("reasoning", ""),
+                notes=verification.get("reasoning", ""),
+                is_consistent=verification.get("is_consistent", True),
+                mismatch_flags=verification.get("mismatch_flags", []),
+            )
+            db.session.add(v)
+            db.session.commit()
 
-                v = VerificationStatus(
-                    issue_id=issue.id,
-                    status=state,
-                    verified_by=None,
-                    verified_at=datetime.utcnow(),
-                    ai_confidence=overall_confidence,
-                    ai_reasoning=verification_message,
-                    notes=verification_message,
-                    is_consistent=overall_valid,
-                    detected_objects=all_verifications[0].get("detected_objects", []) if all_verifications else [],
-                    mismatch_flags=all_mismatch_flags,
-                )
-                db.session.add(v)
-                db.session.commit()
-
-                if user_should_be_flagged:
-                    from ..utils.reputation import flag_user
-                    citizen = User.query.get(user_id)
-                    if citizen:
-                        flag_user(citizen, "AI detected image mismatch", db)
-            except Exception as e:
-                print(f"------ [ WARN ] ------ Overall image verification during upload failed: {e}")
-
-        response = {
+        return {
             "message": "Issue Reported Successfully",
             "issue": issue.to_dict(),
-            "classification": {
-                "issue_type": issue_type,
-                "confidence": confidence if 'confidence' in locals() else 0.0
-            },
-            "priority": {
-                "level": priority_level,
-                "score": priority_score,
-                "breakdown": priority_breakdown
-            }
-        }
-
-        if image_classification:
-            response["image_analysis"] = {
-                "category": image_classification["category"],
-                "confidence": image_classification["confidence"],
-                "detections": image_classification["detections"],
-            }
-
-        if 'state' in locals():
-            from datetime import datetime
-            response["verification"] = {
-                "status": state.value,
-                "notes": verification_message,
-                "verified_at": datetime.utcnow().isoformat()
-            }
-
-        if duplicates:
-            response["potential_duplicates"] = duplicates
-
-        return response, 201
+        }, 201
 
 
 class MyIssues(Resource):
