@@ -405,10 +405,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import LocationSelector from '../components/Location-Selector.vue'
-import PhotoCaptureModal from '../components/Photo-Capture-Modal.vue'
-import VideoCaptureModal from '../components/Video-Capture-Modal.vue'
-import AudioCaptureModal from '../components/Audio-Capture-Modal.vue'
+import LocationSelector from '../components/issue/Location-Selector.vue'
+import PhotoCaptureModal from '../components/issue/Photo-Capture-Modal.vue'
+import VideoCaptureModal from '../components/issue/Video-Capture-Modal.vue'
+import AudioCaptureModal from '../components/issue/Audio-Capture-Modal.vue'
 import axios from '../api/client'
 
 const router = useRouter()
@@ -535,7 +535,7 @@ const submitIssue = async () => {
       formDataToSend.append('video_note', formData.value.videoNote)
     }
 
-    const response = await axios.post('/api/issues/report', formDataToSend)
+    const response = await axios.post('/issues/report', formDataToSend)
 
     if (response.status === 201 || response.status === 200) {
       router.push('/issues')
@@ -551,6 +551,3 @@ const submitIssue = async () => {
 }
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>

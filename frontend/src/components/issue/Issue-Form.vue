@@ -397,7 +397,7 @@ import LocationSelector from './Location-Selector.vue'
 import PhotoCaptureModal from './Photo-Capture-Modal.vue'
 import VideoCaptureModal from './Video-Capture-Modal.vue'
 import AudioCaptureModal from './Audio-Capture-Modal.vue'
-import axios from '../api/client'
+import axios from '../../api/client'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -558,7 +558,7 @@ const submitIssue = async () => {
       formDataToSend.append('video_note', formData.value.videoNote)
     }
 
-    const response = await axios.post('/api/issues/report', formDataToSend)
+    const response = await axios.post('/issues/report', formDataToSend)
 
     if (response.status === 201 || response.status === 200) {
       emit('success', response.data.issue)
@@ -575,11 +575,3 @@ const submitIssue = async () => {
 }
 </script>
 
-<style scoped>
-/* Improve safe-area on iOS */
-@supports (padding: max(0px)) {
-  .p-safe-b {
-    padding-bottom: max(env(safe-area-inset-bottom), 1rem);
-  }
-}
-</style>

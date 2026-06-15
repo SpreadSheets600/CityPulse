@@ -145,7 +145,7 @@
 <script setup>
 import { ref, onUnmounted, watch, nextTick, onMounted } from 'vue'
 import L from 'leaflet'
-import axios from '../api/client'
+import axios from '../../api/client'
 
 // Props
 const props = defineProps({
@@ -183,7 +183,7 @@ const searchAddress = async (query) => {
   }
 
   try {
-    const response = await axios.get(`/api/geocode?q=${encodeURIComponent(query)}`)
+    const response = await axios.get(`/geocode?q=${encodeURIComponent(query)}`)
     addressSuggestions.value = response.data.suggestions || []
   } catch (error) {
     console.error('Geocoding error:', error)
@@ -233,7 +233,7 @@ const useCurrentLocation = async () => {
 
     // Try to get address from coordinates
     try {
-      const response = await axios.get(`/api/reverse-geocode?lat=${lat}&lon=${lng}`)
+      const response = await axios.get(`/reverse-geocode?lat=${lat}&lon=${lng}`)
       if (response.data.address) {
         address.value = response.data.address
       }
@@ -340,7 +340,7 @@ const initializeMap = () => {
 
 const reverseGeocode = async (lat, lng) => {
   try {
-    const response = await axios.get(`/api/reverse-geocode?lat=${lat}&lon=${lng}`)
+    const response = await axios.get(`/reverse-geocode?lat=${lat}&lon=${lng}`)
     if (response.data.address) {
       address.value = response.data.address
     }
@@ -431,26 +431,3 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-/* Leaflet CSS overrides */
-:deep(.leaflet-control-container) {
-  font-family: inherit;
-}
-
-:deep(.leaflet-popup-content-wrapper) {
-  font-family: inherit;
-}
-
-/* Custom styles for leaflet dark map popup override */
-:deep(.leaflet-popup-content-wrapper) {
-  background-color: var(--color-base-200) !important;
-  color: var(--color-base-content) !important;
-  border: 1px solid var(--color-base-300) !important;
-  border-radius: 12px;
-}
-
-:deep(.leaflet-popup-tip) {
-  background-color: var(--color-base-200) !important;
-  border: 1px solid var(--color-base-300) !important;
-}
-</style>
