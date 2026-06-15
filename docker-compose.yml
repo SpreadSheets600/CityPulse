@@ -1,21 +1,4 @@
 services:
-  db:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: citypulse
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
   ollama:
     image: ollama/ollama:latest
     restart: unless-stopped
@@ -23,32 +6,21 @@ services:
       - ollama_data:/root/.ollama
     ports:
       - "11434:11434"
-    # Uncomment below for GPU passthrough (requires nvidia-container-toolkit)
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
 
   backend:
     build: ./backend
     restart: unless-stopped
     depends_on:
-      db:
-        condition: service_healthy
       ollama:
         condition: service_started
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/citypulse
+      DATABASE_URL: ${DATABASE_URL:-sqlite:///citypulse.db}
       SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
       CORS_ORIGINS: http://localhost,http://localhost:80
       # Feature Toggles
       EMAIL_ENABLED: ${EMAIL_ENABLED:-false}
       SMS_ENABLED: ${SMS_ENABLED:-false}
-      OAUTH_ENABLED: ${OAUTH_ENABLED:-false}
       S3_ENABLED: ${S3_ENABLED:-true}
       IMAGE_CLASSIFICATION_ENABLED: ${IMAGE_CLASSIFICATION_ENABLED:-false}
       AI_TEXT_ENABLED: ${AI_TEXT_ENABLED:-false}
@@ -66,13 +38,6 @@ services:
       MAIL_USERNAME: ${MAIL_USERNAME:-}
       MAIL_PASSWORD: ${MAIL_PASSWORD:-}
       MAIL_DEFAULT_SENDER: ${MAIL_DEFAULT_SENDER:-noreply@citypulse.com}
-      # OAuth
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
-      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
-      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
-      OAUTH_REDIRECT_URI: ${OAUTH_REDIRECT_URI:-http://localhost:5000/api/auth/oauth/callback}
-      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
       # SMS
       TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
       TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
@@ -82,6 +47,8 @@ services:
       OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2}
       OLLAMA_VISION_MODEL: ${OLLAMA_VISION_MODEL:-gemma4:31b-cloud}
       OLLAMA_VISION_CONFIDENCE: ${OLLAMA_VISION_CONFIDENCE:-0.3}
+    volumes:
+      - db_data:/app/instance
     ports:
       - "5000:5000"
 
@@ -94,5 +61,5 @@ services:
       - "80:80"
 
 volumes:
-  pgdata:
+  db_data:
   ollama_data:

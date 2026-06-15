@@ -54,7 +54,6 @@ from api.routes.admin import (
     UnflagUser,
 )
 from api.routes.users import GetUserReputation, GetMyReputation
-from api.routes.oauth import GoogleLogin, GitHubLogin, OAuthCallback, init_oauth
 from api.routes.chatbot import Chatbot
 
 from config import Config
@@ -88,14 +87,10 @@ def create_app():
     print("------ [ INFO ] ------ Initializing Mail")
     init_mail(app)
 
-    print("------ [ INFO ] ------ Initializing OAuth")
-    init_oauth(app)
-
     # Log feature status
     features = {
         "Email": app.config.get("EMAIL_ENABLED", False),
         "SMS": app.config.get("SMS_ENABLED", False),
-        "OAuth": app.config.get("OAUTH_ENABLED", False),
         "S3": app.config.get("S3_ENABLED", True),
         "Image Classification (LocateAnything)": app.config.get("IMAGE_CLASSIFICATION_ENABLED", False),
         "AI Text (Ollama)": app.config.get("AI_TEXT_ENABLED", False),
@@ -161,10 +156,6 @@ def create_app():
     api.add_resource(GetUserReputation, "/api/users/<int:user_id>/reputation")
     api.add_resource(GetMyReputation, "/api/users/me/reputation")
 
-    api.add_resource(GoogleLogin, "/api/auth/oauth/google")
-    api.add_resource(GitHubLogin, "/api/auth/oauth/github")
-    api.add_resource(OAuthCallback, "/api/auth/oauth/callback")
-
     api.add_resource(Chatbot, "/api/chatbot")
 
     @app.route("/ping", methods=["GET", "POST"])
@@ -182,12 +173,10 @@ def create_app():
 
 def create_db():
     try:
-        User.query.first()
-        print("------ [ INFO ] ------ Database Already Exists")
-        return
+        db.create_all()
+        print("------ [ INFO ] ------ Database Tables Verified/Created")
     except Exception as e:
         print(f"------ [ INFO ] ------ Error Occurred With Database : {e}")
-        print("------ [ INFO ] ------ Creating Database")
         db.session.rollback()
         db.create_all()
 

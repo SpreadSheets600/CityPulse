@@ -28,7 +28,6 @@ class Config:
     # Set to "false" / "0" / "no" to disable any service in MVP / testing.
     EMAIL_ENABLED = _bool("EMAIL_ENABLED", "false")
     SMS_ENABLED = _bool("SMS_ENABLED", "false")
-    OAUTH_ENABLED = _bool("OAUTH_ENABLED", "false")
     S3_ENABLED = _bool("S3_ENABLED", "true")
     IMAGE_CLASSIFICATION_ENABLED = _bool("IMAGE_CLASSIFICATION_ENABLED", "false")
     AI_TEXT_ENABLED = _bool("AI_TEXT_ENABLED", "false")
@@ -50,16 +49,6 @@ class Config:
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
     MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER", "noreply@citypulse.com")
-
-    # ── OAuth (Google / GitHub) ──────────────────────────────────────
-    GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
-    GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
-    GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID", "")
-    GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET", "")
-    OAUTH_REDIRECT_URI = os.getenv(
-        "OAUTH_REDIRECT_URI", "http://localhost:5000/api/auth/oauth/callback"
-    )
-    FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
     # ── Ollama (local LLM) ──────────────────────────────────────────
     OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
