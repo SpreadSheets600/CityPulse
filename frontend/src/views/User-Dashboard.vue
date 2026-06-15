@@ -268,11 +268,11 @@
                 @change="fetchData"
               >
                 <option value="">Type: All</option>
-                <option value="Road Damage">Road Damage</option>
+                <option value="Road Maintenance">Road Maintenance</option>
                 <option value="Water Supply">Water Supply</option>
                 <option value="Electricity">Electricity</option>
                 <option value="Waste Management">Waste Management</option>
-                <option value="Public Safety">Public Safety</option>
+                <option value="Public Transportation">Public Transportation</option>
                 <option value="Unspecified">Unspecified</option>
               </select>
             </div>
@@ -426,6 +426,19 @@
                     {{ issue.issue_type }}
                   </span>
 
+                  <span
+                    v-if="issue.ai_analysis?.priority"
+                    class="flex items-center rounded-md px-2 py-0.5 border"
+                    :class="{
+                      'bg-red-500/5 border-red-500/10 text-red-400': issue.ai_analysis.priority.level === 'critical',
+                      'bg-orange-500/5 border-orange-500/10 text-orange-400': issue.ai_analysis.priority.level === 'high',
+                      'bg-yellow-500/5 border-yellow-500/10 text-yellow-400': issue.ai_analysis.priority.level === 'medium',
+                      'bg-green-500/5 border-green-500/10 text-green-400': issue.ai_analysis.priority.level === 'low',
+                    }"
+                  >
+                    {{ issue.ai_analysis.priority.level }}
+                  </span>
+
                   <span v-if="issue.address" class="flex items-center">
                     <svg
                       class="w-3 h-3 mr-1 text-base-content/40"
@@ -507,7 +520,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import axios from '../api/client'
-import ReputationBadge from '../components/ReputationBadge.vue'
+import ReputationBadge from '../components/common/ReputationBadge.vue'
 
 const authStore = useAuthStore()
 
@@ -565,7 +578,7 @@ const fetchData = async () => {
     if (filterStatus.value) params.status = filterStatus.value
     if (filterType.value) params.issue_type = filterType.value
 
-    const response = await axios.get('/api/issues', { params })
+    const response = await axios.get('/issues', { params })
     if (response.status === 200) {
       allIssues.value = response.data.issues
     }
@@ -577,7 +590,7 @@ const fetchData = async () => {
 onMounted(async () => {
   fetchData()
   try {
-    const { data } = await axios.get('/api/users/me/reputation')
+    const { data } = await axios.get('/users/me/reputation')
     reputation.value = data.reputation
   } catch (e) {
     console.error('Failed to load reputation:', e)
@@ -585,12 +598,3 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
-.line-clamp-1 {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  line-clamp: 1;
-  overflow: hidden;
-}
-</style>

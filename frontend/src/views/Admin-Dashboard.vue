@@ -500,6 +500,26 @@
                     {{ issue.issue_type }}
                   </span>
 
+                  <span
+                    v-if="issue.ai_analysis?.priority"
+                    class="flex items-center rounded-md px-2 py-0.5 border"
+                    :class="{
+                      'bg-red-500/5 border-red-500/10 text-red-400': issue.ai_analysis.priority.level === 'critical',
+                      'bg-orange-500/5 border-orange-500/10 text-orange-400': issue.ai_analysis.priority.level === 'high',
+                      'bg-yellow-500/5 border-yellow-500/10 text-yellow-400': issue.ai_analysis.priority.level === 'medium',
+                      'bg-green-500/5 border-green-500/10 text-green-400': issue.ai_analysis.priority.level === 'low',
+                    }"
+                  >
+                    {{ issue.ai_analysis.priority.level }}
+                  </span>
+
+                  <span
+                    v-if="issue.department"
+                    class="flex items-center rounded-md bg-purple-500/5 px-2 py-0.5 border border-purple-500/10 text-purple-400"
+                  >
+                    {{ issue.department.name }}
+                  </span>
+
                   <span v-if="issue.address" class="flex items-center">
                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -602,7 +622,7 @@ const fetchIssues = async () => {
   loading.value = true
   error.value = ''
   try {
-    const response = await axios.get('/api/admin/issues')
+    const response = await axios.get('/admin/issues')
     issues.value = response.data.issues
     if (issues.value.length > 0) {
       center.value = [issues.value[0].latitude, issues.value[0].longitude]
@@ -657,31 +677,3 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  line-clamp: 2;
-  overflow: hidden;
-}
-
-/* Fix popup styling inside dark leaflet map */
-::v-deep(.leaflet-popup-content-wrapper) {
-  background-color: var(--color-base-200) !important;
-  color: var(--color-base-content) !important;
-  border: 1px solid var(--color-base-300) !important;
-  border-radius: 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-}
-
-::v-deep(.leaflet-popup-tip) {
-  background-color: var(--color-base-200) !important;
-  border: 1px solid var(--color-base-300) !important;
-}
-
-::v-deep(.leaflet-container a.leaflet-popup-close-button) {
-  color: var(--color-base-content) !important;
-  opacity: 0.6;
-}
-</style>

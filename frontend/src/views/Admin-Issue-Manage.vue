@@ -322,154 +322,94 @@
           </div>
         </div>
 
-        <!-- AI Verification Panel -->
+        <!-- Unified AI Analysis Panel -->
         <div class="bg-base-200 border border-base-300 shadow-xl rounded-3xl p-6 md:p-8">
           <div class="flex items-center justify-between mb-4 gap-2">
             <h3
               class="text-xs font-bold font-mono text-base-content/60 uppercase tracking-widest flex items-center gap-2"
             >
-              <svg
-                class="w-4.5 h-4.5 text-primary"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                />
+              <svg class="w-4.5 h-4.5 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
-              AI Computer Vision Verification
+              Unified AI Analysis
             </h3>
             <button
-              @click="runVerification"
-              :disabled="verifying || !issue.image_urls?.length"
+              @click="runAI"
+              :disabled="verifying"
               class="btn btn-sm btn-outline border-base-300 hover:border-slate-500 rounded-xl font-mono cursor-pointer"
             >
               <span v-if="verifying" class="loading loading-spinner loading-xs mr-1"></span>
-              {{ verifying ? 'ANALYZING...' : 'RUN AI DIAGNOSTIC' }}
+              {{ verifying ? 'ANALYZING...' : 'RUN AI PIPELINE' }}
             </button>
           </div>
 
-          <div v-if="!verification && !verifying" class="text-xs font-mono text-base-content/40 py-4">
-            Trigger visual inspection. Locally hosted AI models will parse the coordinates and match
-            objects inside the attachment payload.
+          <div v-if="!ai && !verifying" class="text-xs font-mono text-base-content/40 py-4">
+            Click to run the full AI pipeline: classification, priority scoring, image verification, department routing, and duplicate detection.
           </div>
 
-          <div v-if="verification" class="space-y-4">
-            <!-- Verification Status Banner -->
-            <div
-              :class="{
-                'bg-emerald-500/10 border-emerald-500/20 text-emerald-400':
-                  verification.status === 'consistent',
-                'bg-red-500/10 border-red-500/20 text-red-400':
-                  verification.status === 'misleading',
-                'bg-yellow-500/10 border-yellow-500/20 text-yellow-400':
-                  verification.status === 'uncertain',
-              }"
-              class="border rounded-2xl p-4 font-mono text-xs leading-relaxed"
-            >
-              <div class="flex items-start gap-3">
-                <div class="flex-shrink-0 mt-0.5">
-                  <svg
-                    v-if="verification.status === 'consistent'"
-                    class="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <svg
-                    v-else-if="verification.status === 'misleading'"
-                    class="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-                    />
-                  </svg>
-                  <svg
-                    v-else
-                    class="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+          <div v-if="ai" class="space-y-4">
+            <!-- Classification -->
+            <div v-if="ai.classification" class="bg-base-100/50 border border-base-300 rounded-2xl p-4">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">Classification</span>
+                <span class="badge badge-sm badge-outline">{{ ai.classification.source }}</span>
+              </div>
+              <p class="text-sm font-bold text-base-content">{{ ai.classification.category }}</p>
+              <p class="text-xs text-base-content/60 mt-1">{{ ai.classification.reasoning }}</p>
+              <div class="mt-2">
+                <div class="flex justify-between text-2xs font-mono text-base-content/40 mb-1">
+                  <span>Confidence</span>
+                  <span>{{ Math.round(ai.classification.confidence * 100) }}%</span>
                 </div>
-                <div>
-                  <p class="font-bold text-base-content">{{ verification.message }}</p>
-                  <div class="mt-2 flex flex-wrap gap-4 text-base-content/60">
-                    <span
-                      >REPORTED_TYPE: <strong>{{ verification.reported_type }}</strong></span
-                    >
-                    <span
-                      >AI_DETECTION: <strong>{{ verification.ai_category }}</strong></span
-                    >
-                    <span
-                      >CONFIDENCE:
-                      <strong>{{ (verification.ai_confidence * 100).toFixed(1) }}%</strong></span
-                    >
-                  </div>
+                <div class="w-full bg-base-300 rounded-full h-1.5">
+                  <div class="bg-primary h-1.5 rounded-full" :style="{ width: Math.round(ai.classification.confidence * 100) + '%' }"></div>
                 </div>
               </div>
             </div>
 
-            <!-- Per-image detections -->
-            <div v-if="detections.length > 0">
-              <h4 class="text-xs font-mono font-bold text-base-content/40 uppercase tracking-wider mb-3">
-                Visual Inspection Details
-              </h4>
-              <div class="space-y-3">
-                <div
-                  v-for="det in detections"
-                  :key="det.image_index"
-                  class="bg-base-100/40 border border-base-300 rounded-2xl p-4 text-xs font-mono"
-                >
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="font-bold text-base-content/80"
-                      >File Object {{ det.image_index + 1 }}</span
-                    >
-                    <span
-                      :class="{
-                        'badge badge-success badge-sm':
-                          det.category !== 'Unspecified' && det.category !== 'error',
-                        'badge badge-warning badge-sm': det.category === 'Unspecified',
-                        'badge badge-error badge-sm': det.category === 'error',
-                      }"
-                      class="font-bold uppercase tracking-wider"
-                      >{{ det.category }}</span
-                    >
-                  </div>
-                  <div v-if="det.detections?.length > 0" class="flex flex-wrap gap-2 mt-2">
-                    <span
-                      v-for="(d, i) in det.detections"
-                      :key="i"
-                      class="inline-flex items-center px-2 py-1 rounded bg-base-300 border border-base-300/40 text-base-content/80 text-2xs"
-                    >
-                      {{ d.label }} ({{ (d.confidence * 100).toFixed(0) }}%)
-                    </span>
-                  </div>
-                  <div v-if="det.error" class="text-error text-2xs mt-1">{{ det.error }}</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Priority -->
+              <div v-if="ai.priority" class="bg-base-100/50 border border-base-300 rounded-2xl p-4">
+                <span class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">Priority</span>
+                <div class="flex items-center gap-2 mt-2">
+                  <span :class="adminPriorityBadgeClass" class="badge badge-sm font-bold uppercase">{{ ai.priority.level }}</span>
+                  <span class="text-sm font-mono text-base-content/60">{{ ai.priority.score }}/100</span>
+                </div>
+                <p class="text-xs text-base-content/60 mt-2">{{ ai.priority.reasoning }}</p>
+              </div>
+
+              <!-- Verification -->
+              <div v-if="ai.verification && ai.verification.status !== 'skipped'" class="bg-base-100/50 border border-base-300 rounded-2xl p-4">
+                <span class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">Image Verification</span>
+                <div class="flex items-center gap-2 mt-2">
+                  <span :class="adminVerificationBadgeClass" class="badge badge-sm font-bold uppercase">{{ ai.verification.status }}</span>
+                  <span v-if="ai.verification.confidence" class="text-sm font-mono text-base-content/60">{{ Math.round(ai.verification.confidence * 100) }}%</span>
+                </div>
+                <p class="text-xs text-base-content/60 mt-2">{{ ai.verification.reasoning }}</p>
+                <div v-if="ai.verification.mismatch_flags?.length" class="mt-2 space-y-1">
+                  <p v-for="(flag, i) in ai.verification.mismatch_flags" :key="i" class="text-2xs text-red-400">- {{ flag }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Department Routing -->
+            <div v-if="ai.department" class="bg-base-100/50 border border-base-300 rounded-2xl p-4">
+              <span class="text-2xs font-mono text-base-content/40 uppercase tracking-widest">Department Routing</span>
+              <p class="text-sm font-bold text-base-content mt-2">
+                {{ ai.department.auto_assigned ? ai.department.department_name : 'Not auto-routed' }}
+              </p>
+              <p v-if="ai.department.auto_assigned" class="text-xs text-emerald-400 mt-1">Auto-assigned based on AI classification</p>
+            </div>
+
+            <!-- Duplicate Warnings -->
+            <div v-if="ai.duplicates?.length" class="bg-yellow-500/5 border border-yellow-500/20 rounded-2xl p-4">
+              <p class="text-xs font-mono font-bold text-yellow-500 uppercase tracking-wider mb-2">
+                {{ ai.duplicates.length }} Potential Duplicate{{ ai.duplicates.length > 1 ? 's' : '' }} Found
+              </p>
+              <div class="space-y-2">
+                <div v-for="dup in ai.duplicates" :key="dup.id" class="flex items-center justify-between text-xs">
+                  <span class="text-base-content/70 truncate">{{ dup.title }}</span>
+                  <span class="font-mono text-base-content/40 ml-2 shrink-0">{{ Math.round(dup.similarity * 100) }}% match</span>
                 </div>
               </div>
             </div>
@@ -618,8 +558,18 @@ const lightboxImages = ref([])
 const lightboxIndex = ref(null)
 
 const verifying = ref(false)
-const verification = ref(null)
-const detections = ref([])
+
+const ai = computed(() => issue.value?.ai_analysis || null)
+
+const adminPriorityBadgeClass = computed(() => {
+  const level = ai.value?.priority?.level
+  return { critical: 'badge-error', high: 'badge-warning', medium: 'badge-info', low: 'badge-success' }[level] || 'badge-ghost'
+})
+
+const adminVerificationBadgeClass = computed(() => {
+  const status = ai.value?.verification?.status
+  return { verified: 'badge-success', rejected: 'badge-error', pending: 'badge-warning' }[status] || 'badge-ghost'
+})
 
 const getStatusClass = (status) => {
   const classes = {
@@ -635,7 +585,7 @@ const getStatusClass = (status) => {
 const loadIssue = async () => {
   loading.value = true
   try {
-    const resp = await axios.get(`/api/issues/${routeParams.value.id}`)
+    const resp = await axios.get(`/issues/${routeParams.value.id}`)
     issue.value = resp.data.issue
     status.value = issue.value.status
     if (issue.value?.department_id) {
@@ -653,7 +603,7 @@ const loadIssue = async () => {
 
 const loadDepartments = async () => {
   try {
-    const resp = await axios.get('/api/admin/departments')
+    const resp = await axios.get('/admin/departments')
     departments.value = resp.data.departments
   } catch (e) {
     console.error(e)
@@ -662,7 +612,7 @@ const loadDepartments = async () => {
 
 const loadUpdates = async () => {
   try {
-    const resp = await axios.get(`/api/issues/${routeParams.value.id}/updates`)
+    const resp = await axios.get(`/issues/${routeParams.value.id}/updates`)
     updates.value = resp.data.updates
   } catch (e) {
     console.error(e)
@@ -671,7 +621,7 @@ const loadUpdates = async () => {
 
 const saveStatus = async () => {
   try {
-    const resp = await axios.put(`/api/admin/issues/${routeParams.value.id}/status`, {
+    const resp = await axios.put(`/admin/issues/${routeParams.value.id}/status`, {
       status: status.value,
     })
     issue.value = resp.data.issue
@@ -683,7 +633,7 @@ const saveStatus = async () => {
 const assignDepartment = async () => {
   if (!departmentId.value) return
   try {
-    const resp = await axios.put(`/api/admin/issues/${routeParams.value.id}/department`, {
+    const resp = await axios.put(`/admin/issues/${routeParams.value.id}/department`, {
       department_id: departmentId.value,
     })
     issue.value = resp.data.issue
@@ -692,16 +642,13 @@ const assignDepartment = async () => {
   }
 }
 
-const runVerification = async () => {
+const runAI = async () => {
   verifying.value = true
-  verification.value = null
-  detections.value = []
   try {
-    const resp = await axios.post(`/api/admin/issues/${routeParams.value.id}/verify`)
-    verification.value = resp.data.verification
-    detections.value = resp.data.detections || []
+    const resp = await axios.post(`/admin/issues/${routeParams.value.id}/verify`)
+    issue.value = resp.data.issue
   } catch (e) {
-    alert(e.response?.data?.error || 'Verification failed')
+    alert(e.response?.data?.error || 'AI pipeline failed')
   } finally {
     verifying.value = false
   }
@@ -720,7 +667,7 @@ const postUpdate = async () => {
   })
 
   try {
-    await axios.post(`/api/admin/issues/${routeParams.value.id}/updates`, formData, {
+    await axios.post(`/admin/issues/${routeParams.value.id}/updates`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -775,31 +722,3 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  line-clamp: 2;
-  overflow: hidden;
-}
-
-/* Fix popup styling inside dark leaflet map */
-::v-deep(.leaflet-popup-content-wrapper) {
-  background-color: var(--color-base-200) !important;
-  color: var(--color-base-content) !important;
-  border: 1px solid var(--color-base-300) !important;
-  border-radius: 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-}
-
-::v-deep(.leaflet-popup-tip) {
-  background-color: var(--color-base-200) !important;
-  border: 1px solid var(--color-base-300) !important;
-}
-
-::v-deep(.leaflet-container a.leaflet-popup-close-button) {
-  color: var(--color-base-content) !important;
-  opacity: 0.6;
-}
-</style>

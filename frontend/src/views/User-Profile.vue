@@ -4,7 +4,7 @@
       <div>
         <div class="mb-8">
           <h2 class="text-3xl font-extrabold text-base-content font-mono tracking-wider uppercase">
-            User Profile
+            {{ authStore.isAdmin ? 'Admin Profile' : 'User Profile' }}
           </h2>
           <p class="mt-1 text-sm text-base-content/60">
             Manage your credentials and neighborhood association profile.
@@ -19,10 +19,11 @@
             <div class="flex items-center mb-8 pb-8 border-b border-base-300">
               <div class="flex-shrink-0">
                 <img
-                  v-if="profilePictureUrl"
+                  v-if="profilePictureUrl && !imageLoadError"
                   :src="profilePictureUrl"
                   alt="Profile"
                   class="w-20 h-20 rounded-2xl object-cover border border-base-300 shadow-lg"
+                  @error="imageLoadError = true"
                 />
                 <div
                   v-else
@@ -164,6 +165,7 @@ const editing = ref(false)
 const saving = ref(false)
 const error = ref('')
 const success = ref(false)
+const imageLoadError = ref(false)
 const form = ref({ firstname: '', lastname: '', phone: '', address: '' })
 
 const userInitials = computed(() => {
@@ -218,6 +220,3 @@ const saveProfile = async () => {
 }
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>

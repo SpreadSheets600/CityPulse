@@ -112,7 +112,7 @@ const handleResetPassword = async () => {
   loading.value = true
   error.value = ''
   try {
-    await axios.post('/api/auth/reset-password', form.value)
+    await axios.post('/auth/reset-password', form.value)
     success.value = true
   } catch (e) {
     error.value = e.response?.data?.error || 'Something went wrong'
@@ -122,6 +122,3 @@ const handleResetPassword = async () => {
 }
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>

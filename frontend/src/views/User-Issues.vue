@@ -282,7 +282,7 @@ const formatDate = (dateString) => {
 const fetchIssues = async () => {
   loading.value = true
   try {
-    const response = await axios.get('/api/issues/my-issues')
+    const response = await axios.get('/issues/my-issues')
 
     if (response.status === 200) {
       issues.value = response.data.issues
@@ -301,12 +301,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  line-clamp: 2;
-  overflow: hidden;
-}
-</style>

@@ -89,7 +89,7 @@ const downloadCSV = async () => {
   if (filters.issue_type) params.issue_type = filters.issue_type
 
   try {
-    const resp = await axios.get('/api/admin/export', { params, responseType: 'blob' })
+    const resp = await axios.get('/admin/export', { params, responseType: 'blob' })
     const url = window.URL.createObjectURL(new Blob([resp.data]))
     const link = document.createElement('a')
     link.href = url
@@ -104,6 +104,3 @@ const downloadCSV = async () => {
 }
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>

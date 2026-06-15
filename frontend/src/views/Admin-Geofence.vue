@@ -201,8 +201,8 @@ const fetchAll = async () => {
   loading.value = true
   try {
     const [gfRes, deptRes] = await Promise.all([
-      axios.get('/api/admin/geofences'),
-      axios.get('/api/admin/departments'),
+      axios.get('/admin/geofences'),
+      axios.get('/admin/departments'),
     ])
     geofences.value = gfRes.data.geofences || []
     departments.value = deptRes.data.departments || []
@@ -215,7 +215,7 @@ const fetchAll = async () => {
 
 const createGeofence = async () => {
   try {
-    await axios.post('/api/admin/geofences', form)
+    await axios.post('/admin/geofences', form)
     showForm.value = false
     form.name = ''
     form.department_id = ''
@@ -232,7 +232,7 @@ const createGeofence = async () => {
 const deleteGeofence = async (id) => {
   if (!confirm('Delete this geofence?')) return
   try {
-    await axios.delete(`/api/admin/geofences/${id}`)
+    await axios.delete(`/admin/geofences/${id}`)
     await fetchAll()
   } catch (e) {
     console.error(e)
@@ -242,6 +242,3 @@ const deleteGeofence = async (id) => {
 onMounted(() => fetchAll())
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>

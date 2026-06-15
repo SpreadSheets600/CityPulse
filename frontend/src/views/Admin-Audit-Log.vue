@@ -86,7 +86,7 @@ const formatDate = (dateString) => {
 const fetchLogs = async () => {
   loading.value = true
   try {
-    const resp = await axios.get('/api/admin/audit-log')
+    const resp = await axios.get('/admin/audit-log')
     logs.value = resp.data.logs || []
   } catch (e) {
     console.error('Failed to fetch audit log', e)
@@ -100,6 +100,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>

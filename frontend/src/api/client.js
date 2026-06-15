@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = ''
+axios.defaults.baseURL = '/api'
 
 axios.interceptors.request.use(
   (config) => {
@@ -22,7 +22,7 @@ axios.interceptors.response.use(
       localStorage.removeItem('token')
       if (
         error.config?.url &&
-        !error.config.url.includes('/api/auth/login') &&
+        !error.config.url.includes('/auth/login') &&
         window.location.pathname !== '/login'
       ) {
         window.location.href = '/login'

@@ -219,7 +219,7 @@ const barOptions = {
 const fetchAnalytics = async () => {
   loading.value = true
   try {
-    const resp = await axios.get('/api/admin/analytics')
+    const resp = await axios.get('/admin/analytics')
     summary.value = resp.data.summary || {}
     statusBreakdown.value = resp.data.status_breakdown || {}
     typeBreakdown.value = resp.data.type_breakdown || {}
@@ -237,6 +237,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>

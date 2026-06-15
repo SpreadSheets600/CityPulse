@@ -214,7 +214,7 @@ const overall = ref({})
 const fetchSLA = async () => {
   loading.value = true
   try {
-    const resp = await axios.get('/api/admin/sla')
+    const resp = await axios.get('/admin/sla')
     departments.value = resp.data.departments || []
     overall.value = resp.data.overall || {}
   } catch (e) {
@@ -229,6 +229,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>

@@ -203,7 +203,7 @@ const form = reactive({
 const fetchDepartments = async () => {
   loading.value = true
   try {
-    const resp = await axios.get('/api/admin/departments')
+    const resp = await axios.get('/admin/departments')
     departments.value = resp.data.departments || []
   } catch (e) {
     console.error('Failed to fetch departments', e)
@@ -218,7 +218,7 @@ const createDepartment = async () => {
   }
   creating.value = true
   try {
-    await axios.post('/api/admin/departments', {
+    await axios.post('/admin/departments', {
       name: form.name,
       description: form.description,
       contact_email: form.contact_email,
@@ -244,6 +244,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>

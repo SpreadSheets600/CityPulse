@@ -90,7 +90,7 @@ const handleForgotPassword = async () => {
   loading.value = true
   error.value = ''
   try {
-    await axios.post('/api/auth/forgot-password', { email: email.value })
+    await axios.post('/auth/forgot-password', { email: email.value })
     sent.value = true
   } catch (e) {
     error.value = e.response?.data?.error || 'Something went wrong'
@@ -100,6 +100,3 @@ const handleForgotPassword = async () => {
 }
 </script>
 
-<style scoped>
-/* Scoped styles */
-</style>
